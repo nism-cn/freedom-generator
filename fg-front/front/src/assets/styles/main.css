@@ -1,0 +1,163 @@
+.input-search>.el-input-group__append,
+.el-input-group__prepend {
+  padding: 0 2px;
+}
+
+.input-search>.el-link,
+.el-link--default {
+  padding: 0 2px;
+}
+
+.link-list>.el-link {
+  padding: 10px 20px;
+}
+
+.gen-main-tabs>.el-tabs__header {
+  margin: 0;
+}
+
+.gen-aside-tabs>.el-tabs--left {
+  writing-mode: vertical-lr;
+  height: auto;
+  padding: 8px 0;
+  letter-spacing: 3px;
+  line-height: 25px;
+}
+
+.gen-tree-node {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  padding-right: 8px;
+}
+
+.el-select {
+  width: 100%;
+}
+
+.el-message {
+  z-index: 99999999 !important;
+}
+
+.contextmenu {
+  margin: 0;
+  background: #fff;
+  z-index: 3000;
+  position: absolute;
+  list-style-type: none;
+  padding: 5px 0;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #333;
+  box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, .3);
+}
+
+.contextmenu>li {
+  margin: 0;
+  padding: 7px 16px;
+  cursor: pointer;
+}
+
+
+.fg-layout-splitpanes {
+  height: calc(100vh - 80px);
+}
+
+.fg-layout {
+  height: calc(100vh - 81px);
+}
+
+.fg-layout>.fg-layout-header,
+.fg-layout-footer>header,
+footer {
+  height: 40px !important;
+  background-color: #B3C0D1;
+  color: #333;
+  text-align: center;
+  line-height: 40px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.fg-layout>.fg-layout-header>.header-left {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.fg-layout>.fg-layout-header>.header-left>.el-image {
+  width: 35px;
+  height: 35px;
+  margin-right: 10px;
+}
+
+.fg-layout>.fg-layout-header>.header-center,
+footer-center {
+  font-size: 12px;
+}
+
+.fg-layout>.fg-layout-header>.header-right .footer-right>.el-link {
+  width: 16px;
+  height: 24px;
+}
+
+.fg-layout>.fg-layout-tabs>.el-tabs__item {
+  writing-mode: vertical-lr;
+  height: auto;
+  padding: 8px 0;
+  letter-spacing: 3px;
+  line-height: 25px;
+}
+
+.fg-tree-menu-div {
+  padding: 8px 0;
+  z-index: 9999;
+  position: fixed;
+  width: 100px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
+}
+
+.fg-tree-menu {
+  text-align: left;
+  width: 100%;
+  margin-left: 0 !important;
+  padding: 6px 0 6px 20px;
+  font-size: 10px;
+  border: 0;
+}
+
+.fg-create-dialog>.el-dialog>.el-dialog__body {
+  padding: 0 20px 5px 20px;
+}
+
+.fg-text-logo {
+  color: #3b5d3f;
+}
+
+.fg-text-main {
+  color: #303133;
+}
+
+.fg-text-primary {
+  color: #409EFF;
+}
+
+.fg-text-success {
+  color: #67C23A;
+}
+
+.fg-text-info {
+  color: #909399;
+}
+
+.fg-text-warning {
+  color: #E6A23C;
+}
+
+.fg-text-danger {
+  color: #F56C6C;
+}

@@ -1,0 +1,15 @@
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+pagehelper:
+  helperDialect: h2
+  supportMethodsArguments: true
+  params: count=countSql
+
+logging:
+  level:
+    org.nism.fg: debug
+    org.springframework: warn
+
+
