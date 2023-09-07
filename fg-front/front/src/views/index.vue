@@ -7,10 +7,10 @@
       </div>
       <div class="header-center">当前: {{ tabId }}</div>
       <div class="header-right">
-        <fg-link content="获取模版样例" placement="end" icon="notebook-1" @click="tempDemo" />
-        <!-- <fg-link content="更换主题" placement="end" icon="lollipop" /> -->
+        <fg-link content="获取模版样例" icon="notebook-1" @click="tempDemo" />
+        <!-- <fg-link content="更换主题" icon="lollipop" /> -->
         <el-dropdown trigger="click" size="mini" @command="exportCmd">
-          <fg-link content="导出数据" placement="end" icon="download" />
+          <fg-link content="导出数据" icon="download" />
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item icon="el-icon-coin" command="db">数据源</el-dropdown-item>
             <el-dropdown-item icon="el-icon-notebook-1" command="temp">模板</el-dropdown-item>
@@ -18,16 +18,16 @@
           </el-dropdown-menu>
         </el-dropdown>
 
-        <fg-link content="导入数据" placement="end" icon="upload2" />
+        <fg-link content="导入数据" icon="upload2" />
         <el-dropdown trigger="click" size="mini" @command="logCmd">
-          <fg-link content="操作日志" placement="end" icon="time" />
+          <fg-link content="操作日志" icon="time" />
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item icon="el-icon-question" command="debug">debug</el-dropdown-item>
             <el-dropdown-item icon="el-icon-info" command="info">info</el-dropdown-item>
             <el-dropdown-item icon="el-icon-warning" command="error">error</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <fg-link content="全屏操作" placement="end" icon="rank" @click="screenfull" />
+        <fg-link content="全屏操作" icon="rank" @click="screenfull" />
       </div>
     </el-header>
 
@@ -66,9 +66,11 @@
       <div class="footer-left">Cosmopolita<u><b class="fg-text-logo">nism</b></u> 海纳百川, 四海一家.</div>
       <div class="footer-center">copyright © nism</div>
       <div class="footer-right">
-        <fg-link content="Github" placement="end" icon="aim"></fg-link>
-        <fg-link content="Gitee" placement="end" icon="aim"></fg-link>
-        <fg-link content="帮助文档" placement="end" icon="help" @click="helpVisible = true"></fg-link>
+        <fg-link content="Github" icon="aim"
+          @click="$browserUtil.open('github', 'https://github.com/nism-cn/freedom-generator')" />
+        <fg-link content="Gitee" icon="aim"
+          @click="$browserUtil.open('gitee', 'https://gitee.com/nism/freedom-generator')" />
+        <fg-link content="帮助文档" icon="help" @click="helpVisible = true" />
       </div>
     </el-footer>
 
@@ -173,7 +175,6 @@ export default {
         localStorage.setItem('isShowHelp', 1)
       })
     }
-
   }
 };
 </script>

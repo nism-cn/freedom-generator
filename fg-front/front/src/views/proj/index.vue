@@ -4,9 +4,9 @@
       <el-col :span="24">
         <el-input class="input-search" size="small" placeholder="请输入内容" suffix-icon="el-icon-search">
           <div slot="append">
-            <fg-link content="刷新" placement="end" icon="refresh-right" @click="find" />
-            <fg-link content="新增" placement="end" icon="plus" @click="openCreate(cmd.mkProj)" />
-            <fg-link content="隐藏" placement="end" icon="minus" />
+            <fg-link content="刷新" icon="refresh-right" @click="find" />
+            <fg-link content="新增" icon="plus" @click="openCreate(cmd.mkProj)" />
+            <fg-link content="隐藏" icon="minus" />
           </div>
         </el-input>
       </el-col>

@@ -24,6 +24,9 @@ Vue.component('fg-page', FgPage)
 Vue.component('fg-link', FgLink)
 Vue.component('fg-editor', FgEditor)
 
+import browserUtil from './utils/browserUtil';
+Vue.prototype.$browserUtil = browserUtil;
+
 new Vue({
   store,
   render: h => h(App),

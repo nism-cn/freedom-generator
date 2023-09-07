@@ -4,11 +4,11 @@
       <el-col :span="24">
         <el-input class="input-search" size="small" placeholder="请输入内容" suffix-icon="el-icon-search">
           <div slot="append">
-            <fg-link content="刷新" placement="end" icon="refresh-right" @click="init" />
-            <fg-link content="全部展开" placement="end" icon="sort" @click="expandAll(true)" />
-            <fg-link content="全部折叠" placement="end" icon="sort-up" @click="expandAll(false)" />
+            <fg-link content="刷新" icon="refresh-right" @click="init" />
+            <fg-link content="全部展开" icon="sort" @click="expandAll(true)" />
+            <fg-link content="全部折叠" icon="sort-up" @click="expandAll(false)" />
             <el-dropdown trigger="click" @command="openCreate">
-              <fg-link id="step_2" content="新建" placement="end" icon="plus" />
+              <fg-link id="step_2" content="新建" icon="plus" />
               <el-dropdown-menu size="mini" slot="dropdown">
                 <el-dropdown-item :command="cmd.group" icon="el-icon-plus">模板组</el-dropdown-item>
                 <el-dropdown-item :disabled="!treeClickData.directory" :command="cmd.mkdir"
@@ -19,7 +19,7 @@
                   icon="el-icon-odometer">参数</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <fg-link content="隐藏" placement="end" icon="minus" />
+            <fg-link content="隐藏" icon="minus" />
           </div>
         </el-input>
       </el-col>

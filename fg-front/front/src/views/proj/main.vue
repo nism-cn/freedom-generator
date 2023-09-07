@@ -12,8 +12,8 @@
         <el-input v-model="pagePm.search" class="input-search" size="small" placeholder="表名/表描述"
           @keyup.enter.native="init">
           <div slot="append">
-            <fg-link content="查询" placement="end" icon="search" @click="init" />
-            <fg-link content="重置" placement="end" icon="refresh" @click="refreshParam" />
+            <fg-link content="查询" icon="search" @click="init" />
+            <fg-link content="重置" icon="refresh" @click="refreshParam" />
           </div>
         </el-input>
       </el-col>

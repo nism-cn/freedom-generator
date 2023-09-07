@@ -13,7 +13,7 @@ export default {
     },
     placement: {
       type: String,
-      default: ''
+      default: 'end'
     },
     icon: {
       type: String,
