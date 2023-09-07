@@ -34,7 +34,7 @@
           <el-input v-model="form.username" />
         </el-form-item>
         <el-form-item label="密码">
-          <el-input v-model="form.password" />
+          <el-input type="password" v-model="form.password" />
         </el-form-item>
         <el-form-item label="说明">
           <el-input type="textarea" :rows="5" v-model="form.remark" />

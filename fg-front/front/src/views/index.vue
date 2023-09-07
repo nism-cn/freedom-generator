@@ -7,9 +7,9 @@
       </div>
       <div class="header-center">当前: {{ tabId }}</div>
       <div class="header-right">
-        <fg-link content="获取模版样例" icon="notebook-1" @click="tempDemo" />
+        <!-- <fg-link content="获取模版样例" icon="notebook-1" @click="tempDemo" /> -->
         <!-- <fg-link content="更换主题" icon="lollipop" /> -->
-        <el-dropdown trigger="click" size="mini" @command="exportCmd">
+        <!-- <el-dropdown trigger="click" size="mini" @command="exportCmd">
           <fg-link content="导出数据" icon="download" />
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item icon="el-icon-coin" command="db">数据源</el-dropdown-item>
@@ -18,7 +18,7 @@
           </el-dropdown-menu>
         </el-dropdown>
 
-        <fg-link content="导入数据" icon="upload2" />
+        <fg-link content="导入数据" icon="upload2" /> -->
         <el-dropdown trigger="click" size="mini" @command="logCmd">
           <fg-link content="操作日志" icon="time" />
           <el-dropdown-menu slot="dropdown">

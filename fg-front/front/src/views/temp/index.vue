@@ -5,8 +5,7 @@
         <el-input class="input-search" size="small" placeholder="请输入内容" suffix-icon="el-icon-search">
           <div slot="append">
             <fg-link content="刷新" icon="refresh-right" @click="init" />
-            <fg-link content="全部展开" icon="sort" @click="expandAll(true)" />
-            <fg-link content="全部折叠" icon="sort-up" @click="expandAll(false)" />
+            <fg-link content="展开/折叠" icon="sort" @click="expandAll" />
             <el-dropdown trigger="click" @command="openCreate">
               <fg-link id="step_2" content="新建" icon="plus" />
               <el-dropdown-menu size="mini" slot="dropdown">
@@ -145,11 +144,8 @@ export default {
         this.count = 0;
       }, 300)
     },
-    /**
-     * 展开/收起
-     */
-    expandAll(expanded) {
-      this.expandNodes(this.$refs.tree.store.root, expanded);
+    expandAll() {
+      this.expandNodes(this.$refs.tree.store.root, !this.$refs.tree.store.root.expanded);
     },
     expandNodes(node, expanded) {
       node.expanded = expanded;
