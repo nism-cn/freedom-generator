@@ -17,6 +17,11 @@
     <p v-html="baseUsage.$loop"></p>
 
     <el-divider content-position="left">
+      <b>特殊字符转义</b>
+    </el-divider>
+    <p v-html="baseUsage.$escape"></p>
+
+    <el-divider content-position="left">
       <b>函数</b>
     </el-divider>
     <b>内置函数</b>
@@ -46,6 +51,7 @@ export default {
         $valUse: '变量使用: ${变量名}',
         $if: '判断语句: <#if [表达式]>[操作]<&#47#if>',
         $loop: `循环语句: <#list [集合] as [对象]>[操作]<&#47#list>`,
+        $escape: "转义: ${r'$'} 输出 '$' / ${r'#'} 输出 '#'",
       },
       func: {
         $own: {
