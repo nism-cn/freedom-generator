@@ -37,7 +37,8 @@
                         <configuration>
                             <executable>npm</executable>
                             <arguments>
-                                <argument>install</argument>
+                                <argument>i</argument>
+                                <argument>--force</argument>
                             </arguments>
                             <workingDirectory>${basedir}/front</workingDirectory>
                         </configuration>
