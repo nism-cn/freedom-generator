@@ -20,14 +20,14 @@
 
         <fg-link content="导入数据" icon="upload2" /> -->
         <el-dropdown trigger="click" size="mini" @command="logCmd">
-          <fg-link content="操作日志" icon="time" />
+          <fg-link :svg="true" content="操作日志" icon="log" />
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item icon="el-icon-question" command="debug">debug</el-dropdown-item>
             <el-dropdown-item icon="el-icon-info" command="info">info</el-dropdown-item>
             <el-dropdown-item icon="el-icon-warning" command="error">error</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <fg-link content="全屏操作" icon="rank" @click="screenfull" />
+        <fg-link :svg="true" content="全屏操作" icon="fullscreen" @click="screenfull" />
       </div>
     </el-header>
 
@@ -66,11 +66,11 @@
       <div class="footer-left">Cosmopolita<u><b class="fg-text-logo">nism</b></u> 海纳百川, 四海一家.</div>
       <div class="footer-center">copyright © nism</div>
       <div class="footer-right">
-        <fg-link content="Github" icon="aim"
+        <fg-link :svg="true" content="Github" icon="github"
           @click="$browserUtil.open('github', 'https://github.com/nism-cn/freedom-generator')" />
-        <fg-link content="Gitee" icon="aim"
+        <fg-link :svg="true" content="Gitee" icon="gitee"
           @click="$browserUtil.open('gitee', 'https://gitee.com/nism/freedom-generator')" />
-        <fg-link content="帮助文档" icon="help" @click="helpVisible = true" />
+        <fg-link :svg="true" content="帮助文档" icon="help-doc" @click="helpVisible = true" />
       </div>
     </el-footer>
 

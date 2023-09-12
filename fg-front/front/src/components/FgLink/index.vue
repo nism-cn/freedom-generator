@@ -1,6 +1,9 @@
 <template>
   <el-tooltip effect="dark" :content="content" :placement="`bottom-${placement}`" :open-delay="800">
-    <el-link :disabled="disabled" :underline="false" :icon="`el-icon-${icon}`" @click="handleClick"></el-link>
+    <el-link :disabled="disabled" :underline="false" @click="handleClick">
+      <svg-icon v-if="svg" :icon-class="`${icon}`" />
+      <i v-else :class="`el-icon-${icon}`" />
+    </el-link>
   </el-tooltip>
 </template>
 <script>
@@ -20,6 +23,10 @@ export default {
       default: ''
     },
     disabled: {
+      type: Boolean,
+      default: false
+    },
+    svg: {
       type: Boolean,
       default: false
     }

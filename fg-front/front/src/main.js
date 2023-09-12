@@ -8,6 +8,7 @@ ElementUI.Dialog.props.closeOnClickModal.default = false
 import '@/assets/styles/main.css';
 import 'normalize.css';
 
+import './assets/icons';
 import store from './store';
 
 import FgEditor from "@/components/FgEditor";

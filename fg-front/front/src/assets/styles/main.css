@@ -81,7 +81,10 @@ footer {
   display: flex;
   justify-content: space-between;
 }
-
+.footer-right{
+  display: flex;
+  align-items: center;
+}
 .fg-layout>.fg-layout-header>.header-left {
   display: flex;
   align-items: center;

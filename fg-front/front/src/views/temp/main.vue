@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <fg-link content="保存" placement="start" icon="wallet" @click="save" />
+      <fg-link :svg="true" content="保存" placement="start" icon="save" @click="save" />
       <fg-link content="刷新" placement="start" icon="refresh-right" @click="load" />
     </div>
     <fg-editor ref="editor" @change="change" :options="options" :language="language" :value="val" />
