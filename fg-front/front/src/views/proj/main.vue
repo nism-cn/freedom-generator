@@ -31,11 +31,11 @@
               <el-tooltip effect="dark" content="双击行可以进行编辑" placement="right"><i class="el-icon-info"></i></el-tooltip>
             </template>
             <template slot-scope="scope">
-              <fg-link content="开发预览" placement="start" icon="video-camera" @click="init(scope.row)" />
+              <!-- <fg-link content="开发预览" placement="start" icon="video-camera" @click="init(scope.row)" /> -->
               <fg-link content="预览" placement="start" icon="view" @click="preview(scope.row)" />
               <fg-link content="编辑" placement="start" icon="edit" @click="openModify(scope.row)" />
               <fg-link content="删除" placement="start" icon="delete" @click="deleteTable(scope.row)" />
-              <fg-link content="结构同步" placement="start" icon="refresh" @click="init" />
+              <!-- <fg-link content="结构同步" placement="start" icon="refresh" @click="init" /> -->
               <fg-link content="生成代码" placement="start" icon="download" @click="generator(scope.row)" />
             </template>
           </el-table-column>
