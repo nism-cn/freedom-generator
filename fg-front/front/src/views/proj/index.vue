@@ -83,6 +83,7 @@ export default {
       setTimeout(() => {
         // 双击
         if (this.count == 2) {
+          data = { ...data, ...{ id: data.name, projectId: data.id } }
           this.$store.commit("app/addTab", data);
         }
         this.count = 0;

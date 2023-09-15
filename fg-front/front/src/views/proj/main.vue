@@ -128,7 +128,7 @@ export default {
   methods: {
     init() {
       // 获取当前项目设置
-      projectApi.findSetting(this.data.id).then(r => this.settingForm = r.data);
+      projectApi.findSetting(this.data.projectId).then(r => this.settingForm = r.data);
       // 获取当前项目表
       this.findByProjectId();
     },
@@ -151,7 +151,7 @@ export default {
       })
     },
     findByProjectId() {
-      tableApi.findByProjectId(this.data.id, this.pagePm).then(r => {
+      tableApi.findByProjectId(this.data.projectId, this.pagePm).then(r => {
         this.tables = r.page.rows;
         this.pagePm.total = r.page.total;
       });
