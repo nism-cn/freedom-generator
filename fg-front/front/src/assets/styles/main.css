@@ -190,3 +190,9 @@ footer-center {
 .icon-color-flag {
   color: #000000;
 }
+
+.tab-pane-border {
+  border-left: 1px solid #e4e7ed;
+  border-right: 1px solid #e4e7ed;
+  border-top: 1px solid #e4e7ed;
+}

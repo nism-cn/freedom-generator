@@ -3,6 +3,7 @@
     <el-link :disabled="disabled" :underline="false" @click="handleClick" :type="type">
       <svg-icon v-if="svg" :icon-class="`${icon}`" />
       <i v-else :class="`el-icon-${icon}`" />
+      <slot></slot>
     </el-link>
   </el-tooltip>
 </template>

@@ -67,14 +67,18 @@
 
     <el-dialog title="代码预览" :visible.sync="viewVisible" width="90%" top="3vh">
       <div class="el-dialog-div">
-        <el-tabs v-model="previewActiveName">
+        <el-tabs class="gen-main-tabs" v-model="previewActiveName" type="card">
           <el-tab-pane v-for="(item) in previewList" :label="item.showName" :name="item.id" :key="item.id">
-            <div>
-              <fg-link content="复制" placement="start" icon="document-copy" v-clipboard:copy="item.code"
-                v-clipboard:success="() => $message.success('复制成功')" />
+            <template>
+              <div class="tab-pane-border">
+                <fg-link content="复制代码" placement="start" icon="document-copy" v-clipboard:copy="item.code"
+                  v-clipboard:success="() => $message.success('复制成功')" type="success">复制</fg-link>
                 <span class="fg-text-warning"> 输出路径: {{ item.path }}</span>
-              <fg-editor :options="{ readOnly: true }" :language="item.showLanguage" :value="item.code" />
-            </div>
+              </div>
+              <div class="tab-pane-border">
+                <fg-editor :options="{ readOnly: true }" :language="item.showLanguage" :value="item.code" />
+              </div>
+            </template>
           </el-tab-pane>
         </el-tabs>
       </div>
