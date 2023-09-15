@@ -32,6 +32,8 @@ public class PreviewDTO implements Serializable {
     private String id;
     /*** 预览名称 */
     private String showName;
+    /*** 预览顺序 */
+    private Integer showIndex = 0;
     /*** 预览语言 */
     private String showLanguage;
     /*** 预览代码(内容) */

@@ -9,9 +9,7 @@ import cn.hutool.db.meta.Table;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import freemarker.core.Environment;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateModel;
+import freemarker.template.*;
 import lombok.AllArgsConstructor;
 import org.nism.fg.base.constant.CoreConstant;
 import org.nism.fg.base.core.BaseEntity;
@@ -145,10 +143,12 @@ public class FgTableServiceImpl extends ServiceImpl<FgTableMapper, FgTable> impl
             preview.setCode(code);
             preview.setPath(outPath);
 
+            preview.setShowIndex(getShowIndex(env));
+
             data.add(preview);
             IoUtil.close(sw);
         }
-        return data;
+        return data.stream().sorted(Comparator.comparing(PreviewDTO::getShowIndex)).collect(Collectors.toList());
     }
 
     @Override
@@ -229,4 +229,21 @@ public class FgTableServiceImpl extends ServiceImpl<FgTableMapper, FgTable> impl
         }
         return dictList;
     }
+
+    private Integer getShowIndex(Environment env) {
+        try {
+            TemplateModel defShowIndex = env.getVariable(CoreConstant.SHOW_INDEX);
+            if (null != defShowIndex) {
+                if (defShowIndex instanceof SimpleNumber) {
+                    return ((SimpleNumber) defShowIndex).getAsNumber().intValue();
+                } else {
+                    throw new IllegalArgumentException("显示排序参数不正确");
+                }
+            }
+        } catch (TemplateModelException e) {
+            throw new IllegalArgumentException("显示排序参数不正确", e);
+        }
+        return 0;
+    }
+
 }

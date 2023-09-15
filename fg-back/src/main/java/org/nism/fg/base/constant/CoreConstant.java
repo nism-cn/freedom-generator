@@ -17,6 +17,7 @@ public interface CoreConstant {
     String DTO_KEY = "DTO_KEY";
     String DB_BEAN_KEY = "ds";
     String OUT_PATH = "_out_path_";
+    String SHOW_INDEX = "_show_index_";
 
     String TYPE_DB = "DB";
     String TYPE_JAVA = "JAVA";
