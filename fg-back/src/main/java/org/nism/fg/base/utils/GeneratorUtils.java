@@ -178,7 +178,7 @@ public class GeneratorUtils {
         } else if (StrUtil.equalsIgnoreCase(suffix, "html")) {
             outPath = StrUtil.format("/{}/{}/{}.html", rootDir.getHtml(), table.getModuleName(), table.getBusinessName());
         } else {
-            throw new IllegalArgumentException("未定义的路径解析规则");
+            outPath = StrUtil.format("/default/{}.{}", table.getBusinessName(), suffix);
         }
         return outPath;
     }

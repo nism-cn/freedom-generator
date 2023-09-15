@@ -23,6 +23,8 @@ public class PreviewDTO implements Serializable {
         LANGUAGE_MAP.put("vue", "html");
         LANGUAGE_MAP.put("js", "javascript");
         LANGUAGE_MAP.put("ftl", "freemarker2");
+        LANGUAGE_MAP.put("sql", "sql");
+        LANGUAGE_MAP.put("html", "html");
     }
 
 

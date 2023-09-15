@@ -31,6 +31,8 @@ module.exports = defineConfig({
     ],
   },
   chainWebpack: config => {
+    // fix monaco bug: Uncaught (in promise) Error: Unexpected usage
+    config.plugin('monaco').use(new MonacoWebpackPlugin())
     // set svg-sprite-loader
     config.module
       .rule('svg')
@@ -47,47 +49,47 @@ module.exports = defineConfig({
         symbolId: 'icon-[name]'
       })
       .end()
-    config
-      .when(true,
-        config => {
-          config
-            .plugin('ScriptExtHtmlWebpackPlugin')
-            .after('html')
-            .use('script-ext-html-webpack-plugin', [{
-              inline: /runtime\..*\.js$/
-            }])
-            .end()
-          config
-            .optimization.splitChunks({
-              chunks: 'all',
-              cacheGroups: {
-                libs: {
-                  name: 'chunk-libs',
-                  test: /[\\/]node_modules[\\/]/,
-                  priority: 10,
-                  chunks: 'initial'
-                },
-                elementUI: {
-                  name: 'chunk-element-ui',
-                  priority: 20,
-                  test: /[\\/]node_modules[\\/]_?element-ui(.*)/
-                },
-                monacoEditor: {
-                  name: 'chunk-monaco-editor',
-                  priority: 20,
-                  test: /[\\/]node_modules[\\/]_?monaco-editor(.*)/
-                },
-                commons: {
-                  name: 'chunk-commons',
-                  test: resolve('src/components'),
-                  minChunks: 3,
-                  priority: 5,
-                  reuseExistingChunk: true
-                }
+    // chunk libs
+    config.when(true,
+      config => {
+        config
+          .plugin('ScriptExtHtmlWebpackPlugin')
+          .after('html')
+          .use('script-ext-html-webpack-plugin', [{
+            inline: /runtime\..*\.js$/
+          }])
+          .end()
+        config
+          .optimization.splitChunks({
+            chunks: 'all',
+            cacheGroups: {
+              libs: {
+                name: 'chunk-libs',
+                test: /[\\/]node_modules[\\/]/,
+                priority: 10,
+                chunks: 'initial'
+              },
+              elementUI: {
+                name: 'chunk-element-ui',
+                priority: 20,
+                test: /[\\/]node_modules[\\/]_?element-ui(.*)/
+              },
+              monacoEditor: {
+                name: 'chunk-monaco-editor',
+                priority: 20,
+                test: /[\\/]node_modules[\\/]_?monaco-editor(.*)/
+              },
+              commons: {
+                name: 'chunk-commons',
+                test: resolve('src/components'),
+                minChunks: 3,
+                priority: 5,
+                reuseExistingChunk: true
               }
-            })
-        }
-      )
+            }
+          })
+      },
+    )
   },
 })
 
