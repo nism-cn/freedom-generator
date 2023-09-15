@@ -6,20 +6,24 @@ import lombok.EqualsAndHashCode;
 import org.nism.fg.base.core.BaseEntity;
 
 /**
- * 数据源对象
+ * 类型表对象
  *
  * @author nism
- * @since 1.0.0
+ * @since 1.0.1
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("FG_DATABASE_INFO")
-public class FgDatabaseInfo extends BaseEntity {
+@TableName("FG_TYPE")
+public class FgType extends BaseEntity {
 
+    /*** 类型 */
+    private String mold;
+    /*** 表名 */
     private String name;
-    private String jdbcUrl;
-    private String username;
-    private String password;
+    /*** 表描述 */
+    private String val;
+    /*** 禁用 */
+    private Boolean dis;
+    /*** 描述 */
     private String remark;
-
 }

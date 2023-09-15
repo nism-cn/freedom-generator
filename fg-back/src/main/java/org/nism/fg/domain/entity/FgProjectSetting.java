@@ -13,7 +13,7 @@ import org.nism.fg.base.core.BaseEntity;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("fg_project_setting")
+@TableName("FG_PROJECT_SETTING")
 public class FgProjectSetting extends BaseEntity {
 
     /*** 关联项目 */

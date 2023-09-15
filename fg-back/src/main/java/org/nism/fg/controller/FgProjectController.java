@@ -6,13 +6,14 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nism.fg.base.config.props.MappingProp;
 import org.nism.fg.base.core.I1;
 import org.nism.fg.base.core.R;
+import org.nism.fg.domain.dto.MapDTO;
 import org.nism.fg.domain.entity.FgProject;
 import org.nism.fg.domain.entity.FgProjectSetting;
 import org.nism.fg.service.FgProjectService;
 import org.nism.fg.service.FgProjectSettingService;
+import org.nism.fg.service.FgTypeService;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -34,7 +35,7 @@ import java.util.*;
 public class FgProjectController {
 
     private final Configuration cfg;
-    private final MappingProp mappingProp;
+    private final FgTypeService typeService;
     private final FgProjectService baseService;
     private final FgProjectSettingService projectSettingService;
 
@@ -80,14 +81,15 @@ public class FgProjectController {
     @GetMapping("types")
     private R<?> types() {
         Map<String, Object> data = new HashMap<>();
+        MapDTO map = typeService.loadMap();
         // base type
-        data.put("javaType", mappingProp.getJavaType());
-        data.put("columnType", mappingProp.getColumnType());
-        data.put("htmlType", mappingProp.getHtmlType());
-        data.put("selectType", mappingProp.getSelectType());
+        data.put("javaType", map.getJavaType());
+        data.put("columnType", map.getColumnType());
+        data.put("htmlType", map.getHtmlTypeMap());
+        data.put("selectType", map.getSelectType());
         // mappings
-        data.put("columnTypeMap", mappingProp.getColumnTypeMap());
-        data.put("htmlTypeMap", mappingProp.getHtmlTypeMap());
+        data.put("columnTypeMap", map.getColumnTypeMap());
+        data.put("htmlTypeMap", map.getHtmlType());
         return R.ok(data);
     }
 

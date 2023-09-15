@@ -3,7 +3,7 @@
     <el-header class="fg-layout-header">
       <div class="header-left">
         <el-image src="/favicon.ico" fit="cover" />
-        <span>自由代码生成器 - Freedom Generator 1.0.0</span>
+        <span>自由代码生成器 - Freedom Generator {{ version }}</span>
       </div>
       <div class="header-center">当前: {{ tabId }}</div>
       <div class="header-right">
@@ -37,6 +37,8 @@
           v-model="leftTabVal">
           <el-tab-pane name="1"><span slot="label"><i class="el-icon-files"></i>项目</span></el-tab-pane>
           <el-tab-pane name="2"><span slot="label"><i class="el-icon-notebook-1"></i>模板</span></el-tab-pane>
+          <el-tab-pane name="3"><span slot="label"><i class="el-icon-s-unfold"></i>映射</span></el-tab-pane>
+
         </el-tabs>
       </el-aside>
 
@@ -44,6 +46,7 @@
         <pane v-if="leftShow" size="20">
           <fg-proj v-show="leftTabVal == '1'" />
           <fg-temp v-show="leftTabVal == '2'" />
+          <fg-maps v-show="leftTabVal == '3'" />
         </pane>
 
         <pane size="70">
@@ -89,15 +92,17 @@ import FgDatabase from '@/views/database';
 import FgMain from '@/views/main';
 import FgProj from '@/views/proj';
 import FgTemp from '@/views/temp';
+import FgMaps from '@/views/maps';
 import FgHelp from '@/views/help';
 import ioApi from '@/apis/ioApi';
 import Intro from '@/utils/intro';
 
 export default {
-  components: { Splitpanes, Pane, FgMain, FgProj, FgTemp, FgDatabase, FgHelp },
+  components: { Splitpanes, Pane, FgMain, FgProj, FgTemp, FgMaps, FgDatabase, FgHelp },
   name: "app-index",
   data() {
     return {
+      version: process.env.VUE_APP_REVERSION,
       leftTabVal: "1",
       rightTabVal: "1",
       leftShow: true,

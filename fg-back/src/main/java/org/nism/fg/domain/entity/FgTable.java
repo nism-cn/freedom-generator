@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("fg_table")
+@TableName("FG_TABLE")
 public class FgTable extends BaseEntity {
 
     /*** 表名 */

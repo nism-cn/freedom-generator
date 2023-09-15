@@ -88,13 +88,18 @@
             </template>
           </el-table-column>
           <el-table-column label="Java类型" width="140">
+            <template slot="header">Java类型
+              <el-tooltip content="刷新映射" placement="top">
+                <el-link type="danger" icon="el-icon-s-unfold"></el-link>
+              </el-tooltip>
+            </template>
             <template slot-scope="scope">
               <el-select :size="tableSize" v-model="scope.row.javaType">
                 <el-option v-for="item in types.javaType" :label="item" :value="item" :key="item" />
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column label="必1填" width="60">
+          <el-table-column label="必填" width="60">
             <template slot="header">必填
               <el-tooltip content="数据库字段不为空,禁止修改!" placement="top">
                 <i class="el-icon-question"></i>
@@ -125,6 +130,11 @@
             </template>
           </el-table-column>
           <el-table-column label="查询方式" width="140">
+            <template slot="header">查询方式
+              <el-tooltip content="刷新映射" placement="top">
+                <el-link type="danger" icon="el-icon-s-unfold"></el-link>
+              </el-tooltip>
+            </template>
             <template slot-scope="scope">
               <el-select :size="tableSize" v-model="scope.row.selectType">
                 <el-option v-for="item in types.selectType" :label="item" :value="item" :key="item" />
@@ -132,6 +142,11 @@
             </template>
           </el-table-column>
           <el-table-column label="显示类型" width="140">
+            <template slot="header">显示类型
+              <el-tooltip content="刷新映射" placement="top">
+                <el-link type="danger" icon="el-icon-s-unfold"></el-link>
+              </el-tooltip>
+            </template>
             <template slot-scope="scope">
               <el-select :size="tableSize" v-model="scope.row.htmlType">
                 <el-option v-for="item in types.htmlType" :label="item" :value="item" :key="item" />
@@ -139,6 +154,11 @@
             </template>
           </el-table-column>
           <el-table-column v-if="dictList.length > 0" label="字典类型" min-width="12%">
+            <template slot="header">字典类型
+              <el-tooltip content="刷新映射" placement="top">
+                <el-link type="danger" icon="el-icon-s-unfold"></el-link>
+              </el-tooltip>
+            </template>
             <template slot-scope="scope">
               <el-select :size="tableSize" v-model="scope.row.dictType" clearable filterable placeholder="请选择">
                 <el-option v-for="dict in dictList" :key="dict.val" :label="dict.name" :value="dict.val">

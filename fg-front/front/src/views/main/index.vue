@@ -15,6 +15,7 @@
           <temp-main v-if="item.mainType == 'template'" :data="item" />
           <proj-main v-if="item.mainType == 'project'" :data="item" />
           <logs-main v-if="item.mainType == 'log'" :data="item" />
+          <maps-main v-if="item.mainType == 'maps'" :data="item" />
         </template>
       </el-tab-pane>
     </el-tabs>
@@ -26,10 +27,11 @@ import { mapState } from 'vuex'
 import ProjMain from '@/views/proj/main'
 import TempMain from '@/views/temp/main'
 import LogsMain from '@/views/logs/main'
+import MapsMain from '@/views/maps/main'
 
 export default {
   name: "main-index",
-  components: { TempMain, ProjMain, LogsMain },
+  components: { TempMain, ProjMain, LogsMain, MapsMain },
   data() {
     return {
       top: undefined,

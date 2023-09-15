@@ -1,6 +1,6 @@
 {
-  "name": "vue-editor",
-  "version": "0.1.0",
+  "name": "fg-front",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

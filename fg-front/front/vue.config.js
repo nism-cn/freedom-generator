@@ -1,7 +1,7 @@
 const { defineConfig } = require('@vue/cli-service');
 const CompressionPlugin = require('compression-webpack-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
-process.env.VUE_APP_MA_VERSION = require('./package.json').version;
+process.env.VUE_APP_REVERSION = require('./package.json').version;
 const path = require('path');
 function resolve(dir) {
   return path.join(__dirname, dir)

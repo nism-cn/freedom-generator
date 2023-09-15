@@ -18,4 +18,9 @@ public interface CoreConstant {
     String DB_BEAN_KEY = "ds";
     String OUT_PATH = "_out_path_";
 
+    String TYPE_DB = "DB";
+    String TYPE_JAVA = "JAVA";
+    String TYPE_HTML = "HTML";
+    String TYPE_SQL = "SQL";
+
 }

@@ -11,7 +11,7 @@ import freemarker.core.Environment;
 import freemarker.template.SimpleScalar;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
-import org.nism.fg.base.config.props.MappingProp;
+import org.nism.fg.domain.dto.MapDTO;
 import org.nism.fg.base.config.props.RootDirProp;
 import org.nism.fg.base.constant.CoreConstant;
 import org.nism.fg.domain.convert.FileConvert;
@@ -19,7 +19,7 @@ import org.nism.fg.domain.dto.FileDTO;
 import org.nism.fg.domain.entity.FgProjectSetting;
 import org.nism.fg.domain.entity.FgTable;
 import org.nism.fg.domain.entity.FgTableColumn;
-import org.nism.fg.domain.enums.DbQuery;
+import org.nism.fg.service.FgTypeService;
 import org.springframework.util.Assert;
 
 import java.io.File;
@@ -85,7 +85,8 @@ public class GeneratorUtils {
         column.setDigit(dbColumn.getDigit());
 
         final String unknown = "unknown";
-        MappingProp maps = SpringUtils.getBean(MappingProp.class);
+        FgTypeService bean = SpringUtils.getBean(FgTypeService.class);
+        MapDTO maps = bean.loadMap();
 
         // java
         column.setJavaName(StringUtils.toCamelCase(columnName, false));
@@ -106,9 +107,6 @@ public class GeneratorUtils {
         column.setCanList(!dbColumn.isPk());
         // 查询
         column.setCanSelect(!dbColumn.isPk() || ignoreSelectSet.contains(columnName));
-        // 查询类型
-        column.setSelectType(DbQuery.eq.name());
-
         return column;
     }
 
