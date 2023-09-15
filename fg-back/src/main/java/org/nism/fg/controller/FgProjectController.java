@@ -85,11 +85,11 @@ public class FgProjectController {
         // base type
         data.put("javaType", map.getJavaType());
         data.put("columnType", map.getColumnType());
-        data.put("htmlType", map.getHtmlTypeMap());
+        data.put("htmlType", map.getHtmlType());
         data.put("selectType", map.getSelectType());
         // mappings
         data.put("columnTypeMap", map.getColumnTypeMap());
-        data.put("htmlTypeMap", map.getHtmlType());
+        data.put("htmlTypeMap", map.getHtmlTypeMap());
         return R.ok(data);
     }
 

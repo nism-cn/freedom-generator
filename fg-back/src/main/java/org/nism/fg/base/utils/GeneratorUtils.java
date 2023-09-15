@@ -11,11 +11,11 @@ import freemarker.core.Environment;
 import freemarker.template.SimpleScalar;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
-import org.nism.fg.domain.dto.MapDTO;
 import org.nism.fg.base.config.props.RootDirProp;
 import org.nism.fg.base.constant.CoreConstant;
 import org.nism.fg.domain.convert.FileConvert;
 import org.nism.fg.domain.dto.FileDTO;
+import org.nism.fg.domain.dto.MapDTO;
 import org.nism.fg.domain.entity.FgProjectSetting;
 import org.nism.fg.domain.entity.FgTable;
 import org.nism.fg.domain.entity.FgTableColumn;
@@ -107,6 +107,8 @@ public class GeneratorUtils {
         column.setCanList(!dbColumn.isPk());
         // 查询
         column.setCanSelect(!dbColumn.isPk() || ignoreSelectSet.contains(columnName));
+        // 查询类型
+        column.setSelectType("eq");
         return column;
     }
 
