@@ -4,16 +4,19 @@
       <el-tab-pane v-for="(item) in tabs" :key="item.id" :name="item.id">
         <template>
           <span slot="label" @contextmenu.prevent="openMenu(item, $event)" @click.middle="closeSelectedTag(item)">
-            <i v-if="item.mainType == 'project'" class="el-icon-files"></i>
-            <i v-else class="el-icon-document"></i>
+            <i v-if="item.mainType == 'project'" class="el-icon-files icon-color-project"></i>
+            <i v-else-if="item.mainType == 'template'" class="el-icon-document icon-color-template"></i>
+            <i v-else-if="item.mainType == 'log'" class="el-icon-receiving icon-color-log"></i>
+            <i v-else-if="item.mainType == 'maps'" class="el-icon-s-unfold icon-color-maps"></i>
+            <i v-else class="el-icon-s-flag icon-color-flag"></i>
             {{ item.name }}
           </span>
           <ul v-show="tabMenuShow" :style="{ left: left + 'px', top: top + 'px' }" class="contextmenu">
             <li @click="closeSelectedTag"><i class="el-icon-close"></i> 关闭当前</li>
             <li @click="closeAllTags(item)"><i class="el-icon-circle-close"></i> 全部关闭</li>
           </ul>
-          <temp-main v-if="item.mainType == 'template'" :data="item" />
           <proj-main v-if="item.mainType == 'project'" :data="item" />
+          <temp-main v-if="item.mainType == 'template'" :data="item" />
           <logs-main v-if="item.mainType == 'log'" :data="item" />
           <maps-main v-if="item.mainType == 'maps'" :data="item" />
         </template>

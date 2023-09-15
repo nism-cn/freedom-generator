@@ -81,10 +81,12 @@ footer {
   display: flex;
   justify-content: space-between;
 }
-.footer-right{
+
+.footer-right {
   display: flex;
   align-items: center;
 }
+
 .fg-layout>.fg-layout-header>.header-left {
   display: flex;
   align-items: center;
@@ -163,4 +165,28 @@ footer-center {
 
 .fg-text-danger {
   color: #F56C6C;
+}
+
+.icon-color-database {
+  color: green;
+}
+
+.icon-color-project {
+  color: orange;
+}
+
+.icon-color-template {
+  color: palevioletred;
+}
+
+.icon-color-maps {
+  color: brown;
+}
+
+.icon-color-log {
+  color: maroon;
+}
+
+.icon-color-flag {
+  color: #000000;
 }

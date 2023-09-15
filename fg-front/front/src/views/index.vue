@@ -20,7 +20,7 @@
 
         <fg-link content="导入数据" icon="upload2" /> -->
         <el-dropdown trigger="click" size="mini" @command="logCmd">
-          <fg-link :svg="true" content="操作日志" icon="log" />
+          <fg-link content="操作日志" icon="receiving" class="icon-color-log"/>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item icon="el-icon-question" command="debug">debug</el-dropdown-item>
             <el-dropdown-item icon="el-icon-info" command="info">info</el-dropdown-item>
@@ -35,10 +35,9 @@
       <el-aside width="25px">
         <el-tabs id="leftTabs" class="fg-layout-tabs-item" tab-position="left" @tab-click="leftTabClick"
           v-model="leftTabVal">
-          <el-tab-pane name="1"><span slot="label"><i class="el-icon-files"></i>项目</span></el-tab-pane>
-          <el-tab-pane name="2"><span slot="label"><i class="el-icon-notebook-1"></i>模板</span></el-tab-pane>
-          <el-tab-pane name="3"><span slot="label"><i class="el-icon-s-unfold"></i>映射</span></el-tab-pane>
-
+          <el-tab-pane name="1"><span slot="label"><i class="el-icon-files icon-color-project"></i>项目</span></el-tab-pane>
+          <el-tab-pane name="2"><span slot="label"><i class="el-icon-notebook-1 icon-color-template"></i>模板</span></el-tab-pane>
+          <el-tab-pane name="3"><span slot="label"><i class="el-icon-s-unfold icon-color-maps"></i>映射</span></el-tab-pane>
         </el-tabs>
       </el-aside>
 
@@ -61,7 +60,7 @@
       <el-aside width="25px">
         <el-tabs id="rightTabs" class="fg-layout-tabs-item" tab-position="right" @tab-click="rightTabClick"
           v-model="rightTabVal">
-          <el-tab-pane name="1"><span slot="label"><i class="el-icon-coin"></i>数据源</span></el-tab-pane>
+          <el-tab-pane name="1"><span slot="label"><i class="el-icon-coin icon-color-database"></i>数据源</span></el-tab-pane>
         </el-tabs>
       </el-aside>
     </el-container>

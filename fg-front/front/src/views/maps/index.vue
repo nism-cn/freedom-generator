@@ -17,7 +17,7 @@
           :props="{ label: 'name' }" :expand-on-click-node="false" @node-click="handleNodeClick"
           @node-contextmenu="contextmenu">
           <span class="gen-tree-node" slot-scope="{ node }">
-            <span><i class="el-icon-files"></i> {{ node.label }}</span>
+            <span><i class="el-icon-s-unfold"></i> {{ node.label }}</span>
           </span>
         </el-tree>
       </el-col>
