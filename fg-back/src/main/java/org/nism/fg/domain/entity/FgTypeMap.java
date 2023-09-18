@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.nism.fg.base.core.BaseEntity;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 /**
  * 类型映射表对象
  *
@@ -16,16 +19,18 @@ import org.nism.fg.base.core.BaseEntity;
 @TableName("FG_TYPE_MAP")
 public class FgTypeMap extends BaseEntity {
 
-    /*** 表名 */
+    /*** 类型 */
     private String typeMold;
-    /*** 表名 */
+    /*** 类型主键 */
+    @NotNull(message = "类型不能为空")
     private Long typeId;
-    /*** 表名 */
+    /*** 类型值 */
     private transient String typeVal;
-    /*** */
+    /*** 映射类型 */
     private String mapMold;
-    /*** 表名 */
+    /*** 映射类型主键 */
+    @NotNull(message = "映射类型不能为空")
     private Long mapId;
-    /*** 表名 */
+    /*** 映射类型值 */
     private transient String mapVal;
 }

@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.nism.fg.base.core.BaseEntity;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * 类型表对象
  *
@@ -17,10 +19,13 @@ import org.nism.fg.base.core.BaseEntity;
 public class FgType extends BaseEntity {
 
     /*** 类型 */
+    @NotBlank(message = "类型不能为空")
     private String mold;
-    /*** 表名 */
+    /*** 描述 */
+    @NotBlank(message = "描述不能为空")
     private String name;
-    /*** 表描述 */
+    /*** 值 */
+    @NotBlank(message = "类型值不能为空")
     private String val;
     /*** 禁用 */
     private Boolean dis;

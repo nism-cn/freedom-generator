@@ -7,6 +7,7 @@ import org.nism.fg.base.core.BaseEntity;
 import org.nism.fg.base.core.R;
 import org.nism.fg.domain.entity.FgType;
 import org.nism.fg.service.FgTypeService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
@@ -47,18 +48,18 @@ public class FgTypeController {
     }
 
     @PostMapping
-    public R<?> create(@RequestBody FgType e) {
+    public R<?> create(@RequestBody @Validated FgType e) {
         return R.ok(baseService.save(e));
     }
 
     @PutMapping("{id}")
-    public R<?> update(@RequestBody FgType e, @PathVariable Long id) {
+    public R<?> update(@RequestBody @Validated FgType e, @PathVariable Long id) {
         e.setId(id);
         return R.ok(baseService.updateById(e));
     }
 
     @PostMapping("saveOrUpdate")
-    public R<?> saveOrUpdate(@RequestBody FgType e) {
+    public R<?> saveOrUpdate(@RequestBody @Validated FgType e) {
         return R.ok(baseService.saveOrUpdate(e));
     }
 

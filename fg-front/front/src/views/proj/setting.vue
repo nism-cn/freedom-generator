@@ -73,7 +73,7 @@ export default {
     init() {
       if (this.visible) {
         // 获取当前项目设置
-        projectApi.findSetting(this.data.id).then(r => this.settingForm = r.data);
+        projectApi.findSetting(this.data.projectId).then(r => this.settingForm = r.data);
         // 获取所有数据源
         databaseApi.find().then(r => this.dbInfoList = r.data);
         // 获取所有模版组
@@ -81,7 +81,7 @@ export default {
       }
     },
     saveOrUpdate() {
-      let data = { ...this.settingForm, ...{ projectId: this.data.id } };
+      let data = { ...this.settingForm, ...{ projectId: this.data.projectId } };
       projectSettingApi.saveOrUpdate(data).then(r => {
         this.innerVisible = false;
         this.settingForm = r.data;

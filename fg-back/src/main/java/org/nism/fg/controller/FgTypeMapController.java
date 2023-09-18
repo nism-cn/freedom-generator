@@ -8,6 +8,7 @@ import org.nism.fg.domain.entity.FgType;
 import org.nism.fg.domain.entity.FgTypeMap;
 import org.nism.fg.service.FgTypeMapService;
 import org.nism.fg.service.FgTypeService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
@@ -58,17 +59,18 @@ public class FgTypeMapController {
     }
 
     @PostMapping
-    public R<?> create(@RequestBody FgTypeMap e) {
+    public R<?> create(@RequestBody @Validated FgTypeMap e) {
         return R.ok(baseService.save(e));
     }
 
     @PutMapping("{id}")
-    public R<?> update(@RequestBody FgTypeMap e, @PathVariable String id) {
+    public R<?> update(@RequestBody @Validated FgTypeMap e, @PathVariable Long id) {
+        e.setId(id);
         return R.ok(baseService.updateById(e));
     }
 
     @PostMapping("saveOrUpdate")
-    public R<?> saveOrUpdate(@RequestBody FgTypeMap e) {
+    public R<?> saveOrUpdate(@RequestBody @Validated FgTypeMap e) {
         return R.ok(baseService.saveOrUpdate(e));
     }
 

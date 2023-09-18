@@ -12,8 +12,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * 请求计时器
@@ -28,17 +26,24 @@ public class WatchFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        if (request.getRequestURI().contains("/io/log/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         StopWatch watch = new StopWatch();
         String taskName = String.format("[%s]%s", request.getMethod(), request.getRequestURI());
 
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        log.debug("--- 请求开始计时\t 时间: {} \t - 请求: {}", dtf.format(LocalDateTime.now()), taskName);
         watch.start(taskName);
         filterChain.doFilter(request, response);
         watch.stop();
 
         StopWatch.TaskInfo task = watch.getLastTaskInfo();
-        log.debug("--- 请求计时结束\t 耗时: {}s,\t {}ms \t - 请求: {}", task.getTimeSeconds(), task.getTimeMillis(), task.getTaskName());
+        log.debug("###### 请求耗时\t: {}s,\t {}ms \t - 请求: {}",
+                String.format("%.2f", task.getTimeSeconds()),
+                task.getTimeMillis(),
+                task.getTaskName()
+        );
         response.addHeader("watch-time", task.getTimeSeconds() + "s");
     }
 

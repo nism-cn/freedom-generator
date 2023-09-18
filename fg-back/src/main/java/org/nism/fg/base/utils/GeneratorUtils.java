@@ -52,7 +52,8 @@ public class GeneratorUtils {
         table.setClassName(convertClassName(dbTable.getTableName(), setting.getIgnoreTablePrefix()));
         table.setRootPackage(setting.getRootPackage());
         table.setModuleName(getLast(setting.getRootPackage(), "."));
-        table.setBusinessName(getLast(dbTable.getTableName(), "_"));
+//        table.setBusinessName(getLast(dbTable.getTableName(), "_"));
+        table.setBusinessName(table.getClassName());
         table.setAuthor(setting.getAuthor());
 
         return table;
@@ -180,7 +181,7 @@ public class GeneratorUtils {
         } else if (StrUtil.equalsIgnoreCase(suffix, "html")) {
             outPath = StrUtil.format("/{}/{}/{}.html", rootDir.getHtml(), table.getModuleName(), table.getBusinessName());
         } else {
-            outPath = StrUtil.format("/default/{}.{}", table.getBusinessName(), suffix);
+            outPath = StrUtil.format("/default/{}/{}.{}", table.getModuleName(), table.getBusinessName(), suffix);
         }
         return outPath;
     }

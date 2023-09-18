@@ -125,8 +125,7 @@ export default {
       console.log(row);
       typeApi.saveOrUpdate(row).then(() => {
         this.$message.success("操作成功!")
-        this.init();
-      })
+      }).finally(() => this.init())
       row.search = null;
     },
     edit(row) {
