@@ -1,13 +1,10 @@
 package org.nism.fg.controller;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.db.meta.MetaUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nism.fg.base.constant.CoreConstant;
 import org.nism.fg.base.core.I2;
 import org.nism.fg.base.core.R;
-import org.nism.fg.base.utils.DataSourceUtils;
 import org.nism.fg.base.utils.PageUtils;
 import org.nism.fg.base.utils.ServletUtils;
 import org.nism.fg.domain.entity.FgTable;
@@ -110,7 +107,7 @@ public class FgTableController {
     /**
      * 生成代码
      */
-    @PutMapping("generator/{ids}")
+    @GetMapping("generator/{ids}")
     public void generator(@PathVariable List<String> ids) throws Exception {
         ServletUtils.byteDownload(baseService.generator(ids));
     }

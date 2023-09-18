@@ -1,6 +1,6 @@
 <template>
   <el-tooltip effect="dark" :content="content" :placement="`bottom-${placement}`" :open-delay="800">
-    <el-link :disabled="disabled" :underline="false" @click="handleClick" :type="type">
+    <el-link :href="disabled ? null : href" :disabled="disabled" :underline="false" @click="handleClick" :type="type">
       <svg-icon v-if="svg" :icon-class="`${icon}`" />
       <i v-else :class="`el-icon-${icon}`" />
       <slot></slot>
@@ -23,10 +23,8 @@ export default {
       type: String,
       default: ''
     },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
+    disabled: Boolean,
+    href: String,
     svg: {
       type: Boolean,
       default: false
@@ -37,8 +35,12 @@ export default {
     }
   },
   methods: {
-    handleClick(evt) {
-      this.$emit('click', evt);
+    handleClick(event) {
+      if (!this.disabled) {
+        if (!this.href) {
+          this.$emit('click', event);
+        }
+      }
     }
   }
 }

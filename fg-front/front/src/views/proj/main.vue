@@ -183,7 +183,7 @@ export default {
     },
     generator(row) {
       const ids = row.id || this.ids;
-      tableApi.generator(ids).then();
+      tableApi.generator(ids);
     },
     createImport() {
       projectApi.importTables(this.settingForm.id, this.importForm.tables).then(r => {
