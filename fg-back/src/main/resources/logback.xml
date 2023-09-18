@@ -71,6 +71,9 @@
         </rollingPolicy>
     </appender>
 
+    <logger name="org.nism.fg" level="debug" />
+    <logger name="org.springframework" level="warn" />
+
     <!--系统操作日志-->
     <root level="info">
         <appender-ref ref="console"/>

@@ -6,10 +6,3 @@ pagehelper:
   helperDialect: h2
   supportMethodsArguments: true
   params: count=countSql
-
-logging:
-  level:
-    org.nism.fg: debug
-    org.springframework: warn
-
-
