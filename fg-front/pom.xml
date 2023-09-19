@@ -35,10 +35,9 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>npm</executable>
+                            <executable>pnpm</executable>
                             <arguments>
                                 <argument>i</argument>
-                                <argument>--force</argument>
                             </arguments>
                             <workingDirectory>${basedir}/front</workingDirectory>
                         </configuration>
@@ -50,7 +49,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>npm</executable>
+                            <executable>pnpm</executable>
                             <arguments>
                                 <argument>run</argument>
                                 <argument>build</argument>

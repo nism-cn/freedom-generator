@@ -1,5 +1,13 @@
 server:
   port: 8080
+  compression:
+    enabled: true
+    mime-types:
+      - 'text/html'
+      - 'text/css'
+      - 'application/javascript'
+      - 'application/font-woff'
+      - 'application/json'
 spring:
   profiles:
     active: @profiles.active@
