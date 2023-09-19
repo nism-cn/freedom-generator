@@ -12,9 +12,7 @@ module.exports = defineConfig({
   productionSourceMap: false,
   transpileDependencies: true,
   configureWebpack: {
-    plugins: [new MonacoWebpackPlugin()]
-  },
-  configureWebpack: {
+    name: process.env.VUE_APP_TITLE,
     resolve: {
       alias: {
         '@': resolve('src')
@@ -50,7 +48,7 @@ module.exports = defineConfig({
       })
       .end()
     // chunk libs
-    config.when(true,
+    config.when(process.env.NODE_ENV !== 'development',
       config => {
         config
           .plugin('ScriptExtHtmlWebpackPlugin')
