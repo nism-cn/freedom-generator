@@ -61,13 +61,5 @@ export default {
       url: `${BASE}/types`,
       method: 'GET',
     })
-  },
-  // 查询列表
-  process: (url) => {
-    return request({
-      url: `${BASE}/process`,
-      method: 'POST',
-      data: { data: url }
-    })
-  },
+  }
 }

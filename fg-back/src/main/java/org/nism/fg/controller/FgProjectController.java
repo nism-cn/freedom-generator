@@ -1,9 +1,6 @@
 package org.nism.fg.controller;
 
-import cn.hutool.core.io.IoUtil;
 import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.nism.fg.base.core.I1;
@@ -16,11 +13,11 @@ import org.nism.fg.service.FgProjectSettingService;
 import org.nism.fg.service.FgTypeService;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * 项目控制层
@@ -93,45 +90,4 @@ public class FgProjectController {
         return R.ok(data);
     }
 
-    /**
-     * 开始渲染
-     */
-    @PostMapping("process")
-    public R<?> process(@RequestBody I1<String> data) throws IOException, TemplateException {
-        String path = data.getData();
-        // 增加灵魂
-        Map<String, Object> root = new HashMap<>();
-        root.put("packageName", "org.nism.gen");
-        root.put("ClassName", "Demo");
-        root.put("className", "demo");
-        root.put("comment", "演示样例");
-        root.put("author", "nism");
-        root.put("moduleName", "demo-module");
-        root.put("businessName", "demo-business");
-
-        root.put("tableName", "gen-table");
-        root.put("license", "The MIT License (MIT)");
-        Map<String, Object> pkColumn = new HashMap<>();
-        root.put("pkColumn", pkColumn);
-
-        pkColumn.put("javaField", "id");
-        pkColumn.put("javaType", "Long");
-        pkColumn.put("comment", "主键不解释");
-
-        List<Map<String, Object>> columns = new ArrayList<>();
-        root.put("columns", columns);
-        columns.add(pkColumn);
-        columns.add(pkColumn);
-
-        // 获取模板数据
-        Template temp = cfg.getTemplate(path);
-
-        Writer sw = new StringWriter();
-        temp.process(root, sw);
-        String r = sw.toString();
-        IoUtil.close(sw);
-
-        return R.ok(r);
-
-    }
 }

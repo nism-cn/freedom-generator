@@ -40,7 +40,8 @@ public class FgProjectSettingController {
     }
 
     @PutMapping("{id}")
-    public R<?> update(@RequestBody FgProjectSetting e, @PathVariable String id) {
+    public R<?> update(@RequestBody FgProjectSetting e, @PathVariable Long id) {
+        e.setId(id);
         return R.ok(baseService.updateById(e));
     }
 

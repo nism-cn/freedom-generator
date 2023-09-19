@@ -45,7 +45,8 @@ public class FgTableController {
     }
 
     @PutMapping("{id}")
-    public R<?> update(@RequestBody FgTable e, @PathVariable String id) {
+    public R<?> update(@RequestBody FgTable e, @PathVariable Long id) {
+        e.setId(id);
         return R.ok(baseService.updateById(e));
     }
 
