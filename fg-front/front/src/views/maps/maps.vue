@@ -162,12 +162,6 @@ export default {
         });
       }).catch(() => { })
     },
-    reduction(row) {
-      typeMapApi.update(row.id, { dis: false }).then(() => {
-        this.$message.success(`${row.val}已还原！`)
-        this.init();
-      });
-    },
     refreshParam() {
       this.pagePm = {
         dis: false,

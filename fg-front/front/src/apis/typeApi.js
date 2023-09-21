@@ -33,6 +33,13 @@ export default {
       data: data
     })
   },
+  // 更新Dis
+  updateDis: (id, dis) => {
+    return request({
+      url: `${BASE}/${id}/${dis}`,
+      method: 'PUT'
+    })
+  },
   saveOrUpdate(data) {
     return request({
       url: `${BASE}/saveOrUpdate`,

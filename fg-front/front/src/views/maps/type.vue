@@ -146,15 +146,15 @@ export default {
         }
       ).then(() => {
         console.log("禁用");
-        typeApi.update(row.id, { dis: true }).then(() => {
-          this.$message.warning(`${row.val}已禁用！`)
+        typeApi.updateDis(row.id, true).then(() => {
+          this.$message.warning(`${row.val} 已禁用！`)
           this.init();
         });
       }).catch((e) => {
         console.log("删除", e);
         if (e == 'cancel') {
           typeApi.delete(row.id).then(() => {
-            this.$message.error(`${row.val}已删除！`)
+            this.$message.error(`${row.val} 已删除！`)
             this.init();
           });
         } else {
@@ -163,8 +163,8 @@ export default {
       })
     },
     reduction(row) {
-      typeApi.update(row.id, { dis: false }).then(() => {
-        this.$message.success(`${row.val}已还原！`)
+      typeApi.updateDis(row.id, false).then(() => {
+        this.$message.success(`${row.val} 已还原！`)
         this.init();
       });
     },

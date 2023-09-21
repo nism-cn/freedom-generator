@@ -53,6 +53,17 @@ module.exports = defineConfig({
         symbolId: 'icon-[name]'
       })
       .end()
+    // config.optimization.minimizer('terser').tap(options => {
+    //   const compress = {
+    //     warnings: false,
+    //     drop_console: true,
+    //     drop_debugger: true,
+    //     pure_funcs: ['console.log'],
+    //   };
+    //   const initCompress = options[0].terserOptions.compress;
+    //   options[0].terserOptions.compress = { ...initCompress, ...compress };
+    //   return options;
+    // })
     // chunk libs
     config.when(process.env.NODE_ENV !== 'development',
       config => {

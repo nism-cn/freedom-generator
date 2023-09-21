@@ -58,6 +58,11 @@ public class FgTypeController {
         return R.ok(baseService.updateById(e));
     }
 
+    @PutMapping("{id}/{dis}")
+    public R<?> updateDis(@PathVariable Long id, @PathVariable Boolean dis) {
+        return R.ok(baseService.lambdaUpdate().eq(BaseEntity::getId, id).set(FgType::getDis, dis).update());
+    }
+
     @PostMapping("saveOrUpdate")
     public R<?> saveOrUpdate(@RequestBody @Validated FgType e) {
         return R.ok(baseService.saveOrUpdate(e));
