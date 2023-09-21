@@ -25,6 +25,7 @@ public class PreviewDTO implements Serializable {
         LANGUAGE_MAP.put("ftl", "freemarker2");
         LANGUAGE_MAP.put("sql", "sql");
         LANGUAGE_MAP.put("html", "html");
+        LANGUAGE_MAP.put("py", "python");
     }
 
 

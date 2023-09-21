@@ -1,6 +1,7 @@
 const { defineConfig } = require('@vue/cli-service');
 const CompressionPlugin = require('compression-webpack-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+
 process.env.VUE_APP_REVERSION = require('./package.json').version;
 const path = require('path');
 function resolve(dir) {
@@ -12,6 +13,10 @@ module.exports = defineConfig({
   productionSourceMap: false,
   transpileDependencies: true,
   configureWebpack: {
+    cache: {
+      type: 'filesystem',
+      allowCollectingMemory: true
+    },
     name: process.env.VUE_APP_TITLE,
     resolve: {
       alias: {
@@ -25,12 +30,13 @@ module.exports = defineConfig({
         algorithm: 'gzip',              // 使用gzip压缩
         minRatio: 0.8,                  // 压缩率小于1才会压缩
         threshold: 10240,               // 压缩率小于1才会压缩
-      })
+      }),
+      new MonacoWebpackPlugin({
+        languages: ['freemarker2']
+      }),
     ],
   },
   chainWebpack: config => {
-    // fix monaco bug: Uncaught (in promise) Error: Unexpected usage
-    config.plugin('monaco').use(new MonacoWebpackPlugin())
     // set svg-sprite-loader
     config.module
       .rule('svg')
@@ -67,15 +73,25 @@ module.exports = defineConfig({
                 priority: 10,
                 chunks: 'initial'
               },
+              vue: {
+                name: 'chunk-vue-bucket',
+                priority: 12,
+                test: /[\\/]node_modules[\\/]_?vue(.*)|[\\/]node_modules[\\/]_?vuex(.*)|[\\/]node_modules[\\/]_?axios(.*)/
+              },
               elementUI: {
                 name: 'chunk-element-ui',
                 priority: 20,
                 test: /[\\/]node_modules[\\/]_?element-ui(.*)/
               },
+              highlightJS: {
+                name: 'chunk-highlight-js',
+                priority: 21,
+                test: /[\\/]node_modules[\\/]_?highlight.js(.*)/
+              },
               monacoEditor: {
                 name: 'chunk-monaco-editor',
-                priority: 20,
-                test: /[\\/]node_modules[\\/]_?monaco-editor(.*)/
+                priority: 22,
+                test: /[\\/]node_modules[\\/]_?monaco-editor(.*)/,
               },
               commons: {
                 name: 'chunk-commons',
@@ -88,6 +104,8 @@ module.exports = defineConfig({
           })
       },
     )
+    config.plugins.delete('prefetch')
+    config.plugins.delete('preload')
   },
 })
 

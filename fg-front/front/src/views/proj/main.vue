@@ -76,7 +76,8 @@
                 <span class="fg-text-warning"> 输出路径: {{ item.path }}</span>
               </div>
               <div class="tab-pane-border">
-                <fg-editor :options="{ readOnly: true }" :language="item.showLanguage" :value="item.code" />
+                <!-- <fg-editor :options="{ readOnly: true }" :language="item.showLanguage" :value="item.code" /> -->
+                <fg-hljs :language="item.showLanguage" :code="item.code"></fg-hljs>
               </div>
             </template>
           </el-tab-pane>

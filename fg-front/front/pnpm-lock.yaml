@@ -20,6 +20,9 @@ dependencies:
   element-ui:
     specifier: ^2.4.5
     version: 2.15.14(vue@2.7.14)
+  highlight.js:
+    specifier: 10.7.3
+    version: 10.7.3
   intro.js:
     specifier: ^7.0.1
     version: 7.2.0
@@ -4697,7 +4700,6 @@ packages:
 
   /highlight.js@10.7.3:
     resolution: {integrity: sha512-tzcUFauisWKNHaRkN4Wjl/ZA07gENAjFl3J/c480dprkGTg5EQstgaNFqBfUqCq54kZRIEcreTsAgF/m2quD7A==}
-    dev: true
 
   /hosted-git-info@2.8.9:
     resolution: {integrity: sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==}

@@ -14,6 +14,7 @@ import store from './store';
 import FgEditor from "@/components/FgEditor";
 import FgLink from "@/components/FgLink";
 import FgPage from "@/components/FgPage";
+import FgHljs from "@/components/FgHljs";
 
 import directive from '@/directive';
 
@@ -23,6 +24,7 @@ Vue.use(directive);
 
 Vue.component('fg-page', FgPage)
 Vue.component('fg-link', FgLink)
+Vue.component('fg-hljs', FgHljs)
 Vue.component('fg-editor', FgEditor)
 
 import browserUtil from './utils/browserUtil';
