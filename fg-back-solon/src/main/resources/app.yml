@@ -1,0 +1,35 @@
+server:
+  port: 8085
+
+mybatis.db1:
+  mappers:
+    - "org.nism.fg.mapper.*"
+
+pagehelper:
+  helperDialect: h2
+  supportMethodsArguments: true
+  params: count=countSql
+
+solon.serialization.json:
+  nullAsWriteable: true
+  longAsString: true
+
+solon.logging.logger:
+  "root": #默认记录器配置
+    level: DEBUG
+  "com.zaxxer.hikari":
+    level: WARN
+  "org.flywaydb":
+    level: WARN
+  "cn.hutool":
+    level: WARN
+
+solon.logging.appender:
+  console:
+    name: "fg.home/logs/debug"
+    rolling: "fg.home/logs/%d{yyyy-MM-dd}.%i.log"
+    pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %magenta(${PID:-}) --- %-15([%15.15thread]) %-56(%cyan(%-40.40logger{39}%L)) : %msg%n"
+  file:
+    name: "fg.home/logs/debug"
+    rolling: "fg.home/logs/%d{yyyy-MM-dd}.%i.log"
+    pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level ${PID:-} --- %-15([%15.15thread]) %-56(%-40.40logger{39}%L) : %msg%n"

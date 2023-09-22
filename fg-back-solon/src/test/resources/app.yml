@@ -1,0 +1,16 @@
+server:
+  port: 8082
+
+mybatis.db1:
+  mappers:
+    - "org.nism.fg.mapper.*"
+
+pagehelper:
+  helperDialect: h2
+  supportMethodsArguments: true
+  params: count=countSql
+
+solon:
+  serialization:
+    json:
+      nullAsWriteable: true
