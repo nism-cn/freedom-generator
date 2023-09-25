@@ -1,6 +1,6 @@
 -- db built-in
 INSERT INTO FG_TYPE (ID, MOLD, NAME, VAL)
-VALUES (1001, 'DB', 'built-in', 'char111'),
+VALUES (1001, 'DB', 'built-in', 'char'),
        (1002, 'DB', 'built-in', 'varchar'),
        (1003, 'DB', 'built-in', 'nvarchar'),
        (1004, 'DB', 'built-in', 'varchar2'),

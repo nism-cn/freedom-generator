@@ -21,6 +21,7 @@ public class DataSourceConfig {
         String db = SystemUtils.getDataDir() + SystemUtils.SEP + "fgdb";
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setJdbcUrl("jdbc:h2:file:" + db + ";MODE=MYSQL");
+        dataSource.setDriverClassName("org.h2.Driver");
         dataSource.setUsername("");
         dataSource.setPassword("");
         return dataSource;

@@ -25,7 +25,7 @@ public class R<T> implements Serializable {
 
     private String msg;
 
-    private boolean ok = true;
+    private boolean ok;
 
     private T data;
 
@@ -80,6 +80,7 @@ public class R<T> implements Serializable {
         r.setCode(code);
         r.setData(data);
         r.setMsg(msg);
+        r.setOk(code == OK);
         return r;
     }
 
@@ -89,10 +90,6 @@ public class R<T> implements Serializable {
 
     public static <T> Boolean isOk(R<T> ret) {
         return R.OK == ret.getCode();
-    }
-
-    public boolean getOk() {
-        return R.OK == this.code;
     }
 
     @Data

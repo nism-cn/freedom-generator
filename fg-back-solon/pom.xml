@@ -47,7 +47,7 @@
 
         <dependency>
             <groupId>org.noear</groupId>
-            <artifactId>solon-web</artifactId>
+            <artifactId>solon-api</artifactId>
         </dependency>
 
         <dependency>
@@ -114,6 +114,8 @@
 
     </dependencies>
     <!-- 主菜是这里： -->
+
+    <packaging>jar</packaging>
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
@@ -159,6 +161,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>
