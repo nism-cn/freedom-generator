@@ -19,10 +19,10 @@ public class AppFilter implements Filter {
         }
         try {
             chain.doFilter(ctx);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             ctx.status(200);
             ctx.outputAsJson(JsonUtils.writeValueAsString(R.fail(e.getMessage())));
-            log.error("异常咯", e);
+            log.error("exception", e);
         }
     }
 }

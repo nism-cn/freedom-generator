@@ -1,6 +1,7 @@
 package org.nism.fg.base.utils;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.db.meta.Column;
 import cn.hutool.db.meta.Table;
@@ -9,6 +10,7 @@ import freemarker.template.SimpleScalar;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 import org.nism.fg.base.constant.CoreConstant;
+import org.nism.fg.base.constant.RootDirProp;
 import org.nism.fg.domain.convert.FileConvert;
 import org.nism.fg.domain.dto.FileDTO;
 import org.nism.fg.domain.dto.MapDTO;
@@ -19,7 +21,9 @@ import org.nism.fg.service.FgTypeService;
 import org.noear.solon.Solon;
 
 import java.io.File;
+import java.io.StringReader;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 代码生成器 工具类
@@ -152,33 +156,31 @@ public class GeneratorUtils {
         String suffix = FileUtil.getSuffix(temp.getName());
         String outPath = "";
 
-//        RootDirProp rootDir = SpringUtils.getBean(RootDirProp.class);
-//
-//        if (StrUtil.equalsIgnoreCase(suffix, "java")) {
-//            List<String> lines = new ArrayList<>();
-//            IoUtil.readLines(new StringReader(code), lines);
-//            List<String> packageLines = lines.stream().filter(e -> e.contains("package ")).collect(Collectors.toList());
-//            List<String> classLines = lines.stream().filter(e -> e.contains("public ")).collect(Collectors.toList());
-//            String packageLine = packageLines.get(0);
-//            String classLine = classLines.get(0);
-//            packageLine = packageLine.replace("package", "").replace(";", "").replace(" ", "").replace(".", "/");
-//            classLine = StrUtil.split(classLine, " ").get(2);
-//            outPath = StrUtil.format("/{}/{}/{}.java", rootDir.getJava(), packageLine, classLine);
-//        } else if (StrUtil.equalsIgnoreCase(suffix, "js")) {
-//            outPath = StrUtil.format("/{}/{}/{}.js", rootDir.getJs(), table.getModuleName(), table.getBusinessName());
-//        } else if (StrUtil.equalsIgnoreCase(suffix, "xml") && StrUtil.contains(temp.getName(), "mapper")) {
-//            outPath = StrUtil.format("/{}/{}Mapper.xml", rootDir.getMapper(), table.getClassName());
-//        } else if (StrUtil.equalsIgnoreCase(suffix, "sql")) {
-//            outPath = StrUtil.format("/{}/{}.sql", rootDir.getSql(), table.getClassName());
-//        } else if (StrUtil.equalsIgnoreCase(suffix, "vue")) {
-//            outPath = StrUtil.format("/{}/{}/{}/index.vue", rootDir.getVue(), table.getModuleName(), table.getBusinessName());
-//        } else if (StrUtil.equalsIgnoreCase(suffix, "html")) {
-//            outPath = StrUtil.format("/{}/{}/{}.html", rootDir.getHtml(), table.getModuleName(), table.getBusinessName());
-//        } else {
-//            outPath = StrUtil.format("/default/{}/{}.{}", table.getModuleName(), table.getBusinessName(), suffix);
-//        }
-        outPath = StrUtil.format("/default/{}/{}.{}", table.getModuleName(), table.getBusinessName(), suffix);
+        RootDirProp rootDir = new RootDirProp();
 
+        if (StrUtil.equalsIgnoreCase(suffix, "java")) {
+            List<String> lines = new ArrayList<>();
+            IoUtil.readLines(new StringReader(code), lines);
+            List<String> packageLines = lines.stream().filter(e -> e.contains("package ")).collect(Collectors.toList());
+            List<String> classLines = lines.stream().filter(e -> e.contains("public ")).collect(Collectors.toList());
+            String packageLine = packageLines.get(0);
+            String classLine = classLines.get(0);
+            packageLine = packageLine.replace("package", "").replace(";", "").replace(" ", "").replace(".", "/");
+            classLine = StrUtil.split(classLine, " ").get(2);
+            outPath = StrUtil.format("/{}/{}/{}.java", rootDir.getJava(), packageLine, classLine);
+        } else if (StrUtil.equalsIgnoreCase(suffix, "js")) {
+            outPath = StrUtil.format("/{}/{}/{}.js", rootDir.getJs(), table.getModuleName(), table.getBusinessName());
+        } else if (StrUtil.equalsIgnoreCase(suffix, "xml") && StrUtil.contains(temp.getName(), "mapper")) {
+            outPath = StrUtil.format("/{}/{}Mapper.xml", rootDir.getMapper(), table.getClassName());
+        } else if (StrUtil.equalsIgnoreCase(suffix, "sql")) {
+            outPath = StrUtil.format("/{}/{}.sql", rootDir.getSql(), table.getClassName());
+        } else if (StrUtil.equalsIgnoreCase(suffix, "vue")) {
+            outPath = StrUtil.format("/{}/{}/{}/index.vue", rootDir.getVue(), table.getModuleName(), table.getBusinessName());
+        } else if (StrUtil.equalsIgnoreCase(suffix, "html")) {
+            outPath = StrUtil.format("/{}/{}/{}.html", rootDir.getHtml(), table.getModuleName(), table.getBusinessName());
+        } else {
+            outPath = StrUtil.format("/default/{}/{}.{}", table.getModuleName(), table.getBusinessName(), suffix);
+        }
         return outPath;
     }
 
