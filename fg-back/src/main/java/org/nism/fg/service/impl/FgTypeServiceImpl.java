@@ -1,10 +1,10 @@
 package org.nism.fg.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.AllArgsConstructor;
 import org.nism.fg.base.constant.CoreConstant;
 import org.nism.fg.base.core.BaseEntity;
+import org.nism.fg.base.core.ServiceImpl;
 import org.nism.fg.domain.dto.MapDTO;
 import org.nism.fg.domain.entity.FgType;
 import org.nism.fg.domain.entity.FgTypeMap;

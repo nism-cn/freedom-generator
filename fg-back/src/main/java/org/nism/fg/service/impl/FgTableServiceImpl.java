@@ -7,7 +7,7 @@ import cn.hutool.db.Db;
 import cn.hutool.db.Entity;
 import cn.hutool.db.meta.Table;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.nism.fg.base.core.ServiceImpl;
 import freemarker.core.Environment;
 import freemarker.template.*;
 import lombok.AllArgsConstructor;

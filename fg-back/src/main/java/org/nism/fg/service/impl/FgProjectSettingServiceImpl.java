@@ -1,6 +1,6 @@
 package org.nism.fg.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.nism.fg.base.core.ServiceImpl;
 import org.nism.fg.domain.entity.FgProjectSetting;
 import org.nism.fg.mapper.FgProjectSettingMapper;
 import org.nism.fg.service.FgProjectSettingService;

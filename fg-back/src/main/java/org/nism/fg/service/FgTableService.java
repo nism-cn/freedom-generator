@@ -1,7 +1,7 @@
 package org.nism.fg.service;
 
 import cn.hutool.db.meta.Table;
-import com.baomidou.mybatisplus.extension.service.IService;
+import org.nism.fg.base.core.IService;
 import org.nism.fg.domain.dto.DictDTO;
 import org.nism.fg.domain.dto.PreviewDTO;
 import org.nism.fg.domain.entity.FgTable;
