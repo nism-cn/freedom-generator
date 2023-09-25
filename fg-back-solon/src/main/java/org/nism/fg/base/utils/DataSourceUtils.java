@@ -4,7 +4,6 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.db.ds.DSFactory;
 import cn.hutool.db.ds.GlobalDSFactory;
 import cn.hutool.db.ds.hikari.HikariDSFactory;
-import cn.hutool.db.ds.simple.SimpleDataSource;
 import cn.hutool.setting.Setting;
 import lombok.extern.slf4j.Slf4j;
 import org.nism.fg.base.constant.CoreConstant;
@@ -13,6 +12,7 @@ import org.nism.fg.domain.entity.FgDatabaseInfo;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.UUID;
 
 /**
  * 数据源工具类
@@ -23,7 +23,7 @@ import java.sql.SQLException;
 @Slf4j
 public class DataSourceUtils {
 
-    public static final String DB_KEY = "IOC_DB";
+    private static final String TEST = "^TEST^";
 
     static {
         DSFactory.setCurrentDSFactory(new HikariDSFactory(new Setting()));
@@ -33,18 +33,26 @@ public class DataSourceUtils {
     }
 
     /**
-     * 初始化druid数据源
+     * 初始化数据源
      */
     public static DataSource init(String id, String url, String username, String password) {
         HikariDSFactory factory = (HikariDSFactory) GlobalDSFactory.get();
         factory.close(id);
         Setting setting = factory.getSetting();
+        Setting ns = new Setting();
 
-        setting.setByGroup("url", id, url);
-        setting.setByGroup("username", id, username);
-        setting.setByGroup("password", id, password);
+        ns.setByGroup("url", id, url);
+        ns.setByGroup("username", id, username);
+        ns.setByGroup("password", id, password);
 
-        DSFactory dsFactory = GlobalDSFactory.set(new HikariDSFactory(setting));
+        for (String group : setting.getGroups()) {
+            if (group.contains(TEST)) {
+                continue;
+            }
+            setting.getMap(group).forEach((k, v) -> ns.putByGroup(k, group, v));
+        }
+
+        DSFactory dsFactory = GlobalDSFactory.set(new HikariDSFactory(ns));
         return dsFactory.getDataSource(id);
     }
 
@@ -54,22 +62,11 @@ public class DataSourceUtils {
     }
 
     public static void test(FgDatabaseInfo db) {
-        SimpleDataSource dataSource = new SimpleDataSource(db.getJdbcUrl(), db.getUsername(), db.getPassword());
+        String id = TEST + UUID.randomUUID().toString().replaceAll("-", "");
+        DataSource dataSource = init(id, db.getJdbcUrl(), db.getUsername(), db.getPassword());
         Connection connection = null;
         try {
             connection = dataSource.getConnection();
-        } catch (SQLException e) {
-            throw new IllegalArgumentException("获取连接失败, 请检查连接配置.", e);
-        } finally {
-            IoUtil.close(connection);
-            IoUtil.close(dataSource);
-        }
-    }
-
-    public static void test(DataSource ds) {
-        Connection connection = null;
-        try {
-            connection = ds.getConnection();
         } catch (SQLException e) {
             throw new IllegalArgumentException("获取连接失败, 请检查连接配置.", e);
         } finally {
@@ -79,28 +76,10 @@ public class DataSourceUtils {
 
     public static DataSource getDb(String id) {
         HikariDSFactory factory = (HikariDSFactory) GlobalDSFactory.get();
-
-        Setting setting = factory.getSetting();
-        System.out.println(setting);
+        System.out.println(factory.getSetting());
         String s = CoreConstant.DB_BEAN_KEY + id;
-//        reloadClassLoader(ds);
-//        DataSourceUtils.test(ds);
-        DataSource ds = factory.getDataSource(s);
-        System.out.println(ds.getClass());
-        return ds;
+        return factory.getDataSource(s);
     }
 
-    private static void reloadClassLoader(DataSource ds) {
-//        try {
-//            String driverClassName = JdbcUtils.getDriverClassName(ds.getUrl());
-//            ClassLoader classLoader = CoreConstant.JDBC_CLASS_LOADER_MAP.get(driverClassName);
-//            if (classLoader != null && ds.getDriverClassLoader() == null) {
-//                ds.setDriverClassLoader(classLoader);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            log.error("通过外部加载jar失败", e);
-//        }
-    }
 
 }

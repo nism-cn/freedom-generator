@@ -19,10 +19,10 @@ solon.logging.logger:
     level: DEBUG
   "com.zaxxer.hikari":
     level: WARN
-  "org.flywaydb":
-    level: WARN
-  "cn.hutool":
-    level: WARN
+#  "org.flywaydb":
+#    level: WARN
+#  "cn.hutool":
+#    level: WARN
 
 solon.logging.appender:
   console:
@@ -33,3 +33,5 @@ solon.logging.appender:
     name: "fg.home/logs/debug"
     rolling: "fg.home/logs/%d{yyyy-MM-dd}.%i.log"
     pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level ${PID:-} --- %-15([%15.15thread]) %-56(%-40.40logger{39}%L) : %msg%n"
+
+solon.extend: "!fg.home/libs"
