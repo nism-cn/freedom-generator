@@ -51,6 +51,8 @@ public class DataSourceUtils {
         ns.setByGroup("url", id, url);
         ns.setByGroup("username", id, username);
         ns.setByGroup("password", id, password);
+        ns.setByGroup("remarks", id, "true");
+        ns.setByGroup("useInformationSchema", id, "true");
 
         DSFactory dsFactory = GlobalDSFactory.set(new HikariDSFactory(ns));
         return dsFactory.getDataSource(id);
@@ -76,7 +78,6 @@ public class DataSourceUtils {
 
     public static DataSource getDb(String id) {
         HikariDSFactory factory = (HikariDSFactory) GlobalDSFactory.get();
-        System.out.println(factory.getSetting());
         String s = CoreConstant.DB_BEAN_KEY + id;
         return factory.getDataSource(s);
     }

@@ -83,9 +83,6 @@ public class FgTableServiceImpl extends ServiceImpl<FgTableMapper, FgTable> impl
     @Tran
     @Override
     public boolean removeByIds(Collection<?> ids) {
-        ids.forEach(e -> {
-            System.out.println(baseMapper.selectById(e.toString()));
-        });
         baseMapper.deleteBatchIds(ids);
         tableColumnMapper.delete(Wrappers.lambdaQuery(FgTableColumn.class).in(FgTableColumn::getTableId, ids));
         return true;
