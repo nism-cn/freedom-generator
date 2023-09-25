@@ -1,6 +1,6 @@
 package org.nism.fg.service.impl;
 
-import com.baomidou.mybatisplus.solon.service.impl.ServiceImpl;
+import org.nism.fg.base.core.ServiceImpl;
 import org.nism.fg.domain.entity.FgDatabaseInfo;
 import org.nism.fg.mapper.FgDatabaseInfoMapper;
 import org.nism.fg.service.FgDatabaseInfoService;
