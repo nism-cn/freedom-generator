@@ -21,11 +21,13 @@ public class FgTableColumnController {
     @Inject
     private FgTableColumnService baseService;
 
+    @Get
     @Mapping
     public R<?> find() {
         return R.ok(baseService.list());
     }
 
+    @Get
     @Mapping("{id}")
     public R<?> findOne(Long id) {
         return R.ok(baseService.getById(id));
@@ -50,6 +52,7 @@ public class FgTableColumnController {
         return R.ok(baseService.removeById(id));
     }
 
+    @Get
     @Mapping("tableId/{tableId}")
     public R<?> find(Long tableId) {
         return R.ok(baseService.lambdaQuery().eq(FgTableColumn::getTableId, tableId).list());

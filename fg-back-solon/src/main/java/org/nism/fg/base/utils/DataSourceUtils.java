@@ -41,16 +41,16 @@ public class DataSourceUtils {
         Setting setting = factory.getSetting();
         Setting ns = new Setting();
 
-        ns.setByGroup("url", id, url);
-        ns.setByGroup("username", id, username);
-        ns.setByGroup("password", id, password);
-
         for (String group : setting.getGroups()) {
             if (group.contains(TEST)) {
                 continue;
             }
             setting.getMap(group).forEach((k, v) -> ns.putByGroup(k, group, v));
         }
+
+        ns.setByGroup("url", id, url);
+        ns.setByGroup("username", id, username);
+        ns.setByGroup("password", id, password);
 
         DSFactory dsFactory = GlobalDSFactory.set(new HikariDSFactory(ns));
         return dsFactory.getDataSource(id);

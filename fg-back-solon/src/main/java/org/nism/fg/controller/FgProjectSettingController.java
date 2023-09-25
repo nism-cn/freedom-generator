@@ -20,11 +20,13 @@ public class FgProjectSettingController {
     @Inject
     private FgProjectSettingService baseService;
 
+    @Get
     @Mapping
     public R<?> find() {
         return R.ok(baseService.list());
     }
 
+    @Get
     @Mapping("{id}")
     public R<?> findOne(Long id) {
         return R.ok(baseService.getById(id));

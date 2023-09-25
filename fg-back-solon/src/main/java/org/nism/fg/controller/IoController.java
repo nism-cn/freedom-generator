@@ -39,6 +39,7 @@ public class IoController {
     /**
      * 获取项目结构
      */
+    @Get
     @Mapping("file-tree")
     public R<?> fileTree() throws IOException {
         List<Path> walk = Files.walk(Paths.get(TEMP_PATH)).collect(Collectors.toList());
@@ -55,6 +56,7 @@ public class IoController {
         return R.ok(dtos);
     }
 
+    @Get
     @Mapping("temp")
     public R<?> temp() {
         List<FileDTO> tempList = new ArrayList<>();
@@ -67,6 +69,7 @@ public class IoController {
     /**
      * 获取模版样例
      */
+    @Get
     @Mapping("temp-demo")
     public R<?> tempDemo() {
         FileUtil.copy(ResourceUtil.getResource("demo").getPath(), TEMP_PATH, true);

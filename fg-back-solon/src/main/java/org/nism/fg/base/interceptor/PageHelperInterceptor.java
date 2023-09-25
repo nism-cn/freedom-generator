@@ -26,7 +26,7 @@ public class PageHelperInterceptor implements RouterInterceptor {
     }
 
     @Override
-    public Object postResult(Context ctx, Object body) throws Throwable {        //此处的 Result 对象是我自定义的返回值类型,具体根据自己需求修改即可
+    public Object postResult(Context ctx, Object body) throws Throwable {
         if (body instanceof R) {
             R<?> r = (R<?>) body;
             Object data = r.getData();

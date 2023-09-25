@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.nism.fg.base.core.I2;
 import org.nism.fg.base.core.R;
 import org.nism.fg.base.utils.PageUtils;
+import org.nism.fg.base.utils.ServletUtils;
 import org.nism.fg.domain.entity.FgTable;
 import org.nism.fg.domain.entity.FgTableColumn;
 import org.nism.fg.service.FgTableService;
@@ -31,6 +32,7 @@ public class FgTableController {
         return R.ok(baseService.list());
     }
 
+    @Get
     @Mapping("{id}")
     public R<?> findOne(Long id) {
         return R.ok(baseService.getById(id));
@@ -61,6 +63,7 @@ public class FgTableController {
         return R.ok(baseService.removeByIds(ids));
     }
 
+    @Get
     @Mapping("project/{projectId}")
     public R<?> findByProjectId(Long projectId, @Body String search) {
         return R.ok(PageUtils.startPage().doSelectPage(() -> baseService.lambdaQuery()
@@ -76,6 +79,7 @@ public class FgTableController {
     /**
      * 获取数据库表
      */
+    @Get
     @Mapping("db-tables/{settingId}")
     private R<?> dbTables(Long settingId) {
         return R.ok(baseService.getDbTables(settingId));
@@ -84,6 +88,7 @@ public class FgTableController {
     /**
      * 获取字典数据
      */
+    @Get
     @Mapping("dictList/{tableId}")
     private R<?> dictList(Long tableId) {
         return R.ok(baseService.dictList(tableId));
@@ -102,6 +107,7 @@ public class FgTableController {
     /**
      * 预览代码
      */
+    @Get
     @Mapping("preview/{id}")
     public R<?> preview(Long id) throws Exception {
         return R.ok(baseService.preview(id));
@@ -110,9 +116,10 @@ public class FgTableController {
     /**
      * 生成代码
      */
+    @Get
     @Mapping("generator/{ids}")
     public void generator(List<String> ids) throws Exception {
-//        ServletUtils.byteDownload(baseService.generator(ids));
+        ServletUtils.byteDownload(baseService.generator(ids));
     }
 
 }

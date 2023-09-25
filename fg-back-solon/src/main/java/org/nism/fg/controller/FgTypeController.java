@@ -22,6 +22,7 @@ public class FgTypeController {
     @Inject
     private FgTypeService baseService;
 
+    @Get
     @Mapping("list/{mold}")
     public R<?> listMold(String mold, String search, boolean dis) {
         return R.ok(baseService.lambdaQuery()
@@ -33,11 +34,13 @@ public class FgTypeController {
         );
     }
 
+    @Get
     @Mapping
     public R<?> find() {
         return R.ok(baseService.lambdaQuery().eq(FgType::getDis, false).list());
     }
 
+    @Get
     @Mapping("{id}")
     public R<?> findOne(Long id) {
         return R.ok(baseService.lambdaQuery().eq(BaseEntity::getId, id).eq(FgType::getDis, false).one());

@@ -29,11 +29,13 @@ public class FgTypeMapController {
     @Inject
     private FgTypeMapService baseService;
 
+    @Get
     @Mapping
     public R<?> find() {
         return R.ok(baseService.list());
     }
 
+    @Get
     @Mapping("list/{typeMold}/{mapMold}")
     public R<?> listMold(String typeMold, String mapMold) {
         List<FgTypeMap> typeMaps = baseService.lambdaQuery()
@@ -51,6 +53,7 @@ public class FgTypeMapController {
         return R.ok(typeMaps);
     }
 
+    @Get
     @Mapping("{id}")
     public R<?> findOne(Long id) {
         return R.ok(baseService.getById(id));
@@ -81,6 +84,7 @@ public class FgTypeMapController {
         return R.ok(baseService.removeById(id));
     }
 
+    @Get
     @Mapping("groups")
     public R<?> groups() {
         return R.ok(baseService.lambdaQuery()

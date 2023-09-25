@@ -7,7 +7,6 @@ import org.nism.fg.base.utils.Assert;
 import org.nism.fg.base.utils.DataSourceUtils;
 import org.nism.fg.domain.entity.FgDatabaseInfo;
 import org.nism.fg.service.FgDatabaseInfoService;
-import org.noear.solon.Solon;
 import org.noear.solon.annotation.*;
 
 import javax.sql.DataSource;
@@ -24,15 +23,16 @@ import java.sql.SQLException;
 @Mapping("database-info")
 public class FgDatabaseInfoController {
 
-    //    private ConfigurableListableBeanFactory beanFactory;
     @Inject
     private FgDatabaseInfoService baseService;
 
+    @Get
     @Mapping
     public R<?> find() {
         return R.ok(baseService.list());
     }
 
+    @Get
     @Mapping("{id}")
     public R<?> findOne(Long id) {
         return R.ok(baseService.getById(id));
@@ -44,31 +44,16 @@ public class FgDatabaseInfoController {
         boolean save = baseService.save(e);
         String dsId = CoreConstant.DB_BEAN_KEY + e.getId();
         DataSource dataSource = DataSourceUtils.init(e);
-//        beanFactory.registerSingleton(dsId, dataSource);
-        Solon.context().wrap(dsId, dataSource);
-//        Solon.context().wrapAndPut(UserService.class, new UserServiceImpl());
-
         return R.ok(save);
     }
 
     @Put
     @Mapping("{id}")
-    public R<?> update(FgDatabaseInfo e, String id) throws SQLException {
+    public R<?> update(FgDatabaseInfo e, Long id) throws SQLException {
+        e.setId(id);
         boolean update = baseService.updateById(e);
         Assert.isTrue(update, "更新失败!");
-        System.out.println(e);
         DataSourceUtils.init(e);
-        FgDatabaseInfo byId = baseService.getById(id);
-//        dataSource.setUrl(byId.getJdbcUrl());
-//        dataSource.setUsername(byId.getUsername());
-//        dataSource.setPassword(byId.getPassword());
-        return R.ok(update);
-    }
-
-    @Mapping("dataSources")
-    public R<?> dataSources() {
-//        Map<String, DataSource> beansOfType = beanFactory.getBeansOfType(DataSource.class);
-//        return R.ok(beansOfType.keySet());
         return R.ok();
     }
 

@@ -37,11 +37,13 @@ public class FgProjectController {
     @Inject
     private FgProjectSettingService projectSettingService;
 
+    @Get
     @Mapping
     public R<?> find() {
         return R.ok(baseService.list());
     }
 
+    @Get
     @Mapping("{id}")
     public R<?> findOne(Long id) {
         return R.ok(baseService.getById(id));
@@ -80,6 +82,7 @@ public class FgProjectController {
         return R.ok();
     }
 
+    @Get
     @Mapping("types")
     private R<?> types() {
         Map<String, Object> data = new HashMap<>();
