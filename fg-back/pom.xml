@@ -94,12 +94,6 @@
 
         <dependency>
             <groupId>cn.hutool</groupId>
-            <artifactId>hutool-core</artifactId>
-            <version>${hutool.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>cn.hutool</groupId>
             <artifactId>hutool-db</artifactId>
             <version>${hutool.version}</version>
         </dependency>
