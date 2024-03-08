@@ -70,14 +70,18 @@
         <el-tabs class="gen-main-tabs" v-model="previewActiveName" type="card">
           <el-tab-pane v-for="(item) in previewList" :label="item.showName" :name="item.id" :key="item.id">
             <template>
-              <div class="tab-pane-border">
+              <div class="tab-pane-border">&nbsp;
                 <fg-link content="复制代码" placement="start" icon="document-copy" v-clipboard:copy="item.code"
-                  v-clipboard:success="() => $message.success('复制成功')" type="success">复制</fg-link>
-                <span class="fg-text-warning"> 输出路径: {{ item.path }}</span>
+                  v-clipboard:success="() => $message.success('复制代码成功')" type="warning"></fg-link>&nbsp;
+                <fg-link content="复制全路径" placement="start" icon="copy-document" v-clipboard:copy="item.path"
+                  v-clipboard:success="() => $message.success('复制全路径成功')" type="warning"></fg-link>&nbsp;
+                <fg-link content="复制文件名" placement="start" icon="files" v-clipboard:copy="item.path.substring(item.path.lastIndexOf('/') + 1)"
+                  v-clipboard:success="() => $message.success('复制文件名成功')" type="warning"></fg-link>&nbsp;&nbsp;
+                <el-tag size="mini"> 输出路径: {{ item.path }}</el-tag>
               </div>
               <div class="tab-pane-border">
                 <!-- <fg-editor :options="{ readOnly: true }" :language="item.showLanguage" :value="item.code" /> -->
-                <fg-hljs :language="item.showLanguage" :code="item.code"></fg-hljs>
+                <fg-hljs v-if="viewVisible" :language="item.showLanguage" :code="item.code"></fg-hljs>
               </div>
             </template>
           </el-tab-pane>
