@@ -23,7 +23,8 @@
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <hutool.version>5.8.18</hutool.version>
         <druid.version>1.2.16</druid.version>
-        <solon.version>2.5.6</solon.version>
+<!--        <solon.version>2.5.6</solon.version>-->
+        <solon.version>2.5.7-M5</solon.version>
     </properties>
 
     <dependencyManagement>
