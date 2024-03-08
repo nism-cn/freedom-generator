@@ -6,6 +6,7 @@
       <fg-link :disabled="multiple" content="批量生成" placement="start" icon="download" @click="generator" />
       <fg-link :disabled="multiple" content="批量删除" placement="start" icon="delete" @click="deleteTable" />
       <fg-link content="刷新" placement="start" icon="refresh-right" @click="init" />
+      <fg-link content="强制刷新" placement="start" icon="refresh" @click="forceRefresh" />
     </template>
     <el-row>
       <el-col :span="24">
@@ -21,7 +22,8 @@
 
     <el-row>
       <el-col :span="24">
-        <el-table height="76vh" size="medium" :data="tables" @row-dblclick="openModify" @selection-change="selectChange">
+        <el-table height="76vh" size="medium" :data="tables" @row-dblclick="openModify"
+          @selection-change="selectChange">
           <el-table-column type="selection" width="55" />
           <el-table-column prop="name" label="表名" />
           <el-table-column prop="comment" label="描述" />
@@ -35,7 +37,7 @@
               <fg-link content="预览" placement="start" icon="view" @click="preview(scope.row)" />
               <fg-link content="编辑" placement="start" icon="edit" @click="openModify(scope.row)" />
               <fg-link content="删除" placement="start" icon="delete" @click="deleteTable(scope.row)" />
-              <!-- <fg-link content="结构同步" placement="start" icon="refresh" @click="init" /> -->
+              <fg-link content="强制刷新" placement="start" icon="refresh" @click="forceRefresh(scope.row)" />
               <fg-link content="生成代码" placement="start" icon="download" @click="generator(scope.row)" />
             </template>
           </el-table-column>
@@ -51,7 +53,8 @@
     <el-dialog title="导入表" :visible.sync="importVisible">
       <el-form :model="importForm" @submit.prevent.native>
         <el-form-item label="">
-          <el-select v-model="importForm.tables" multiple filterable placeholder="请选择" :filter-method="tableSelectFilter">
+          <el-select v-model="importForm.tables" multiple filterable placeholder="请选择"
+            :filter-method="tableSelectFilter">
             <el-option v-for="item in tableNameList" :key="item.tableName" :value="item.tableName">
               <span style="float: left" v-text="item.tableName"></span>
               <span style="float: right; color: #8492a6; font-size: 13px" v-text="item.comment"></span>
@@ -75,7 +78,8 @@
                   v-clipboard:success="() => $message.success('复制代码成功')" type="warning"></fg-link>&nbsp;
                 <fg-link content="复制全路径" placement="start" icon="copy-document" v-clipboard:copy="item.path"
                   v-clipboard:success="() => $message.success('复制全路径成功')" type="warning"></fg-link>&nbsp;
-                <fg-link content="复制文件名" placement="start" icon="files" v-clipboard:copy="item.path.substring(item.path.lastIndexOf('/') + 1)"
+                <fg-link content="复制文件名" placement="start" icon="files"
+                  v-clipboard:copy="item.path.substring(item.path.lastIndexOf('/') + 1)"
                   v-clipboard:success="() => $message.success('复制文件名成功')" type="warning"></fg-link>&nbsp;&nbsp;
                 <el-tag size="mini"> 输出路径: {{ item.path }}</el-tag>
               </div>
@@ -107,6 +111,7 @@ export default {
   data() {
     return {
       ids: [],
+      tableNames: [],
       single: true,
       multiple: true,
       previewList: [],
@@ -125,7 +130,9 @@ export default {
       viewVisible: false,
       previewActiveName: "",
       settingForm: {},
-      importForm: {},
+      importForm: {
+        tables: []
+      },
     }
   },
   mounted() {
@@ -144,6 +151,7 @@ export default {
     // 多选框选中数据
     selectChange(selection) {
       this.ids = selection.map((item) => item.id);
+      this.tableNames = selection.map((item) => item.name);
       this.single = selection.length != 1;
       this.multiple = !selection.length;
     },
@@ -184,6 +192,23 @@ export default {
       const ids = row.id || this.ids;
       this.$confirm(`确定删除选中吗？`, '提示', { type: 'warning' }).then(() => {
         tableApi.deleteBatch(ids).then(() => this.init());
+      }).catch(() => { })
+    },
+    forceRefresh(row) {
+      const ids = row.id || this.ids;
+      const tableNames = row.name ? [row.name] : this.tableNames;
+      this.$confirm(
+        `<b>确定<b style="color:red">强制</b>刷新选中吗？</b> <br> 既为刷新,会删除表结构,数据也会清空!`,
+        '提示',
+        { type: 'warning', dangerouslyUseHTMLString: true, }
+      ).then(() => {
+        Promise.all([
+          tableApi.deleteBatch(ids),
+          projectApi.importTables(this.settingForm.id, tableNames)
+        ]).then(() => {
+          this.init();
+          this.importVisible = false;
+        })
       }).catch(() => { })
     },
     generator(row) {
