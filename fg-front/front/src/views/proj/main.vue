@@ -6,7 +6,7 @@
       <fg-link :disabled="multiple" content="批量生成" placement="start" icon="download" @click="generator" />
       <fg-link :disabled="multiple" content="批量删除" placement="start" icon="delete" @click="deleteTable" />
       <fg-link content="刷新" placement="start" icon="refresh-right" @click="init" />
-      <fg-link content="强制刷新" placement="start" icon="refresh" @click="forceRefresh" />
+      <fg-link :disabled="multiple" content="强制刷新" placement="start" icon="refresh" @click="forceRefresh" />
     </template>
     <el-row>
       <el-col :span="24">
