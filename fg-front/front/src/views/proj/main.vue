@@ -208,6 +208,7 @@ export default {
         ]).then(() => {
           this.init();
           this.importVisible = false;
+          this.$message.success('刷新成功')
         })
       }).catch(() => { })
     },
