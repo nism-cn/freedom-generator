@@ -1,5 +1,15 @@
 <template>
-  <pre><code v-html="hlHtml"></code></pre>
+
+  <div class="fg-hljs">
+    <div class="fg-hljs-numbers-pre">
+      <pre><code v-html="hlHtml"></code></pre>
+      <pre>
+          <ul class="fg-hljs-line-numbers">
+            <li v-for="i in lines" :key="i" v-html="i"></li>
+          </ul>
+      </pre>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -15,12 +25,36 @@ export default {
   data() {
     return {
       hlHtml: null,
+      lines: 0
     };
   },
   mounted() {
-    const data = hljs.highlight(this.language, this.code);
-    const { value } = data;
-    this.hlHtml = value;
+    const hlHtml = hljs.highlight(this.language, this.code).value;
+    this.lines = this.code.split("\n").length;
+    this.hlHtml = hlHtml;
   },
 };
 </script>
+
+<style scoped>
+.fg-hljs {
+  position: relative;
+}
+
+.fg-hljs-numbers-pre {
+  padding-left: 40px;
+  margin-top: -10px;
+}
+
+.fg-hljs-line-numbers {
+  position: absolute;
+  padding-left: 10px;
+  margin-top: -30px;
+  top: 0;
+  left: 0;
+  width: 0;
+  text-align: right;
+  list-style-type: none;
+  color: #ccc;
+}
+</style>
