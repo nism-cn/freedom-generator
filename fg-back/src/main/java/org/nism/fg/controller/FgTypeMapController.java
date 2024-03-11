@@ -80,6 +80,7 @@ public class FgTypeMapController {
     }
 
     @GetMapping("groups")
+    @SuppressWarnings({"unchecked"})
     public R<?> groups() {
         return R.ok(baseService.lambdaQuery()
                 .select(FgTypeMap::getTypeMold, FgTypeMap::getMapMold)
