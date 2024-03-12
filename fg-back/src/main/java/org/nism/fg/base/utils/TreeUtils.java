@@ -3,7 +3,9 @@ package org.nism.fg.base.utils;
 import org.nism.fg.base.core.Tree;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 树操作工具
@@ -19,19 +21,26 @@ public class TreeUtils {
     /**
      * 数据通过递归整理为树结构
      *
-     * @param list   源数据
-     * @param parent 根节点
-     * @param <E>    树类型
+     * @param list       源数据
+     * @param parent     根节点
+     * @param comparator 排序
+     * @param <E>        树类型
      * @return 树数据
      */
-    public static <E extends Tree<E>> List<E> buildTree(List<E> list, String parent) {
+    public static <E extends Tree<E>> List<E> buildTree(List<E> list, String parent, Comparator<E> comparator) {
         List<E> tree = new ArrayList<>();
-        list.forEach(e -> {
-            if (e.getParent().equals(parent)) {
-                e.setChildren(buildTree(list, e.getChildrenId()));
-                tree.add(e);
-            }
-        });
+
+        // 进行排序
+        List<E> currentLevelNodes = list.stream()
+                .filter(e -> e.getParent().equals(parent))
+                .sorted(comparator)
+                .collect(Collectors.toList());
+
+        // 对当前层级的节点进行排序
+        for (E node : currentLevelNodes) {
+            node.setChildren(buildTree(list, node.getChildrenId(), comparator));
+            tree.add(node);
+        }
         return tree;
     }
 

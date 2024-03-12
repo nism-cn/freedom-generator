@@ -22,6 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,7 +54,8 @@ public class IoController {
             }
             fileTree.add(dto);
         }
-        List<FileDTO> dtos = TreeUtils.buildTree(fileTree, "");
+        Comparator<FileDTO> comparing = Comparator.comparing(FileDTO::getDirectory).thenComparing(FileDTO::getName);
+        List<FileDTO> dtos = TreeUtils.buildTree(fileTree, "", comparing);
         dtos.forEach(e -> e.setGroup(true));
         return R.ok(dtos);
     }
