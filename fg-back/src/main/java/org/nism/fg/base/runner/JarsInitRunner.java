@@ -24,10 +24,11 @@ public class JarsInitRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
         File jars = FileUtil.file(SystemUtils.getLibsDir());
         JarsWatcher jarsWatcher = new JarsWatcher();
-        WatchMonitor monitor = WatchMonitor.create(jars, WatchMonitor.EVENTS_ALL);
-        monitor.setWatcher(jarsWatcher);
-        monitor.setMaxDepth(1);
-        monitor.start();
+        try (WatchMonitor monitor = WatchMonitor.create(jars, WatchMonitor.EVENTS_ALL)) {
+            monitor.setWatcher(jarsWatcher);
+            monitor.setMaxDepth(1);
+            monitor.start();
+        }
         log.debug("jar文件扫描启动");
         jarsWatcher.loadJdbc();
     }

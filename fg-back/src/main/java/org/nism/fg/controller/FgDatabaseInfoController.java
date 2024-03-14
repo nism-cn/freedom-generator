@@ -75,7 +75,7 @@ public class FgDatabaseInfoController {
     }
 
     @PostMapping("test-connection")
-    public R<?> testConnection(@RequestBody FgDatabaseInfo e) throws SQLException {
+    public R<?> testConnection(@RequestBody FgDatabaseInfo e) {
         DataSourceUtils.test(e);
         return R.ok();
     }
