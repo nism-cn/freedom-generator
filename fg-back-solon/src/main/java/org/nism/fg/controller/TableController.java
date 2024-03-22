@@ -6,8 +6,8 @@ import org.nism.fg.base.core.I2;
 import org.nism.fg.base.core.R;
 import org.nism.fg.base.utils.PageUtils;
 import org.nism.fg.base.utils.ServletUtils;
-import org.nism.fg.domain.entity.Table;
 import org.nism.fg.domain.entity.Column;
+import org.nism.fg.domain.entity.Table;
 import org.nism.fg.service.TableService;
 import org.noear.solon.annotation.*;
 
@@ -72,7 +72,9 @@ public class TableController {
                     e.like(Table::getName, search);
                     e.or();
                     e.like(Table::getComment, search);
-                }).list()
+                })
+                .orderByDesc(Table::getId)
+                .list()
         ));
     }
 

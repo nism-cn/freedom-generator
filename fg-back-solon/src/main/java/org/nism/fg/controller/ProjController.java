@@ -1,6 +1,5 @@
 package org.nism.fg.controller;
 
-import freemarker.template.Configuration;
 import lombok.extern.slf4j.Slf4j;
 import org.nism.fg.base.core.I1;
 import org.nism.fg.base.core.R;
@@ -28,8 +27,6 @@ import java.util.Optional;
 @Mapping("project")
 public class ProjController {
 
-    @Inject
-    private Configuration cfg;
     @Inject
     private TypeService typeService;
     @Inject
