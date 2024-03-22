@@ -18,7 +18,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @TableName("FG_TABLE")
-public class FgTable extends BaseEntity {
+public class Table extends BaseEntity {
 
     /*** 表名 */
     private Long projectId;

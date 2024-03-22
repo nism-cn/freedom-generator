@@ -1,9 +1,9 @@
 package org.nism.fg.base.core.adapter.impl;
 
-import org.nism.fg.base.core.adapter.TypeAdapter;
 import org.nism.fg.base.core.CoreConstant;
+import org.nism.fg.base.core.adapter.TypeAdapter;
 import org.nism.fg.domain.entity.Table;
-import org.springframework.stereotype.Component;
+import org.noear.solon.annotation.Component;
 
 import java.util.HashMap;
 import java.util.Map;

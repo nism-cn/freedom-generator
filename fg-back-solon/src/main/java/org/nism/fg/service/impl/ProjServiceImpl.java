@@ -7,7 +7,7 @@ import org.apache.ibatis.solon.annotation.Db;
 import org.nism.fg.base.core.ServiceImpl;
 import org.nism.fg.base.utils.Assert;
 import org.nism.fg.base.utils.DataSourceUtils;
-import org.nism.fg.base.utils.GeneratorUtils;
+import org.nism.fg.base.utils.GenUtils;
 import org.nism.fg.domain.entity.Proj;
 import org.nism.fg.domain.entity.Sets;
 import org.nism.fg.domain.entity.Table;
@@ -67,11 +67,11 @@ public class ProjServiceImpl extends ServiceImpl<ProjMapper, Proj> implements Pr
             tableNames.forEach(tableName -> {
                 cn.hutool.db.meta.Table t = MetaUtil.getTableMeta(dbBean, tableName);
                 Long id = IdWorker.getId(t);
-                Table table = GeneratorUtils.buildTable(t, setting);
+                Table table = GenUtils.buildTable(t, setting);
                 table.setId(id);
                 tableList.add(table);
                 t.getColumns().forEach(c -> {
-                    Column column = GeneratorUtils.buildColumn(c, setting);
+                    Column column = GenUtils.buildColumn(c, setting);
                     if (column != null) {
                         column.setTableId(id);
                         columnList.add(column);

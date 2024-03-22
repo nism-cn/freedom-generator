@@ -23,7 +23,6 @@
         <mybatis-plus.version>3.5.3.2</mybatis-plus.version>
         <hutool.version>5.8.26</hutool.version>
         <druid.version>1.2.18</druid.version>
-        <h2.version>2.2.222</h2.version>
     </properties>
 
     <dependencyManagement>
@@ -74,7 +73,6 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>${h2.version}</version>
         </dependency>
 
         <dependency>

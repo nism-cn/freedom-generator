@@ -8,7 +8,7 @@ import org.nism.fg.base.core.I2;
 import org.nism.fg.base.core.R;
 import org.nism.fg.base.utils.PageUtils;
 import org.nism.fg.base.utils.ServletUtils;
-import org.nism.fg.domain.entity.FgTable;
+import org.nism.fg.domain.entity.Table;
 import org.nism.fg.domain.entity.Column;
 import org.nism.fg.service.TableService;
 import org.springframework.web.bind.annotation.*;
@@ -41,12 +41,12 @@ public class TableController {
     }
 
     @PostMapping
-    public R<?> create(@RequestBody FgTable e) {
+    public R<?> create(@RequestBody Table e) {
         return R.ok(baseService.save(e));
     }
 
     @PutMapping("{id}")
-    public R<?> update(@RequestBody FgTable e, @PathVariable Long id) {
+    public R<?> update(@RequestBody Table e, @PathVariable Long id) {
         e.setId(id);
         return R.ok(baseService.updateById(e));
     }
@@ -64,11 +64,11 @@ public class TableController {
     @GetMapping("project/{projectId}")
     public R<?> findByProjectId(@PathVariable Serializable projectId, String search) {
         return R.ok(PageUtils.startPage().doSelectPage(() -> baseService.lambdaQuery()
-                .eq(FgTable::getProjectId, projectId)
+                .eq(Table::getProjectId, projectId)
                 .and(StrUtil.isNotBlank(search), e -> {
-                    e.like(FgTable::getName, search);
+                    e.like(Table::getName, search);
                     e.or();
-                    e.like(FgTable::getComment, search);
+                    e.like(Table::getComment, search);
                 })
                 .orderByDesc(BaseEntity::getId)
                 .list()
@@ -95,7 +95,7 @@ public class TableController {
      * 修改生成配置
      */
     @PutMapping("modify")
-    public R<?> modify(@RequestBody I2<FgTable, List<Column>> data) {
+    public R<?> modify(@RequestBody I2<Table, List<Column>> data) {
         baseService.modify(data.getData(), data.getSub());
         return R.ok();
     }

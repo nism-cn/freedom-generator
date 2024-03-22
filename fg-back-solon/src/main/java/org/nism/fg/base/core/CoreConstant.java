@@ -24,4 +24,6 @@ public interface CoreConstant {
     String TYPE_HTML = "HTML";
     String TYPE_SQL = "SQL";
 
+    String TYPE_ADAPTER_PREFIX = "type-adapter-";
+
 }

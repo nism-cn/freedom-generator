@@ -5,7 +5,6 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.db.Db;
 import cn.hutool.db.Entity;
-import cn.hutool.db.meta.Table;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.nism.fg.base.core.ServiceImpl;
 import freemarker.core.Environment;
@@ -21,7 +20,7 @@ import org.nism.fg.domain.dto.DictDTO;
 import org.nism.fg.domain.dto.FileDTO;
 import org.nism.fg.domain.dto.PreviewDTO;
 import org.nism.fg.domain.entity.Sets;
-import org.nism.fg.domain.entity.FgTable;
+import org.nism.fg.domain.entity.Table;
 import org.nism.fg.domain.entity.Column;
 import org.nism.fg.mapper.SetsMapper;
 import org.nism.fg.mapper.ColumnMapper;
@@ -46,15 +45,15 @@ import java.util.zip.ZipOutputStream;
  */
 @AllArgsConstructor
 @Service
-public class TableServiceImpl extends ServiceImpl<TableMapper, FgTable> implements TableService {
+public class TableServiceImpl extends ServiceImpl<TableMapper, Table> implements TableService {
 
     private final Configuration cfg;
     private final ColumnMapper tableColumnMapper;
     private final SetsMapper projectSettingMapper;
 
     @Override
-    public FgTable getById(Serializable id) {
-        FgTable table = baseMapper.selectById(id);
+    public Table getById(Serializable id) {
+        Table table = baseMapper.selectById(id);
         List<Column> columns = tableColumnMapper.selectList(
                 Wrappers.lambdaQuery(Column.class).eq(Column::getTableId, id)
         );
@@ -65,7 +64,7 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, FgTable> implemen
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void modify(FgTable table, List<Column> columns) {
+    public void modify(Table table, List<Column> columns) {
         baseMapper.updateById(table);
         tableColumnMapper.updateBatch(columns);
     }
@@ -87,22 +86,22 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, FgTable> implemen
     }
 
     @Override
-    public List<FgTable> selectBatchIdsUnion(Collection<?> ids) {
-        List<FgTable> tables = baseMapper.selectList(Wrappers.lambdaQuery(FgTable.class).in(FgTable::getId, ids));
+    public List<Table> selectBatchIdsUnion(Collection<?> ids) {
+        List<Table> tables = baseMapper.selectList(Wrappers.lambdaQuery(Table.class).in(Table::getId, ids));
         Assert.notEmpty(tables, "未找到表数据");
         List<Column> columns = tableColumnMapper.selectList(Wrappers.lambdaQuery(Column.class)
                 .in(Column::getTableId, tables.stream().map(BaseEntity::getId).collect(Collectors.toSet()))
         );
         Assert.notEmpty(columns, "未找到字段数据");
         List<Sets> settings = projectSettingMapper.selectList(Wrappers.lambdaQuery(Sets.class)
-                .in(Sets::getProjectId, tables.stream().map(FgTable::getProjectId).collect(Collectors.toSet()))
+                .in(Sets::getProjectId, tables.stream().map(Table::getProjectId).collect(Collectors.toSet()))
         );
         Assert.notEmpty(settings, "未找到设置数据");
 
         Map<Long, List<Column>> columnMap = columns.stream().collect(Collectors.groupingBy(Column::getTableId));
         Map<Long, Sets> settingMap = settings.stream().collect(Collectors.toMap(Sets::getProjectId, Function.identity()));
 
-        for (FgTable table : tables) {
+        for (Table table : tables) {
             List<Column> cs = columnMap.get(table.getId());
             Assert.notEmpty(cs, table.getName() + "未找到对应字段数据");
             table.setColumns(cs);
@@ -117,7 +116,7 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, FgTable> implemen
     @SuppressWarnings({"unchecked"})
     public List<PreviewDTO> preview(Serializable id) throws Exception {
         List<PreviewDTO> data = new ArrayList<>();
-        FgTable table = this.selectBatchIdsUnion(Collections.singletonList(id)).get(0);
+        Table table = this.selectBatchIdsUnion(Collections.singletonList(id)).get(0);
         Map<String, Object> root = GenUtils.buildTemplateData(this.selectBatchIdsUnion(Collections.singletonList(id)).get(0));
         List<FileDTO> tempFileDtoList = (List<FileDTO>) root.get(CoreConstant.DTO_KEY);
         root.remove(CoreConstant.DTO_KEY);
@@ -156,7 +155,7 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, FgTable> implemen
     public byte[] generator(Collection<?> ids) throws Exception {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);
-        for (FgTable table : this.selectBatchIdsUnion(ids)) {
+        for (Table table : this.selectBatchIdsUnion(ids)) {
             Map<String, Object> root = GenUtils.buildTemplateData(table);
             List<FileDTO> tempFileDtoList = (List<FileDTO>) root.get(CoreConstant.DTO_KEY);
             root.remove(CoreConstant.DTO_KEY);
@@ -191,7 +190,7 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, FgTable> implemen
     }
 
     @Override
-    public List<Table> getDbTables(Serializable settingId) {
+    public List<cn.hutool.db.meta.Table> getDbTables(Serializable settingId) {
         Assert.isTrue(!"null".equals(settingId), "未找到项目配置信息,请先配置项目");
 
         Sets setting = projectSettingMapper.selectById(settingId);
@@ -199,17 +198,17 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, FgTable> implemen
         Assert.notNull(setting, "未找到项目配置信息,请先配置项目!");
         Long dbInfoId = setting.getDbInfoId();
 
-        List<FgTable> tableList = baseMapper.selectList(Wrappers.lambdaQuery(FgTable.class).eq(FgTable::getProjectId, setting.getProjectId()));
+        List<Table> tableList = baseMapper.selectList(Wrappers.lambdaQuery(Table.class).eq(Table::getProjectId, setting.getProjectId()));
         // 已经生成的表
-        List<String> hasGenNames = tableList.stream().map(FgTable::getName).collect(Collectors.toList());
-        List<Table> tables = MetaUtil.getTableList(DataSourceUtils.getDb(dbInfoId.toString()));
+        List<String> hasGenNames = tableList.stream().map(Table::getName).collect(Collectors.toList());
+        List<cn.hutool.db.meta.Table> tables = MetaUtil.getTableList(DataSourceUtils.getDb(dbInfoId.toString()));
 
         return tables.stream().filter(e -> !hasGenNames.contains(e.getTableName())).collect(Collectors.toList());
     }
 
     @Override
     public List<DictDTO> dictList(Serializable tableId) {
-        FgTable table = baseMapper.selectById(tableId);
+        Table table = baseMapper.selectById(tableId);
         Assert.notNull(table, "未找到表信息!");
         Sets setting = projectSettingMapper.selectOne(Wrappers.lambdaQuery(Sets.class).eq(Sets::getProjectId, table.getProjectId()));
         Assert.notNull(setting, "未找到项目配置信息,请先配置项目!");

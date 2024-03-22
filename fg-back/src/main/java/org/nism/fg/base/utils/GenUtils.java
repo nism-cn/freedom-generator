@@ -3,7 +3,6 @@ package org.nism.fg.base.utils;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.db.meta.Table;
 import com.fasterxml.jackson.core.type.TypeReference;
 import freemarker.core.Environment;
 import org.nism.fg.base.core.adapter.TypeAdapter;
@@ -13,7 +12,7 @@ import org.nism.fg.domain.convert.FileConvert;
 import org.nism.fg.domain.dto.FileDTO;
 import org.nism.fg.domain.dto.MapDTO;
 import org.nism.fg.domain.entity.Sets;
-import org.nism.fg.domain.entity.FgTable;
+import org.nism.fg.domain.entity.Table;
 import org.nism.fg.domain.entity.Column;
 import org.nism.fg.service.TypeService;
 import org.springframework.util.Assert;
@@ -37,8 +36,8 @@ public class GenUtils {
     /**
      * 初始化表信息
      */
-    public static FgTable buildTable(Table dbTable, Sets setting) {
-        FgTable table = new FgTable();
+    public static Table buildTable(cn.hutool.db.meta.Table dbTable, Sets setting) {
+        Table table = new Table();
 
         table.setProjectId(setting.getProjectId());
 
@@ -109,7 +108,7 @@ public class GenUtils {
         return column;
     }
 
-    public static Map<String, Object> buildTemplateData(FgTable table) {
+    public static Map<String, Object> buildTemplateData(Table table) {
         Sets setting = table.getSetting();
         Assert.notNull(setting, "未找到项目配置信息,请先配置项目!");
         final String rootPath = SystemUtils.getTemplateDir() + SystemUtils.SEP + setting.getTempPath();
@@ -149,7 +148,7 @@ public class GenUtils {
         return root;
     }
 
-    public static String buildOutPath(FileDTO temp, FgTable table, String code, Environment env) {
+    public static String buildOutPath(FileDTO temp, Table table, String code, Environment env) {
         String defOutPath = FreemarkerUtils.getStringVal(env, CoreConstant.OUT_PATH);
         if (StringUtils.isNotBlank(defOutPath)) {
             return defOutPath;

@@ -2,8 +2,8 @@ package org.nism.fg.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.nism.fg.base.core.BaseMapper;
-import org.nism.fg.domain.entity.FgTable;
+import org.nism.fg.domain.entity.Table;
 
 @Mapper
-public interface TableMapper extends BaseMapper<FgTable> {
+public interface TableMapper extends BaseMapper<Table> {
 }

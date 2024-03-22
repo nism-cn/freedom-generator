@@ -13,7 +13,7 @@ import org.nism.fg.base.core.BaseEntity;
 import org.nism.fg.base.core.ServiceImpl;
 import org.nism.fg.base.utils.Assert;
 import org.nism.fg.base.utils.DataSourceUtils;
-import org.nism.fg.base.utils.GeneratorUtils;
+import org.nism.fg.base.utils.GenUtils;
 import org.nism.fg.base.utils.MetaUtil;
 import org.nism.fg.domain.convert.DictConvert;
 import org.nism.fg.domain.dto.DictDTO;
@@ -119,7 +119,7 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, Table> implements
     public List<PreviewDTO> preview(Long id) throws Exception {
         List<PreviewDTO> data = new ArrayList<>();
         Table table = this.selectBatchIdsUnion(Collections.singletonList(id)).get(0);
-        Map<String, Object> root = GeneratorUtils.buildTemplateData(this.selectBatchIdsUnion(Collections.singletonList(id)).get(0));
+        Map<String, Object> root = GenUtils.buildTemplateData(this.selectBatchIdsUnion(Collections.singletonList(id)).get(0));
         List<FileDTO> tempFileDtoList = (List<FileDTO>) root.get(CoreConstant.DTO_KEY);
         root.remove(CoreConstant.DTO_KEY);
 
@@ -140,7 +140,7 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, Table> implements
             Environment env = template.createProcessingEnvironment(root, sw);
             env.process();
             String code = sw.toString();
-            String outPath = GeneratorUtils.buildOutPath(temp, table, code, env);
+            String outPath = GenUtils.buildOutPath(temp, table, code, env);
             preview.setCode(code);
             preview.setPath(outPath);
 
@@ -158,7 +158,7 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, Table> implements
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);
         for (Table table : this.selectBatchIdsUnion(ids)) {
-            Map<String, Object> root = GeneratorUtils.buildTemplateData(table);
+            Map<String, Object> root = GenUtils.buildTemplateData(table);
             List<FileDTO> tempFileDtoList = (List<FileDTO>) root.get(CoreConstant.DTO_KEY);
             root.remove(CoreConstant.DTO_KEY);
             // 获取模板列表
@@ -174,7 +174,7 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, Table> implements
                 String code = sw.toString();
                 IoUtil.close(sw);
                 try {
-                    String outPath = GeneratorUtils.buildOutPath(temp, table, code, env);
+                    String outPath = GenUtils.buildOutPath(temp, table, code, env);
                     // 添加到zip
                     zip.putNextEntry(new ZipEntry(outPath));
                     IoUtil.write(zip, StandardCharsets.UTF_8, false, code);

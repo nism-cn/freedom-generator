@@ -4,17 +4,15 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import freemarker.core.Environment;
-import freemarker.template.SimpleScalar;
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
-import org.nism.fg.base.core.CoreConstant;
 import org.nism.fg.base.config.props.RootDirProp;
+import org.nism.fg.base.core.CoreConstant;
+import org.nism.fg.base.core.adapter.TypeAdapter;
 import org.nism.fg.domain.convert.FileConvert;
 import org.nism.fg.domain.dto.FileDTO;
 import org.nism.fg.domain.dto.MapDTO;
+import org.nism.fg.domain.entity.Column;
 import org.nism.fg.domain.entity.Sets;
 import org.nism.fg.domain.entity.Table;
-import org.nism.fg.domain.entity.Column;
 import org.nism.fg.service.TypeService;
 import org.noear.solon.Solon;
 
@@ -29,9 +27,9 @@ import java.util.stream.Collectors;
  * @author inism
  * @since 1.0.0
  */
-public class GeneratorUtils {
+public class GenUtils {
 
-    private GeneratorUtils() {
+    private GenUtils() {
     }
 
     /**
@@ -124,31 +122,36 @@ public class GeneratorUtils {
         // 注入freemarker 参数
         root.put("table", table);
         root.put("columns", table.getColumns());
+        List<Column> pkColumns = table.getColumns().stream().filter(Column::getPk).collect(Collectors.toList());
+        // 表无主键情况
+        root.put("pkColumn", pkColumns.isEmpty() ? null : pkColumns.get(0));
+        root.put("pkColumns", pkColumns);
         root.put("setting", table.getSetting());
-
         root.put(CoreConstant.DTO_KEY, tempFileDtoList);
 
         // 获取参数
         String argsPath = rootPath + SystemUtils.SEP + SystemUtils.ARGS;
         if (FileUtil.exist(argsPath)) {
             String json = FileUtil.readUtf8String(argsPath);
-            root.put("args", JsonUtils.toObject(json, Map.class));
+            @SuppressWarnings("unchecked")
+            Map<String, Object> args = JsonUtils.toObject(json, Map.class);
+            root.put("args", args);
+            Object type = args.get("type");
+            if (type != null) {
+                String string = type.toString();
+                Map<String, TypeAdapter> adapterMap = Solon.context().getBeansMapOfType(TypeAdapter.class);
+                Arrays.stream(string.split(",")).forEach(i ->
+                        root.put(i, adapterMap.get(CoreConstant.TYPE_ADAPTER_PREFIX + i).getMap(table))
+                );
+            }
         }
         return root;
     }
 
     public static String buildOutPath(FileDTO temp, Table table, String code, Environment env) {
-        try {
-            TemplateModel defOutPath = env.getVariable(CoreConstant.OUT_PATH);
-            if (null != defOutPath) {
-                if (defOutPath instanceof SimpleScalar) {
-                    return ((SimpleScalar) defOutPath).getAsString();
-                } else {
-                    throw new IllegalArgumentException("输出路径参数不正确");
-                }
-            }
-        } catch (TemplateModelException e) {
-            throw new IllegalArgumentException("输出路径参数不正确", e);
+        String defOutPath = FreemarkerUtils.getStringVal(env, CoreConstant.OUT_PATH);
+        if (StringUtils.isNotBlank(defOutPath)) {
+            return defOutPath;
         }
 
         String suffix = FileUtil.getSuffix(temp.getName());

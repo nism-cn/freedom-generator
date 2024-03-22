@@ -1,7 +1,6 @@
 package org.nism.fg.service.impl;
 
 import cn.hutool.db.meta.MetaUtil;
-import cn.hutool.db.meta.Table;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.AllArgsConstructor;
@@ -10,7 +9,7 @@ import org.nism.fg.base.utils.DataSourceUtils;
 import org.nism.fg.base.utils.GenUtils;
 import org.nism.fg.domain.entity.Proj;
 import org.nism.fg.domain.entity.Sets;
-import org.nism.fg.domain.entity.FgTable;
+import org.nism.fg.domain.entity.Table;
 import org.nism.fg.domain.entity.Column;
 import org.nism.fg.mapper.ProjMapper;
 import org.nism.fg.mapper.SetsMapper;
@@ -43,7 +42,7 @@ public class ProjServiceImpl extends ServiceImpl<ProjMapper, Proj> implements Pr
     @Transactional(rollbackFor = Exception.class)
     public boolean removeById(Serializable id) {
         // 删除table
-        tableMapper.delete(Wrappers.lambdaQuery(FgTable.class).eq(FgTable::getProjectId, id));
+        tableMapper.delete(Wrappers.lambdaQuery(Table.class).eq(Table::getProjectId, id));
         // 删除字段信息
         columnMapper.delete(Wrappers.lambdaQuery(Column.class).eq(Column::getProjectId, id));
         // 删除设置
@@ -61,12 +60,12 @@ public class ProjServiceImpl extends ServiceImpl<ProjMapper, Proj> implements Pr
             Assert.notNull(setting, "未找到项目配置信息,请先配置项目!");
             DataSource dbBean = DataSourceUtils.getDb(setting.getDbInfoId().toString());
 
-            List<FgTable> tableList = new ArrayList<>(tableNames.size());
+            List<Table> tableList = new ArrayList<>(tableNames.size());
             List<Column> columnList = new ArrayList<>();
             tableNames.forEach(tableName -> {
-                Table t = MetaUtil.getTableMeta(dbBean, tableName);
+                cn.hutool.db.meta.Table t = MetaUtil.getTableMeta(dbBean, tableName);
                 Long id = IdWorker.getId(t);
-                FgTable table = GenUtils.buildTable(t, setting);
+                Table table = GenUtils.buildTable(t, setting);
                 table.setId(id);
                 tableList.add(table);
                 t.getColumns().forEach(c -> {
