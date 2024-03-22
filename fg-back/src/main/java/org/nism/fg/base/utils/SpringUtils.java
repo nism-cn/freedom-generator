@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,6 +31,10 @@ public class SpringUtils implements BeanFactoryPostProcessor, ApplicationContext
 
     private static ConfigurableListableBeanFactory beanFactory;
     private static ApplicationContext context;
+
+    public static <T> Map<String, T> getBeansOfType(Class<T> clazz) {
+        return beanFactory.getBeansOfType(clazz);
+    }
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
@@ -122,5 +127,6 @@ public class SpringUtils implements BeanFactoryPostProcessor, ApplicationContext
         Set<String> collect = Arrays.stream(activeProfiles).filter(profile::equals).collect(Collectors.toSet());
         return collect.size() > 0;
     }
+
 
 }

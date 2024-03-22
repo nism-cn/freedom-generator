@@ -5,12 +5,9 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.db.meta.Column;
 import cn.hutool.db.meta.Table;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 import freemarker.core.Environment;
-import freemarker.template.SimpleScalar;
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
+import org.nism.fg.base.adapter.TypeAdapter;
 import org.nism.fg.base.config.props.RootDirProp;
 import org.nism.fg.base.constant.CoreConstant;
 import org.nism.fg.domain.convert.FileConvert;
@@ -113,47 +110,50 @@ public class GeneratorUtils {
         return column;
     }
 
-    public static Map<String, Object> buildTemplateData(FgTable table) throws JsonProcessingException {
+    public static Map<String, Object> buildTemplateData(FgTable table) {
         FgProjectSetting setting = table.getSetting();
         Assert.notNull(setting, "未找到项目配置信息,请先配置项目!");
         final String rootPath = SystemUtils.getTemplateDir() + SystemUtils.SEP + setting.getTempPath();
         Map<String, Object> root = new HashMap<>();
-        ObjectMapper objectMapper = SpringUtils.getBean(ObjectMapper.class);
 
         // 获取模板
         List<File> tempFiles = FileUtil.loopFiles(rootPath, path -> path.getName().toLowerCase().endsWith(".ftl"));
         Assert.notEmpty(tempFiles, "未找到模板!");
-        List<FileDTO> tempFileDtoList = new ArrayList<>();
-        tempFiles.forEach(file -> tempFileDtoList.add(FileConvert.to(file)));
+        List<FileDTO> tempFileDtoList = tempFiles.stream().map(FileConvert::to).collect(Collectors.toList());
 
         // 注入freemarker 参数
         root.put("table", table);
         root.put("columns", table.getColumns());
+        List<FgTableColumn> pkColumns = table.getColumns().stream().filter(FgTableColumn::getPk).collect(Collectors.toList());
+        // 表无主键情况
+        root.put("pkColumn", pkColumns.isEmpty() ? null : pkColumns.get(0));
+        root.put("pkColumns", pkColumns);
         root.put("setting", table.getSetting());
-
         root.put(CoreConstant.DTO_KEY, tempFileDtoList);
 
         // 获取参数
         String argsPath = rootPath + SystemUtils.SEP + SystemUtils.ARGS;
         if (FileUtil.exist(argsPath)) {
             String json = FileUtil.readUtf8String(argsPath);
-            root.put("args", objectMapper.readValue(json, Map.class));
+            Map<String, Object> args = JsonUtils.toObject(json, new TypeReference<Map<String, Object>>() {
+            });
+            root.put("args", args);
+            Object type = args.get("type");
+            if (type != null) {
+                String string = type.toString();
+                Map<String, TypeAdapter> adapterMap = SpringUtils.getBeansOfType(TypeAdapter.class);
+                Arrays.stream(string.split(",")).forEach(i ->
+                        root.put(i, adapterMap.get(CoreConstant.TYPE_ADAPTER_PREFIX + i).getMap(table))
+                );
+            }
         }
         return root;
     }
 
     public static String buildOutPath(FileDTO temp, FgTable table, String code, Environment env) {
-        try {
-            TemplateModel defOutPath = env.getVariable(CoreConstant.OUT_PATH);
-            if (null != defOutPath) {
-                if (defOutPath instanceof SimpleScalar) {
-                    return ((SimpleScalar) defOutPath).getAsString();
-                } else {
-                    throw new IllegalArgumentException("输出路径参数不正确");
-                }
-            }
-        } catch (TemplateModelException e) {
-            throw new IllegalArgumentException("输出路径参数不正确", e);
+        String defOutPath = FreemarkerUtils.getStringVal(env, CoreConstant.OUT_PATH);
+        if (StringUtils.isNotBlank(defOutPath)) {
+            return defOutPath;
         }
 
         String suffix = FileUtil.getSuffix(temp.getName());
