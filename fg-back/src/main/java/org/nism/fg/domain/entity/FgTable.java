@@ -39,10 +39,10 @@ public class FgTable extends BaseEntity {
     private String author;
     /*** 字段 */
     @TableField(exist = false)
-    private List<FgTableColumn> columns;
+    private List<Column> columns;
     /*** 设置 */
     @TableField(exist = false)
-    private FgProjectSetting setting;
+    private Sets setting;
     /*** 字典 */
     @TableField(exist = false)
     private List<DictDTO> dictList;

@@ -4,11 +4,6 @@ import freemarker.core.Environment;
 import freemarker.template.SimpleScalar;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
-import org.nism.fg.base.constant.CoreConstant;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Optional;
 
 public class FreemarkerUtils {
 

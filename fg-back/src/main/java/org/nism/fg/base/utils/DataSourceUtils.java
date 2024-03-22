@@ -4,8 +4,8 @@ import cn.hutool.core.io.IoUtil;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.util.JdbcUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.nism.fg.base.constant.CoreConstant;
-import org.nism.fg.domain.entity.FgDatabaseInfo;
+import org.nism.fg.base.core.CoreConstant;
+import org.nism.fg.domain.entity.DbInfo;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -40,11 +40,11 @@ public class DataSourceUtils {
         return dataSource;
     }
 
-    public static DruidDataSource init(FgDatabaseInfo db) {
+    public static DruidDataSource init(DbInfo db) {
         return init(db.getJdbcUrl(), db.getUsername(), db.getPassword());
     }
 
-    public static void test(FgDatabaseInfo db) {
+    public static void test(DbInfo db) {
         DruidDataSource dataSource = new DruidDataSource();
         Connection connection = null;
         try {
