@@ -21,10 +21,13 @@
         <springboot.version>2.5.14</springboot.version>
         <pagehelper.version>1.4.6</pagehelper.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
-        <hutool.version>5.8.18</hutool.version>
+        <hutool.version>5.8.26</hutool.version>
         <druid.version>1.2.16</druid.version>
-<!--        <solon.version>2.5.6</solon.version>-->
-        <solon.version>2.5.7-M5</solon.version>
+        <solon.version>2.7.0</solon.version>
+        <h2.version>2.2.222</h2.version>
+        <mysql.version>8.2.0</mysql.version>
+        <flyway.version>8.5.13</flyway.version>
+        <ftl.version>2.3.31</ftl.version>
     </properties>
 
     <dependencyManagement>
@@ -59,31 +62,25 @@
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
-            <version>2.3.31</version>
+            <version>${ftl.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.29</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.protobuf</groupId>
-                    <artifactId>protobuf-java</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>${mysql.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.4.200</version>
+            <version>${h2.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>7.7.3</version>
+            <version>${flyway.version}</version>
         </dependency>
 
         <!-- 日志框架 -->
@@ -161,7 +158,6 @@
             </plugin>
         </plugins>
     </build>
-
 
 
     <!-- 检查jar包 -->

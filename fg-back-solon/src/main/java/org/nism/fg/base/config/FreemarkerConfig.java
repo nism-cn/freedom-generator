@@ -1,17 +1,18 @@
 package org.nism.fg.base.config;
 
 import cn.hutool.core.io.FileUtil;
+import freemarker.ext.beans.BeansWrapperBuilder;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
-import freemarker.template.TemplateModel;
+import freemarker.template.TemplateHashModel;
 import freemarker.template.TemplateModelException;
-import org.nism.fg.base.freemarker.*;
 import org.nism.fg.base.utils.SystemUtils;
 import org.noear.solon.annotation.Bean;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.TimeZone;
+
+import static freemarker.template.Configuration.VERSION_2_3_31;
 
 /**
  * 模板引擎配置
@@ -22,21 +23,21 @@ import java.util.Map;
 @org.noear.solon.annotation.Configuration
 public class FreemarkerConfig {
 
+    private final static TemplateHashModel staticModels = new BeansWrapperBuilder(VERSION_2_3_31).build().getStaticModels();
+    private final static String STR_UTIL = "cn.hutool.core.util.StrUtil";
+    private final static String TOOLS = "org.nism.fg.base.utils.FtlTools";
+
     @Bean
     public Configuration cfg() throws IOException, TemplateModelException {
-        Configuration cfg = new Configuration(Configuration.VERSION_2_3_31);
+        Configuration cfg = new Configuration(VERSION_2_3_31);
         cfg.setDirectoryForTemplateLoading(FileUtil.mkdir(SystemUtils.getTemplateDir()));
+        // 编码
         cfg.setDefaultEncoding("UTF-8");
+        // 中国时间
+        cfg.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-
-        Map<String, TemplateModel> strUtil = new HashMap<>();
-        strUtil.put("toUnderline", new ToUnderlineCaseMethodModel());
-        strUtil.put("toCame", new ToCameCaseMethodModel());
-        strUtil.put("toPascal", new ToPascalCaseCaseMethodModel());
-        strUtil.put("lowerFirst", new LowerFirstMethodModel());
-        strUtil.put("upperFirst", new UpperFirstMethodModel());
-
-        cfg.setSharedVariable("strUtil", strUtil);
+        cfg.setSharedVariable("strUtil", staticModels.get(STR_UTIL));
+        cfg.setSharedVariable("tools", staticModels.get(TOOLS));
         return cfg;
     }
 

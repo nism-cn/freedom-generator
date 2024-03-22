@@ -3,21 +3,19 @@ package org.nism.fg.base.utils;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.db.meta.Column;
-import cn.hutool.db.meta.Table;
 import freemarker.core.Environment;
 import freemarker.template.SimpleScalar;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
-import org.nism.fg.base.constant.CoreConstant;
-import org.nism.fg.base.constant.RootDirProp;
+import org.nism.fg.base.core.CoreConstant;
+import org.nism.fg.base.config.props.RootDirProp;
 import org.nism.fg.domain.convert.FileConvert;
 import org.nism.fg.domain.dto.FileDTO;
 import org.nism.fg.domain.dto.MapDTO;
-import org.nism.fg.domain.entity.FgProjectSetting;
-import org.nism.fg.domain.entity.FgTable;
-import org.nism.fg.domain.entity.FgTableColumn;
-import org.nism.fg.service.FgTypeService;
+import org.nism.fg.domain.entity.Sets;
+import org.nism.fg.domain.entity.Table;
+import org.nism.fg.domain.entity.Column;
+import org.nism.fg.service.TypeService;
 import org.noear.solon.Solon;
 
 import java.io.File;
@@ -39,8 +37,8 @@ public class GeneratorUtils {
     /**
      * 初始化表信息
      */
-    public static FgTable buildTable(Table dbTable, FgProjectSetting setting) {
-        FgTable table = new FgTable();
+    public static Table buildTable(cn.hutool.db.meta.Table dbTable, Sets setting) {
+        Table table = new Table();
 
         table.setProjectId(setting.getProjectId());
 
@@ -60,7 +58,7 @@ public class GeneratorUtils {
     /**
      * 初始化列属性字段
      */
-    public static FgTableColumn buildColumn(Column dbColumn, FgProjectSetting setting) {
+    public static Column buildColumn(cn.hutool.db.meta.Column dbColumn, Sets setting) {
         String columnName = dbColumn.getName();
 
         // 忽略生成的字段
@@ -69,7 +67,7 @@ public class GeneratorUtils {
             return null;
         }
 
-        FgTableColumn column = new FgTableColumn();
+        Column column = new Column();
         column.setProjectId(setting.getProjectId());
 
         // 数据库原有属性
@@ -84,7 +82,7 @@ public class GeneratorUtils {
         column.setDigit(dbColumn.getDigit());
 
         final String unknown = "unknown";
-        FgTypeService bean = Solon.context().getBean(FgTypeService.class);
+        TypeService bean = Solon.context().getBean(TypeService.class);
         MapDTO maps = bean.loadMap();
 
         // java
@@ -111,8 +109,8 @@ public class GeneratorUtils {
         return column;
     }
 
-    public static Map<String, Object> buildTemplateData(FgTable table) {
-        FgProjectSetting setting = table.getSetting();
+    public static Map<String, Object> buildTemplateData(Table table) {
+        Sets setting = table.getSetting();
         Assert.notNull(setting, "未找到项目配置信息,请先配置项目!");
         final String rootPath = SystemUtils.getTemplateDir() + SystemUtils.SEP + setting.getTempPath();
         Map<String, Object> root = new HashMap<>();
@@ -134,12 +132,12 @@ public class GeneratorUtils {
         String argsPath = rootPath + SystemUtils.SEP + SystemUtils.ARGS;
         if (FileUtil.exist(argsPath)) {
             String json = FileUtil.readUtf8String(argsPath);
-            root.put("args", JsonUtils.readValue(json, Map.class));
+            root.put("args", JsonUtils.toObject(json, Map.class));
         }
         return root;
     }
 
-    public static String buildOutPath(FileDTO temp, FgTable table, String code, Environment env) {
+    public static String buildOutPath(FileDTO temp, Table table, String code, Environment env) {
         try {
             TemplateModel defOutPath = env.getVariable(CoreConstant.OUT_PATH);
             if (null != defOutPath) {

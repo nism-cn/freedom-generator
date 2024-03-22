@@ -6,8 +6,8 @@ import cn.hutool.db.ds.GlobalDSFactory;
 import cn.hutool.db.ds.hikari.HikariDSFactory;
 import cn.hutool.setting.Setting;
 import lombok.extern.slf4j.Slf4j;
-import org.nism.fg.base.constant.CoreConstant;
-import org.nism.fg.domain.entity.FgDatabaseInfo;
+import org.nism.fg.base.core.CoreConstant;
+import org.nism.fg.domain.entity.DbInfo;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -58,12 +58,12 @@ public class DataSourceUtils {
         return dsFactory.getDataSource(id);
     }
 
-    public static DataSource init(FgDatabaseInfo db) {
+    public static DataSource init(DbInfo db) {
         String dsId = CoreConstant.DB_BEAN_KEY + db.getId();
         return init(dsId, db.getJdbcUrl(), db.getUsername(), db.getPassword());
     }
 
-    public static void test(FgDatabaseInfo db) {
+    public static void test(DbInfo db) {
         String id = TEST + UUID.randomUUID().toString().replaceAll("-", "");
         DataSource dataSource = init(id, db.getJdbcUrl(), db.getUsername(), db.getPassword());
         Connection connection = null;
