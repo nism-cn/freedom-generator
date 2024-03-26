@@ -1,6 +1,5 @@
 package org.nism.fg.domain.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,11 +15,11 @@ import org.nism.fg.domain.enums.TabsType;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("FG_PROJECT")
+@TableName("F_PROJ")
 public class Proj extends BaseEntity implements Tabs {
 
     private String name;
-    @TableField(exist = false)
-    private String mainType = TabsType.project.name();
+
+    private transient String mainType = TabsType.project.name();
 
 }

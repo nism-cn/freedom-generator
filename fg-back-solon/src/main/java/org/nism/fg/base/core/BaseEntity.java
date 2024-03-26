@@ -1,6 +1,5 @@
 package org.nism.fg.base.core;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
@@ -18,7 +17,7 @@ public class BaseEntity implements Serializable {
 
     @TableId
     private Long id;
-    @TableField(exist = false)
-    private String search;
+
+    private transient String search;
 
 }

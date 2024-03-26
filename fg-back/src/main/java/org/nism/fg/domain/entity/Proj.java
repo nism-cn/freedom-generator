@@ -15,7 +15,7 @@ import org.nism.fg.domain.enums.TabsType;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("FG_PROJECT")
+@TableName("F_PROJ")
 public class Proj extends BaseEntity implements Tabs {
 
     private String name;

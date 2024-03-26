@@ -15,7 +15,7 @@ import javax.validation.constraints.NotBlank;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("FG_TYPE")
+@TableName("F_TYPE")
 public class Type extends BaseEntity {
 
     /*** 类型 */

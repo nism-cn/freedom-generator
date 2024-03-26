@@ -108,7 +108,7 @@ public class GenUtils {
     }
 
     public static Map<String, Object> buildTemplateData(Table table) {
-        Sets setting = table.getSetting();
+        Sets setting = table.getSets();
         Assert.notNull(setting, "未找到项目配置信息,请先配置项目!");
         final String rootPath = SystemUtils.getTemplateDir() + SystemUtils.SEP + setting.getTempPath();
         Map<String, Object> root = new HashMap<>();
@@ -126,7 +126,7 @@ public class GenUtils {
         // 表无主键情况
         root.put("pkColumn", pkColumns.isEmpty() ? null : pkColumns.get(0));
         root.put("pkColumns", pkColumns);
-        root.put("setting", table.getSetting());
+        root.put("setting", table.getSets());
         root.put(CoreConstant.DTO_KEY, tempFileDtoList);
 
         // 获取参数

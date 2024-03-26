@@ -1,6 +1,5 @@
 package org.nism.fg.domain.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,7 +16,7 @@ import java.util.List;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("FG_TABLE")
+@TableName("F_TABLE")
 public class Table extends BaseEntity {
 
     /*** 表名 */
@@ -38,12 +37,9 @@ public class Table extends BaseEntity {
     /*** 作者 */
     private String author;
     /*** 字段 */
-    @TableField(exist = false)
-    private List<Column> columns;
+    private transient List<Column> columns;
     /*** 设置 */
-    @TableField(exist = false)
-    private Sets setting;
+    private transient Sets sets;
     /*** 字典 */
-    @TableField(exist = false)
-    private List<DictDTO> dictList;
+    private transient List<DictDTO> dictList;
 }

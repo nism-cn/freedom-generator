@@ -13,7 +13,7 @@ import org.nism.fg.base.core.BaseEntity;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("FG_TABLE_COLUMN")
+@TableName("F_COLUMN")
 public class Column extends BaseEntity {
 
     /*** 项目主键 */

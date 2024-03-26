@@ -13,7 +13,7 @@ import org.nism.fg.base.core.BaseEntity;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("FG_TYPE_MAP")
+@TableName("F_TYPE_MAP")
 public class TypeMap extends BaseEntity {
 
     /*** 类型 */

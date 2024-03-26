@@ -13,7 +13,7 @@ import org.nism.fg.base.core.BaseEntity;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("FG_DATABASE_INFO")
+@TableName("F_DB_INFO")
 public class DbInfo extends BaseEntity {
 
     private String name;

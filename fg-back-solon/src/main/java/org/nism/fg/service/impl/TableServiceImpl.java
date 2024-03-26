@@ -109,7 +109,7 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, Table> implements
             table.setColumns(cs);
             Sets setting = settingMap.get(table.getProjectId());
             Assert.notNull(setting, table.getName() + "未找到项目配置信息,请先配置项目!");
-            table.setSetting(setting);
+            table.setSets(setting);
         }
         return tables;
     }
