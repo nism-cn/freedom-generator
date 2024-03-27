@@ -1,9 +1,15 @@
 package org.nism.fg.domain.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.nism.fg.base.core.BaseEntity;
+import org.nism.fg.base.core.JacksonSerializer;
+
+import java.util.Map;
 
 /**
  * 生成表字段对象
@@ -13,7 +19,7 @@ import org.nism.fg.base.core.BaseEntity;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("F_COLUMN")
+@TableName(value = "F_COLUMN" ,autoResultMap = true)
 public class Column extends BaseEntity {
 
     /*** 项目主键 */
@@ -41,25 +47,19 @@ public class Column extends BaseEntity {
     private Integer digit;
     /*** 排序 */
     private Integer sort;
-    /* ========================= 需要定义属性 ========================= */
-    /*** 插入 */
-    private Boolean canInsert;
-    /*** 更新 */
-    private Boolean canUpdate;
-    /*** 列表 */
-    private Boolean canList;
-    /*** 查询 */
-    private Boolean canSelect;
-    /*** 查询方式 */
-    private String selectType;
 
     /* ========================= 自动生成属性 ========================= */
-    /*** java字段名 */
-    private String javaName;
-    /*** java类型 */
-    private String javaType;
-    /*** html类型 */
-    private String htmlType;
+    /*** 小驼峰 columnName */
+    private String camel;
+    /*** 大驼峰 ColumnName */
+    private String upCamel;
+    /*** 小下划线 column_name */
+    private String underline;
+    /*** 大下划线 COLUMN_NAME */
+    private String upUnderline;
+    /*** 类型的映射 */
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private Map<String, String> types;
     /*** 字典类型 */
     private String dictType;
 

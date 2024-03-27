@@ -1,7 +1,7 @@
 <template>
   <el-collapse-item :name="name">
     <template slot="title">
-      <h2><i class="header-icon el-icon-help"></i> Freedom Generator 高级用法</h2>
+      <h2><i class="header-icon el-icon-document-add"></i> 高级用法</h2>
     </template>
 
     <!-- 参数 -->

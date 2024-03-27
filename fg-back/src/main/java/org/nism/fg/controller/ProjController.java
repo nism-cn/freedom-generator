@@ -27,12 +27,12 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("project")
+@RequestMapping("proj")
 public class ProjController {
 
     private final TypeService typeService;
     private final ProjService baseService;
-    private final SetsService projectSettingService;
+    private final SetsService setsService;
 
     @GetMapping
     public R<?> find() {
@@ -63,7 +63,7 @@ public class ProjController {
 
     @GetMapping("setting/{id}")
     public R<?> findSetting(@PathVariable Serializable id) {
-        Sets one = projectSettingService.lambdaQuery().eq(Sets::getProjectId, id).one();
+        Sets one = setsService.lambdaQuery().eq(Sets::getProjectId, id).one();
         return R.ok(Optional.ofNullable(one).orElse(new Sets()));
     }
 
@@ -75,17 +75,7 @@ public class ProjController {
 
     @GetMapping("types")
     private R<?> types() {
-        Map<String, Object> data = new HashMap<>();
-        MapDTO map = typeService.loadMap();
-        // base type
-        data.put("javaType", map.getJavaType());
-        data.put("columnType", map.getColumnType());
-        data.put("htmlType", map.getHtmlType());
-        data.put("selectType", map.getSelectType());
-        // mappings
-        data.put("columnTypeMap", map.getColumnTypeMap());
-        data.put("htmlTypeMap", map.getHtmlTypeMap());
-        return R.ok(data);
+        return R.ok(typeService.loadMaps());
     }
 
 }

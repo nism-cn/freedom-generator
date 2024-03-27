@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-const BASE = '/table-column'
+const BASE = '/sets'
 
 export default {
   // 列表查询
@@ -40,10 +40,12 @@ export default {
       method: 'DELETE'
     })
   },
-  findByTableId: (tableId) => {
+  // 保存或更新
+  saveOrUpdate: (data) => {
     return request({
-      url: `${BASE}/tableId/${tableId}`,
-      method: 'GET'
+      url: `${BASE}/saveOrUpdate`,
+      method: 'POST',
+      data: data
     })
   },
 }

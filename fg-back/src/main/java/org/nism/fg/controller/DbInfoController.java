@@ -25,7 +25,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("database-info")
+@RequestMapping("db-info")
 public class DbInfoController {
 
     private final ConfigurableListableBeanFactory beanFactory;

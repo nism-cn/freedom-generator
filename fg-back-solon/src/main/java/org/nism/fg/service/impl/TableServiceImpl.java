@@ -49,14 +49,14 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, Table> implements
     @Inject
     private Configuration cfg;
     @Db
-    private ColumnMapper tableColumnMapper;
+    private ColumnMapper columnMapper;
     @Db
-    private SetsMapper projectSettingMapper;
+    private SetsMapper setsMapper;
 
     @Override
     public Table getById(Serializable id) {
         Table table = baseMapper.selectById(id);
-        List<Column> columns = tableColumnMapper.selectList(
+        List<Column> columns = columnMapper.selectList(
                 Wrappers.lambdaQuery(Column.class).eq(Column::getTableId, id)
         );
         table.setColumns(columns);
@@ -68,14 +68,14 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, Table> implements
     @Override
     public void modify(Table table, List<Column> columns) {
         baseMapper.updateById(table);
-        tableColumnMapper.updateBatch(columns);
+        columnMapper.updateBatch(columns);
     }
 
     @Tran
     @Override
     public boolean removeById(Serializable id) {
         baseMapper.deleteById(id);
-        tableColumnMapper.delete(Wrappers.lambdaQuery(Column.class).eq(Column::getTableId, id));
+        columnMapper.delete(Wrappers.lambdaQuery(Column.class).eq(Column::getTableId, id));
         return true;
     }
 
@@ -83,7 +83,7 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, Table> implements
     @Override
     public boolean removeByIds(Collection<?> ids) {
         baseMapper.deleteBatchIds(ids);
-        tableColumnMapper.delete(Wrappers.lambdaQuery(Column.class).in(Column::getTableId, ids));
+        columnMapper.delete(Wrappers.lambdaQuery(Column.class).in(Column::getTableId, ids));
         return true;
     }
 
@@ -91,25 +91,25 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, Table> implements
     public List<Table> selectBatchIdsUnion(Collection<?> ids) {
         List<Table> tables = baseMapper.selectList(Wrappers.lambdaQuery(Table.class).in(Table::getId, ids));
         Assert.notEmpty(tables, "未找到表数据");
-        List<Column> columns = tableColumnMapper.selectList(Wrappers.lambdaQuery(Column.class)
+        List<Column> columns = columnMapper.selectList(Wrappers.lambdaQuery(Column.class)
                 .in(Column::getTableId, tables.stream().map(BaseEntity::getId).collect(Collectors.toSet()))
         );
         Assert.notEmpty(columns, "未找到字段数据");
-        List<Sets> settings = projectSettingMapper.selectList(Wrappers.lambdaQuery(Sets.class)
+        List<Sets> setsList = setsMapper.selectList(Wrappers.lambdaQuery(Sets.class)
                 .in(Sets::getProjectId, tables.stream().map(Table::getProjectId).collect(Collectors.toSet()))
         );
-        Assert.notEmpty(settings, "未找到设置数据");
+        Assert.notEmpty(setsList, "未找到设置数据");
 
         Map<Long, List<Column>> columnMap = columns.stream().collect(Collectors.groupingBy(Column::getTableId));
-        Map<Long, Sets> settingMap = settings.stream().collect(Collectors.toMap(Sets::getProjectId, Function.identity()));
+        Map<Long, Sets> setsMap = setsList.stream().collect(Collectors.toMap(Sets::getProjectId, Function.identity()));
 
         for (Table table : tables) {
             List<Column> cs = columnMap.get(table.getId());
             Assert.notEmpty(cs, table.getName() + "未找到对应字段数据");
             table.setColumns(cs);
-            Sets setting = settingMap.get(table.getProjectId());
-            Assert.notNull(setting, table.getName() + "未找到项目配置信息,请先配置项目!");
-            table.setSets(setting);
+            Sets sets = setsMap.get(table.getProjectId());
+            Assert.notNull(sets, table.getName() + "未找到项目配置信息,请先配置项目!");
+            table.setSets(sets);
         }
         return tables;
     }
@@ -192,15 +192,15 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, Table> implements
     }
 
     @Override
-    public List<cn.hutool.db.meta.Table> getDbTables(Long settingId) {
-        Assert.isTrue(!"null".equals(settingId), "未找到项目配置信息,请先配置项目");
+    public List<cn.hutool.db.meta.Table> getDbTables(Long setsId) {
+//        Assert.isTrue(true, "未找到项目配置信息,请先配置项目");
 
-        Sets setting = projectSettingMapper.selectById(settingId);
+        Sets sets = setsMapper.selectById(setsId);
 
-        Assert.notNull(setting, "未找到项目配置信息,请先配置项目!");
-        Long dbInfoId = setting.getDbInfoId();
+        Assert.notNull(sets, "未找到项目配置信息,请先配置项目!");
+        Long dbInfoId = sets.getDbInfoId();
 
-        List<Table> tableList = baseMapper.selectList(Wrappers.lambdaQuery(Table.class).eq(Table::getProjectId, setting.getProjectId()));
+        List<Table> tableList = baseMapper.selectList(Wrappers.lambdaQuery(Table.class).eq(Table::getProjectId, sets.getProjectId()));
         // 已经生成的表
         List<String> hasGenNames = tableList.stream().map(Table::getName).collect(Collectors.toList());
         List<cn.hutool.db.meta.Table> tables = MetaUtil.getTableList(DataSourceUtils.getDb(dbInfoId.toString()));
@@ -212,12 +212,12 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, Table> implements
     public List<DictDTO> dictList(Long tableId) {
         Table table = baseMapper.selectById(tableId);
         Assert.notNull(table, "未找到表信息!");
-        Sets setting = projectSettingMapper.selectOne(Wrappers.lambdaQuery(Sets.class).eq(Sets::getProjectId, table.getProjectId()));
-        Assert.notNull(setting, "未找到项目配置信息,请先配置项目!");
+        Sets sets = setsMapper.selectOne(Wrappers.lambdaQuery(Sets.class).eq(Sets::getProjectId, table.getProjectId()));
+        Assert.notNull(sets, "未找到项目配置信息,请先配置项目!");
         List<DictDTO> dictList = new ArrayList<>();
-        if (setting.getDictUse()) {
+        if (sets.getDictUse()) {
             try {
-                List<Entity> dictEntities = cn.hutool.db.Db.use(DataSourceUtils.getDb(setting.getDbInfoId().toString())).query(setting.getDictSql());
+                List<Entity> dictEntities = cn.hutool.db.Db.use(DataSourceUtils.getDb(sets.getDbInfoId().toString())).query(sets.getDictSql());
                 for (Entity e : dictEntities) {
                     DictDTO dto = DictConvert.to(e);
                     if (dto != null) {

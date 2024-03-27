@@ -42,7 +42,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import projectApi from '@/apis/projectApi';
+import projApi from '@/apis/projApi';
 
 export default {
   name: "maps-index",
@@ -50,13 +50,13 @@ export default {
     return {
       count: 0,
       list: [{
-        "id": "基础数据",
-        "name": "基础数据",
+        "id": "基础类型",
+        "name": "基础类型",
         "mainType": "maps",
         "type": "type",
       }, {
-        "id": "映射数据",
-        "name": "映射数据",
+        "id": "类型映射",
+        "name": "类型映射",
         "mainType": "maps",
         "type": "typeMap",
       }],
@@ -105,12 +105,12 @@ export default {
     operation() {
       let type = this.op.type;
       if (type == 'mkProj') {
-        projectApi.create(this.form).then((r) => {
+        projApi.create(this.form).then((r) => {
           this.$store.commit("app/addTab", r.data);
           this.closeDialog();
         });
       } else if (type == 'rename') {
-        projectApi.update(this.treeClickData.id, this.form).then(() => {
+        projApi.update(this.treeClickData.id, this.form).then(() => {
           this.closeDialog();
         });
       }
@@ -120,7 +120,7 @@ export default {
       // this.find();
     },
     del(data) {
-      projectApi.delete(data.id).then(() => {
+      projApi.delete(data.id).then(() => {
         // this.find();
         this.$store.commit("app/delTab", data.id);
       })

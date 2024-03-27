@@ -55,6 +55,7 @@
         <el-form-item label="">
           <el-select v-model="importForm.tables" multiple filterable placeholder="请选择"
             :filter-method="tableSelectFilter">
+            <el-option label='全选' value='selectAll' @click.native='selectAll' v-if="tableNameList.length"></el-option>
             <el-option v-for="item in tableNameList" :key="item.tableName" :value="item.tableName">
               <span style="float: left" v-text="item.tableName"></span>
               <span style="float: right; color: #8492a6; font-size: 13px" v-text="item.comment"></span>
@@ -97,7 +98,7 @@
 </template>
 
 <script>
-import projectApi from '@/apis/projectApi';
+import projApi from '@/apis/projApi';
 import tableApi from '@/apis/tableApi';
 import ProjSetting from './setting';
 import ProjModify from './modify';
@@ -144,7 +145,7 @@ export default {
   methods: {
     init() {
       // 获取当前项目设置
-      projectApi.findSetting(this.data.projectId).then(r => this.settingForm = r.data);
+      projApi.findSetting(this.data.projectId).then(r => this.settingForm = r.data);
       // 获取当前项目表
       this.findByProjectId();
     },
@@ -159,6 +160,22 @@ export default {
       this.tableNameList = this.tableNameListOld.filter(e => {
         return e.tableName.includes(search) || e.comment.includes(search)
       })
+    },
+    selectAll() {
+      if (this.importForm.tables.length < this.tableNameList.length) {
+        this.importForm.tables = []
+        this.tableNameList.map((i) => {
+          this.importForm.tables.push(i.tableName)
+        })
+        console.info(this.importForm.tables)
+        this.importForm.tables = this.importForm.tables.filter((i) => {
+          return i !== "selectAll"
+        });
+        console.info(this.importForm.tables)
+      } else {   // 取消全选
+        this.importForm.tables = [];
+      }
+      this.$emit('update:updateMultipleSelect', this.importForm.tables);
     },
     preview(data) {
       tableApi.preview(data.id).then(r => {
@@ -204,7 +221,7 @@ export default {
       ).then(() => {
         Promise.all([
           tableApi.deleteBatch(ids),
-          projectApi.importTables(this.settingForm.id, tableNames)
+          projApi.importTables(this.settingForm.id, tableNames)
         ]).then(() => {
           this.init();
           this.importVisible = false;
@@ -217,7 +234,7 @@ export default {
       tableApi.generator(ids);
     },
     createImport() {
-      projectApi.importTables(this.settingForm.id, this.importForm.tables).then(r => {
+      projApi.importTables(this.settingForm.id, this.importForm.tables).then(r => {
         console.info(r);
         this.init();
         this.importVisible = false;
@@ -232,7 +249,7 @@ export default {
       this.init();
     },
     del(data) {
-      projectApi.delete(data.id).then(() => {
+      projApi.delete(data.id).then(() => {
         this.init();
       })
     },

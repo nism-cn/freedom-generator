@@ -18,7 +18,7 @@ import java.io.Serializable;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("table-column")
+@RequestMapping("column")
 public class ColumnController {
 
     private final ColumnService baseService;

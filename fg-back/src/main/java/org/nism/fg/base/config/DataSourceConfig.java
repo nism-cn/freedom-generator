@@ -21,7 +21,8 @@ public class DataSourceConfig {
     @Primary
     public DataSource dataSource() {
         String db = SystemUtils.getDataDir() + SystemUtils.SEP + "fgdb";
-        return DataSourceUtils.init("jdbc:h2:file:" + db + ";MODE=MYSQL", "", "");
+//        return DataSourceUtils.init("jdbc:h2:file:" + db + ";MODE=MYSQL", "", "");
+        return DataSourceUtils.init("jdbc:mysql://192.168.20.140/fg", "root", "123456");
     }
 
 }

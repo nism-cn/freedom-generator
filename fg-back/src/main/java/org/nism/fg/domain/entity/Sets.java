@@ -23,17 +23,9 @@ public class Sets extends BaseEntity {
     /*** 关联模板 */
     private String tempPath;
     /*** Java包 */
-    private String rootPackage;
+    private String pkg;
     /*** 作者 */
     private String author;
-    /*** 忽略生成表前缀 */
-    private String ignoreTablePrefix;
-    /*** 忽略生成表字段 (继承了父类) */
-    private String ignoreColumn;
-    /*** 忽略生成表插入字段 (主键,创建时间等) */
-    private String ignoreInsertColumn;
-    /*** 忽略生成表显示字段 (修改页主键显示等) */
-    private String ignoreSelectColumn;
     /*** 是否开启字典表查询 */
     private Boolean dictUse;
     /*** 字典表查询sql */

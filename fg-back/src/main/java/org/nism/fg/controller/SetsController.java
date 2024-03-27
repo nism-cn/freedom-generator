@@ -18,7 +18,7 @@ import java.io.Serializable;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("project-setting")
+@RequestMapping("sets")
 public class SetsController {
 
     private final SetsService baseService;

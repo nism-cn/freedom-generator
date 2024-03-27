@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-const BASE = '/project'
+const BASE = '/db-info'
 
 export default {
   // 列表查询
@@ -40,26 +40,12 @@ export default {
       method: 'DELETE'
     })
   },
-  // 单个查询
-  findSetting: (id) => {
+  // 测试连接
+  testConnection: (data) => {
     return request({
-      url: `${BASE}/setting/${id}`,
-      method: 'GET'
-    })
-  },
-  // 导入表
-  importTables: (dbId, tables) => {
-    return request({
-      url: `${BASE}/importTables/${dbId}`,
+      url: `${BASE}/test-connection`,
       method: 'POST',
-      data: { data: tables }
-    })
-  },
-  // 数据映射类型
-  types: () => {
-    return request({
-      url: `${BASE}/types`,
-      method: 'GET',
+      data: data
     })
   }
 }

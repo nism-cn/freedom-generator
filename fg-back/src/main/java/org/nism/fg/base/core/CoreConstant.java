@@ -19,11 +19,6 @@ public interface CoreConstant {
     String OUT_PATH = "_out_path_";
     String SHOW_INDEX = "_show_index_";
 
-    String TYPE_DB = "DB";
-    String TYPE_JAVA = "JAVA";
-    String TYPE_HTML = "HTML";
-    String TYPE_SQL = "SQL";
-
     String TYPE_ADAPTER_PREFIX = "type-adapter-";
 
 }

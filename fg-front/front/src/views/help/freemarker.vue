@@ -1,7 +1,7 @@
 <template>
   <el-collapse-item :name="name">
     <template slot="title">
-      <h2><i class="header-icon el-icon-notebook-1"></i> Freemarker 常见用法</h2>
+      <h2><i class="header-icon el-icon-notebook-1"></i> 模板用法</h2>
     </template>
 
     <el-divider content-position="left">

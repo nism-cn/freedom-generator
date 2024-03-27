@@ -1,6 +1,7 @@
 <template>
   <el-dialog :visible.sync="innerVisible" title="帮助文档" width="90%" top="3vh">
     <el-collapse v-model="actName" accordion>
+      <help-fg-def :name="'fg-def'" />
       <help-fg-base :name="'fg-base'" />
       <help-fg-advanced :name="'fg-advanced'" />
       <help-ftl :name="'freemarker'" />
@@ -11,11 +12,12 @@
 <script>
 
 import HelpFtl from '@/views/help/freemarker'
+import HelpFgDef from '@/views/help/fgDef'
 import HelpFgBase from '@/views/help/fgBase'
 import HelpFgAdvanced from '@/views/help/fgAdvanced'
 
 export default {
-  components: { HelpFtl, HelpFgBase, HelpFgAdvanced },
+  components: { HelpFtl, HelpFgDef, HelpFgBase, HelpFgAdvanced },
   name: "help-index",
   props: ["visible"],
   computed: {
@@ -30,7 +32,7 @@ export default {
   },
   data() {
     return {
-      actName: ["fg-base"]
+      actName: ["fg-def"]
     }
   },
 }

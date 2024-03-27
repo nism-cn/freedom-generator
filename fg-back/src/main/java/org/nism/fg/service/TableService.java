@@ -29,7 +29,7 @@ public interface TableService extends IService<Table> {
 
     byte[] generator(Collection<?> ids) throws Exception;
 
-    List<cn.hutool.db.meta.Table> getDbTables(Serializable settingId);
+    List<cn.hutool.db.meta.Table> getDbTables(Serializable setsId);
 
     List<DictDTO> dictList(Serializable tableId);
 }

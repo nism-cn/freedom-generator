@@ -26,12 +26,16 @@ public class Table extends BaseEntity {
     /*** 表描述 */
     private String comment;
 
-    /*** Java类名 */
-    private String className;
+    /*** 小驼峰 tableName */
+    private String camel;
+    /*** 大驼峰 TableName */
+    private String upCamel;
+    /*** 小下划线 table_name */
+    private String underline;
+    /*** 大下划线 TABLE_NAME */
+    private String upUnderline;
     /*** 模块名 */
-    private String moduleName;
-    /*** 业务名 */
-    private String businessName;
+    private String module;
     /*** 字段 */
     private transient List<Column> columns;
     /*** 设置 */

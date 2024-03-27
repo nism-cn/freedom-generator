@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import databaseApi from '@/apis/databaseApi';
+import dbInfoApi from '@/apis/dbInfoApi';
 
 export default {
   name: "database-index",
@@ -68,10 +68,10 @@ export default {
   },
   methods: {
     find() {
-      databaseApi.find().then(r => this.list = r.data);
+      dbInfoApi.find().then(r => this.list = r.data);
     },
     testConnection() {
-      databaseApi.testConnection(this.form)
+      dbInfoApi.testConnection(this.form)
         .then(() => this.$message.success("连接成功"))
         .catch((e) => console.error(e));
     },
@@ -80,18 +80,18 @@ export default {
       this.dialogVisible = true;
     },
     openUpdate(id) {
-      databaseApi.findOne(id).then(r => {
+      dbInfoApi.findOne(id).then(r => {
         this.form = r.data;
         this.dialogVisible = true;
       })
     },
     create() {
-      databaseApi.create(this.form)
+      dbInfoApi.create(this.form)
         .then(() => this.$message.success("新增成功"))
         .finally(() => this.closeDialog())
     },
     update() {
-      databaseApi.update(this.form.id, this.form)
+      dbInfoApi.update(this.form.id, this.form)
         .then(() => this.$message.success("修改成功"))
         .finally(() => this.closeDialog())
     },

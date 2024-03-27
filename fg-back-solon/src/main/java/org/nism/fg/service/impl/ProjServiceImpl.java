@@ -58,20 +58,20 @@ public class ProjServiceImpl extends ServiceImpl<ProjMapper, Proj> implements Pr
     @Override
     public void importTables(Long projectId, List<String> tableNames) {
         try {
-            Sets setting = setsMapper.selectById(projectId);
-            Assert.notNull(setting, "未找到项目配置信息,请先配置项目!");
-            DataSource dbBean = DataSourceUtils.getDb(setting.getDbInfoId().toString());
+            Sets sets = setsMapper.selectById(projectId);
+            Assert.notNull(sets, "未找到项目配置信息,请先配置项目!");
+            DataSource dbBean = DataSourceUtils.getDb(sets.getDbInfoId().toString());
 
             List<Table> tableList = new ArrayList<>(tableNames.size());
             List<Column> columnList = new ArrayList<>();
             tableNames.forEach(tableName -> {
                 cn.hutool.db.meta.Table t = MetaUtil.getTableMeta(dbBean, tableName);
                 Long id = IdWorker.getId(t);
-                Table table = GenUtils.buildTable(t, setting);
+                Table table = GenUtils.buildTable(t, sets);
                 table.setId(id);
                 tableList.add(table);
                 t.getColumns().forEach(c -> {
-                    Column column = GenUtils.buildColumn(c, setting);
+                    Column column = GenUtils.buildColumn(c, sets);
                     if (column != null) {
                         column.setTableId(id);
                         columnList.add(column);

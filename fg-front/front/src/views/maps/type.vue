@@ -7,21 +7,21 @@
     <el-row>
       <el-col :span="4">
         <el-menu :default-active="actType" @select="menuSelect">
-          <el-menu-item index="DB">
+          <el-menu-item index="db">
             <i class="el-icon-coin"></i>
-            <span slot="title">数据类型</span>
+            <span slot="title">数据库</span>
           </el-menu-item>
-          <el-menu-item index="JAVA">
+          <el-menu-item index="java">
             <svg-icon icon-class="java" style="margin: 0 6px 0 0;" />
-            <span slot="title">JAVA类型</span>
+            <span slot="title">java</span>
           </el-menu-item>
-          <el-menu-item index="HTML">
+          <el-menu-item index="html">
             <svg-icon icon-class="html" style="margin: 0 6px 0 0;" />
-            <span slot="title">HTML类型</span>
+            <span slot="title">html</span>
           </el-menu-item>
-          <el-menu-item index="SQL">
+          <el-menu-item index="sql">
             <svg-icon icon-class="sql" style="margin: 0 6px 0 0;" />
-            <span slot="title">查询类型</span>
+            <span slot="title">sql</span>
           </el-menu-item>
         </el-menu>
       </el-col>

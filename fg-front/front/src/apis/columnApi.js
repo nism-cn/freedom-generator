@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-const BASE = '/database-info'
+const BASE = '/column'
 
 export default {
   // 列表查询
@@ -40,12 +40,10 @@ export default {
       method: 'DELETE'
     })
   },
-  // 测试连接
-  testConnection: (data) => {
+  findByTableId: (tableId) => {
     return request({
-      url: `${BASE}/test-connection`,
-      method: 'POST',
-      data: data
+      url: `${BASE}/tableId/${tableId}`,
+      method: 'GET'
     })
-  }
+  },
 }

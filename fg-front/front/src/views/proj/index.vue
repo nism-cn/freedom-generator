@@ -43,7 +43,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import projectApi from '@/apis/projectApi';
+import projApi from '@/apis/projApi';
 
 export default {
   name: "proj-index",
@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     find() {
-      projectApi.find().then(r => this.list = r.data)
+      projApi.find().then(r => this.list = r.data)
     },
     handleNodeClick(data) {
       this.count++;
@@ -100,12 +100,12 @@ export default {
     operation() {
       let type = this.op.type;
       if (type == 'mkProj') {
-        projectApi.create(this.form).then((r) => {
+        projApi.create(this.form).then((r) => {
           this.$store.commit("app/addTab", r.data);
           this.closeDialog();
         });
       } else if (type == 'rename') {
-        projectApi.update(this.treeClickData.id, this.form).then(() => {
+        projApi.update(this.treeClickData.id, this.form).then(() => {
           this.closeDialog();
         });
       }
@@ -115,7 +115,7 @@ export default {
       this.find();
     },
     del(data) {
-      projectApi.delete(data.id).then(() => {
+      projApi.delete(data.id).then(() => {
         this.find();
         this.$store.commit("app/delTab", data.id);
       })

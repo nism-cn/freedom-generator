@@ -78,9 +78,9 @@ public class TableController {
     /**
      * 获取数据库表
      */
-    @GetMapping("db-tables/{settingId}")
-    private R<?> dbTables(@PathVariable Serializable settingId) {
-        return R.ok(baseService.getDbTables(settingId));
+    @GetMapping("db-tables/{setsId}")
+    private R<?> dbTables(@PathVariable Serializable setsId) {
+        return R.ok(baseService.getDbTables(setsId));
     }
 
     /**

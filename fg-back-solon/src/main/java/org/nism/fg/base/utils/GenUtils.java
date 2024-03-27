@@ -35,20 +35,20 @@ public class GenUtils {
     /**
      * 初始化表信息
      */
-    public static Table buildTable(cn.hutool.db.meta.Table dbTable, Sets setting) {
+    public static Table buildTable(cn.hutool.db.meta.Table dbTable, Sets sets) {
         Table table = new Table();
 
-        table.setProjectId(setting.getProjectId());
+        table.setProjectId(sets.getProjectId());
 
         table.setName(dbTable.getTableName());
         table.setComment(dbTable.getComment());
 
-        table.setClassName(convertClassName(dbTable.getTableName(), setting.getIgnoreTablePrefix()));
-        table.setRootPackage(setting.getRootPackage());
-        table.setModuleName(getLast(setting.getRootPackage(), "."));
+        table.setClassName(convertClassName(dbTable.getTableName(), sets.getIgnoreTablePrefix()));
+        table.setRootPackage(sets.getRootPackage());
+        table.setModuleName(getLast(sets.getRootPackage(), "."));
 //        table.setBusinessName(getLast(dbTable.getTableName(), "_"));
         table.setBusinessName(table.getClassName());
-        table.setAuthor(setting.getAuthor());
+        table.setAuthor(sets.getAuthor());
 
         return table;
     }
@@ -56,17 +56,17 @@ public class GenUtils {
     /**
      * 初始化列属性字段
      */
-    public static Column buildColumn(cn.hutool.db.meta.Column dbColumn, Sets setting) {
+    public static Column buildColumn(cn.hutool.db.meta.Column dbColumn, Sets sets) {
         String columnName = dbColumn.getName();
 
         // 忽略生成的字段
-        Set<String> ignoreColumnSet = new HashSet<>(StrUtil.split(setting.getIgnoreColumn(), ","));
+        Set<String> ignoreColumnSet = new HashSet<>(StrUtil.split(sets.getIgnoreColumn(), ","));
         if (ignoreColumnSet.contains(columnName)) {
             return null;
         }
 
         Column column = new Column();
-        column.setProjectId(setting.getProjectId());
+        column.setProjectId(sets.getProjectId());
 
         // 数据库原有属性
         column.setName(dbColumn.getName());
@@ -92,8 +92,8 @@ public class GenUtils {
         String htmlType = maps.getHtmlTypeMap().get(dbColumn.getTypeName().toLowerCase());
         column.setHtmlType(htmlType == null ? unknown : htmlType);
 
-        Set<String> ignoreInsertSet = new HashSet<>(StrUtil.split(setting.getIgnoreInsertColumn(), ","));
-        Set<String> ignoreSelectSet = new HashSet<>(StrUtil.split(setting.getIgnoreSelectColumn(), ","));
+        Set<String> ignoreInsertSet = new HashSet<>(StrUtil.split(sets.getIgnoreInsertColumn(), ","));
+        Set<String> ignoreSelectSet = new HashSet<>(StrUtil.split(sets.getIgnoreSelectColumn(), ","));
         // 插入
         column.setCanInsert(true);
         // 编辑
@@ -108,9 +108,9 @@ public class GenUtils {
     }
 
     public static Map<String, Object> buildTemplateData(Table table) {
-        Sets setting = table.getSets();
-        Assert.notNull(setting, "未找到项目配置信息,请先配置项目!");
-        final String rootPath = SystemUtils.getTemplateDir() + SystemUtils.SEP + setting.getTempPath();
+        Sets sets = table.getSets();
+        Assert.notNull(sets, "未找到项目配置信息,请先配置项目!");
+        final String rootPath = SystemUtils.getTemplateDir() + SystemUtils.SEP + sets.getTempPath();
         Map<String, Object> root = new HashMap<>();
 
         // 获取模板
@@ -126,7 +126,7 @@ public class GenUtils {
         // 表无主键情况
         root.put("pkColumn", pkColumns.isEmpty() ? null : pkColumns.get(0));
         root.put("pkColumns", pkColumns);
-        root.put("setting", table.getSets());
+        root.put("sets", table.getSets());
         root.put(CoreConstant.DTO_KEY, tempFileDtoList);
 
         // 获取参数

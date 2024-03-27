@@ -32,7 +32,7 @@ public class ProjController {
     @Inject
     private ProjService baseService;
     @Inject
-    private SetsService projectSettingService;
+    private SetsService setsService;
 
     @Get
     @Mapping
@@ -68,7 +68,7 @@ public class ProjController {
 
     @Mapping("setting/{id}")
     public R<?> findSetting(Long id) {
-        Sets one = projectSettingService.lambdaQuery().eq(Sets::getProjectId, id).one();
+        Sets one = setsService.lambdaQuery().eq(Sets::getProjectId, id).one();
         return R.ok(Optional.ofNullable(one).orElse(new Sets()));
     }
 
