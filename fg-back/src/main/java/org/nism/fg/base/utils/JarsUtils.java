@@ -5,7 +5,7 @@ import cn.hutool.core.util.ClassLoaderUtil;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.util.JdbcConstants;
 import com.alibaba.druid.util.JdbcUtils;
-import org.nism.fg.base.core.CoreConstant;
+import org.nism.fg.base.core.BaseConstant;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -24,7 +24,7 @@ public class JarsUtils {
                 if (JdbcConstants.H2_DRIVER.equals(driverClassName)) {
                     continue;
                 }
-                CoreConstant.JDBC_CLASS_LOADER_MAP.put(driverClassName, loader);
+                BaseConstant.JDBC_CLASS_LOADER_MAP.put(driverClassName, loader);
             }
         }
     }

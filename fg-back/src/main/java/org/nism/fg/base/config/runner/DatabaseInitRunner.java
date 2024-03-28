@@ -2,7 +2,7 @@ package org.nism.fg.base.config.runner;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nism.fg.base.core.CoreConstant;
+import org.nism.fg.base.core.BaseConstant;
 import org.nism.fg.base.utils.DataSourceUtils;
 import org.nism.fg.domain.entity.DbInfo;
 import org.nism.fg.service.DbInfoService;
@@ -31,7 +31,7 @@ public class DatabaseInitRunner implements CommandLineRunner {
     public void run(String... args) {
         try {
             List<DbInfo> list = dbInfoService.list();
-            list.forEach(e -> beanFactory.registerSingleton(CoreConstant.DB_BEAN_KEY + e.getId(), DataSourceUtils.init(e)));
+            list.forEach(e -> beanFactory.registerSingleton(BaseConstant.DB_BEAN_KEY + e.getId(), DataSourceUtils.init(e)));
             log.debug("数据源注入成功 : {}", list.stream().map(DbInfo::getName).collect(Collectors.toList()));
         } catch (Exception e) {
             // 忽略异常,项目正常启动

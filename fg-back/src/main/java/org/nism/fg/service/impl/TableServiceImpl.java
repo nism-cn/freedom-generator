@@ -2,32 +2,38 @@ package org.nism.fg.service.impl;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.db.Db;
 import cn.hutool.db.Entity;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import freemarker.core.Environment;
-import freemarker.template.*;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import lombok.AllArgsConstructor;
-import org.nism.fg.base.core.BaseEntity;
-import org.nism.fg.base.core.CoreConstant;
-import org.nism.fg.base.core.ServiceImpl;
+import lombok.Data;
+import org.nism.fg.base.core.BaseConstant;
+import org.nism.fg.base.core.mvc.domain.BaseEntity;
+import org.nism.fg.base.core.mvc.service.ServiceImpl;
 import org.nism.fg.base.utils.DataSourceUtils;
+import org.nism.fg.base.utils.FreemarkerUtils;
 import org.nism.fg.base.utils.GenUtils;
 import org.nism.fg.base.utils.MetaUtil;
-import org.nism.fg.base.utils.SpringUtils;
 import org.nism.fg.domain.convert.DictConvert;
 import org.nism.fg.domain.dto.DictDTO;
 import org.nism.fg.domain.dto.FileDTO;
 import org.nism.fg.domain.dto.PreviewDTO;
 import org.nism.fg.domain.entity.Column;
+import org.nism.fg.domain.entity.Config;
 import org.nism.fg.domain.entity.Sets;
 import org.nism.fg.domain.entity.Table;
 import org.nism.fg.mapper.ColumnMapper;
+import org.nism.fg.mapper.ConfigMapper;
 import org.nism.fg.mapper.SetsMapper;
 import org.nism.fg.mapper.TableMapper;
 import org.nism.fg.service.TableService;
-import org.nism.fg.service.TypeService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -50,8 +56,10 @@ import java.util.zip.ZipOutputStream;
 public class TableServiceImpl extends ServiceImpl<TableMapper, Table> implements TableService {
 
     private final Configuration cfg;
-    private final ColumnMapper columnMapper;
+    private final Configuration stringCfg;
     private final SetsMapper setsMapper;
+    private final ColumnMapper columnMapper;
+    private final ConfigMapper configMapper;
 
     @Override
     public Table getById(Serializable id) {
@@ -59,11 +67,6 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, Table> implements
         List<Column> columns = columnMapper.selectList(
                 Wrappers.lambdaQuery(Column.class).eq(Column::getTableId, id)
         );
-        // 实时渲染type
-//        final TypeService typeService = SpringUtils.getBean(TypeService.class);
-//        for (Column c : columns) {
-//            c.setTypes(typeService.loadMaps(c.getType()));
-//        }
         table.setColumns(columns);
 //        this.tableSetDictList(table);
         return table;
@@ -120,69 +123,69 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, Table> implements
     }
 
     @Override
-    @SuppressWarnings({"unchecked"})
+    public Table selectByIdUnion(Serializable id) {
+        Table table = baseMapper.selectById(id);
+        Assert.notNull(table, "未找到表数据");
+        List<Column> columns = columnMapper.selectList(Wrappers.lambdaQuery(Column.class).eq(Column::getTableId, id));
+        Assert.notEmpty(columns, "未找到字段数据");
+        Sets sets = setsMapper.selectOne(Wrappers.lambdaQuery(Sets.class).eq(Sets::getProjectId, table.getProjectId()));
+        Assert.notNull(sets, "未找到设置数据");
+        table.setColumns(columns);
+        table.setSets(sets);
+        return table;
+    }
+
+    @Override
     public List<PreviewDTO> preview(Serializable id) throws Exception {
         List<PreviewDTO> data = new ArrayList<>();
-        Table table = this.selectBatchIdsUnion(Collections.singletonList(id)).get(0);
-        Map<String, Object> root = GenUtils.buildTemplateData(this.selectBatchIdsUnion(Collections.singletonList(id)).get(0));
-        List<FileDTO> tempFileDtoList = (List<FileDTO>) root.get(CoreConstant.DTO_KEY);
-        root.remove(CoreConstant.DTO_KEY);
+        Table table = this.selectByIdUnion(id);
+        Map<String, Object> root = GenUtils.buildTemplateData(table);
+        @SuppressWarnings({"unchecked"})
+        List<FileDTO> tempFileDtoList = (List<FileDTO>) root.get(BaseConstant.DTO_KEY);
+        root.remove(BaseConstant.DTO_KEY);
 
         // 根据模板进行渲染
-        for (FileDTO temp : tempFileDtoList) {
-            if (!StrUtil.equals(temp.getSuffix(), "ftl")) {
+        for (FileDTO fileDTO : tempFileDtoList) {
+            if (!StrUtil.equals(fileDTO.getSuffix(), "ftl")) {
                 continue;
             }
-            Writer sw = new StringWriter();
+            TmpDTO tmpDTO = buildCode(fileDTO.getRelativePath(), root);
 
             PreviewDTO preview = new PreviewDTO();
-            preview.setId(temp.getRelativePath());
-            preview.setShowName(temp.getName());
-            String showLanguage = PreviewDTO.LANGUAGE_MAP.get(FileUtil.getSuffix(temp.getName()));
-            preview.setShowLanguage(showLanguage == null ? "text" : showLanguage);
-
-            Template template = cfg.getTemplate(temp.getRelativePath());
-            Environment env = template.createProcessingEnvironment(root, sw);
-            env.process();
-            String code = sw.toString();
-            String outPath = GenUtils.buildOutPath(temp, table, code, env);
-            preview.setCode(code);
-            preview.setPath(outPath);
-
-            preview.setShowIndex(getShowIndex(env));
+            preview.setId(fileDTO.getRelativePath());
+            preview.setShowName(fileDTO.getName());
+            String showLanguage = PreviewDTO.LANGUAGE_MAP.get(FileUtil.getSuffix(fileDTO.getName()));
+            preview.setShowLanguage(Optional.ofNullable(showLanguage).orElse("text"));
+            preview.setCode(tmpDTO.getCode());
+            preview.setPath(buildOutPath(tmpDTO.getEnv(), fileDTO.getName(), root));
+            preview.setShowIndex(FreemarkerUtils.getNumberVal(tmpDTO.getEnv(), BaseConstant.SHOW_INDEX).intValue());
 
             data.add(preview);
-            IoUtil.close(sw);
         }
         return data.stream().sorted(Comparator.comparing(PreviewDTO::getShowIndex)).collect(Collectors.toList());
     }
 
+
     @Override
-    @SuppressWarnings({"unchecked"})
     public byte[] generator(Collection<?> ids) throws Exception {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);
         for (Table table : this.selectBatchIdsUnion(ids)) {
             Map<String, Object> root = GenUtils.buildTemplateData(table);
-            List<FileDTO> tempFileDtoList = (List<FileDTO>) root.get(CoreConstant.DTO_KEY);
-            root.remove(CoreConstant.DTO_KEY);
+            @SuppressWarnings({"unchecked"})
+            List<FileDTO> tempFileDtoList = (List<FileDTO>) root.get(BaseConstant.DTO_KEY);
+            root.remove(BaseConstant.DTO_KEY);
             // 获取模板列表
-            for (FileDTO temp : tempFileDtoList) {
-                if (!StrUtil.equals(temp.getSuffix(), "ftl")) {
+            for (FileDTO fileDTO : tempFileDtoList) {
+                if (!StrUtil.equals(fileDTO.getSuffix(), "ftl")) {
                     continue;
                 }
                 // 渲染模板
-                Writer sw = new StringWriter();
-                Template template = cfg.getTemplate(temp.getRelativePath());
-                Environment env = template.createProcessingEnvironment(root, sw);
-                env.process();
-                String code = sw.toString();
-                IoUtil.close(sw);
+                TmpDTO tmpDTO = buildCode(fileDTO.getRelativePath(), root);
                 try {
-                    String outPath = GenUtils.buildOutPath(temp, table, code, env);
                     // 添加到zip
-                    zip.putNextEntry(new ZipEntry(outPath));
-                    IoUtil.write(zip, StandardCharsets.UTF_8, false, code);
+                    zip.putNextEntry(new ZipEntry(buildOutPath(tmpDTO.getEnv(), fileDTO.getName(), root)));
+                    IoUtil.write(zip, StandardCharsets.UTF_8, false, tmpDTO.getCode());
 
                     zip.flush();
                     zip.closeEntry();
@@ -201,14 +204,12 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, Table> implements
         Assert.isTrue(!"null".equals(setsId), "未找到项目配置信息,请先配置项目");
 
         Sets sets = setsMapper.selectById(setsId);
-
         Assert.notNull(sets, "未找到项目配置信息,请先配置项目!");
-        Long dbInfoId = sets.getDbInfoId();
-
         List<Table> tableList = baseMapper.selectList(Wrappers.lambdaQuery(Table.class).eq(Table::getProjectId, sets.getProjectId()));
+
         // 已经生成的表
         List<String> hasGenNames = tableList.stream().map(Table::getName).collect(Collectors.toList());
-        List<cn.hutool.db.meta.Table> tables = MetaUtil.getTableList(DataSourceUtils.getDb(dbInfoId.toString()));
+        List<cn.hutool.db.meta.Table> tables = MetaUtil.getTableList(DataSourceUtils.getDb(sets.getDbInfoId().toString()));
 
         return tables.stream().filter(e -> !hasGenNames.contains(e.getTableName())).collect(Collectors.toList());
     }
@@ -219,37 +220,86 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, Table> implements
         Assert.notNull(table, "未找到表信息!");
         Sets sets = setsMapper.selectOne(Wrappers.lambdaQuery(Sets.class).eq(Sets::getProjectId, table.getProjectId()));
         Assert.notNull(sets, "未找到项目配置信息,请先配置项目!");
+        return sets.getDictUse() ? getDictData(sets.getDbInfoId(), sets.getDictSql()) : new ArrayList<>();
+    }
+
+    private List<DictDTO> getDictData(Long dbInfoId, String sql) {
         List<DictDTO> dictList = new ArrayList<>();
-        if (sets.getDictUse()) {
-            try {
-                List<Entity> dictEntities = Db.use(DataSourceUtils.getDb(sets.getDbInfoId().toString())).query(sets.getDictSql());
-                for (Entity e : dictEntities) {
-                    DictDTO dto = DictConvert.to(e);
-                    if (dto != null) {
-                        dictList.add(dto);
-                    }
+        try {
+            List<Entity> dictEntities = Db.use(DataSourceUtils.getDb(dbInfoId.toString())).query(sql);
+            for (Entity e : dictEntities) {
+                DictDTO dto = DictConvert.to(e);
+                if (dto != null) {
+                    dictList.add(dto);
                 }
-            } catch (Exception e) {
-                throw new IllegalArgumentException("字典表sql异常: " + e.getMessage(), e);
             }
+        } catch (Exception e) {
+            throw new IllegalArgumentException("字典表sql异常: " + e.getMessage(), e);
         }
         return dictList;
     }
 
-    private Integer getShowIndex(Environment env) {
-        try {
-            TemplateModel defShowIndex = env.getVariable(CoreConstant.SHOW_INDEX);
-            if (null != defShowIndex) {
-                if (defShowIndex instanceof SimpleNumber) {
-                    return ((SimpleNumber) defShowIndex).getAsNumber().intValue();
-                } else {
-                    throw new IllegalArgumentException("显示排序参数不正确");
-                }
+    /**
+     * 开始打码
+     *
+     * @param codePath 源码路径
+     * @param root     传入的变量
+     */
+    private TmpDTO buildCode(String codePath, Map<String, Object> root) throws TemplateException, IOException {
+        // 渲染模板
+        Writer sw = new StringWriter();
+        Template template = cfg.getTemplate(codePath);
+        Environment env = template.createProcessingEnvironment(root, sw);
+        env.process();
+        String code = sw.toString();
+        IoUtil.close(sw);
+        TmpDTO dto = new TmpDTO();
+        dto.setCode(code);
+        dto.setEnv(env);
+        return dto;
+    }
+
+    /**
+     * 根据配置信息生成输出路径
+     *
+     * @param name 文件名称
+     * @param root 渲染所需数据
+     * @return 输出路径
+     */
+    private String buildOutPath(Environment env, String name, Map<String, Object> root) {
+        // 输出的文件名称
+        String outSuffix = FileUtil.getSuffix(name);
+        String outPrefix = FileUtil.getPrefix(name);
+        String defaultName = outPrefix + "_" + RandomUtil.randomStringUpper(6) + "." + outSuffix;
+        // val 倒序
+        List<Config> pathList = configMapper.selectList(Wrappers.lambdaQuery(Config.class).eq(Config::getType, "OUT_PATH"))
+                .stream().sorted(Comparator.comparing(i -> -i.getVal().length())).collect(Collectors.toList());
+        String reg = "";
+        for (Config c : pathList) {
+            if (ReUtil.contains(c.getKey(), name)) {
+                reg = c.getVal();
+                break;
             }
-        } catch (TemplateModelException e) {
-            throw new IllegalArgumentException("显示排序参数不正确", e);
         }
-        return 0;
+        StringWriter writer = new StringWriter();
+        try {
+            Template template = new Template("temporary", reg, stringCfg);
+            template.process(root, writer);
+        } catch (IOException | TemplateException e) {
+            log.error("{}", e);
+            return defaultName;
+        }
+        String path = writer.toString();
+        return StrUtil.isEmpty(path) ? defaultName : path;
+    }
+
+    /**
+     * 简易封装传输对象
+     */
+    @Data
+    private static class TmpDTO {
+        private String code;
+        private Environment env;
     }
 
 }

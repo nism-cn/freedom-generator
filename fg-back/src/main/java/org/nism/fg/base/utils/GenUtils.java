@@ -1,11 +1,8 @@
 package org.nism.fg.base.utils;
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
-import freemarker.core.Environment;
-import org.nism.fg.base.config.props.RootDirProp;
-import org.nism.fg.base.core.CoreConstant;
+import org.nism.fg.base.core.BaseConstant;
 import org.nism.fg.domain.convert.FileConvert;
 import org.nism.fg.domain.dto.FileDTO;
 import org.nism.fg.domain.entity.Column;
@@ -15,8 +12,6 @@ import org.nism.fg.service.TypeService;
 import org.springframework.util.Assert;
 
 import java.io.File;
-import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,7 +92,7 @@ public class GenUtils {
         root.put("pkColumn", pkColumns.isEmpty() ? null : pkColumns.get(0));
         root.put("pkColumns", pkColumns);
         root.put("sets", table.getSets());
-        root.put(CoreConstant.DTO_KEY, tempFileDtoList);
+        root.put(BaseConstant.DTO_KEY, tempFileDtoList);
 
         // 获取参数
         String argsPath = rootPath + SystemUtils.SEP + SystemUtils.ARGS;
@@ -106,42 +101,6 @@ public class GenUtils {
             root.put("args", JsonUtils.toObject(json, Object.class));
         }
         return root;
-    }
-
-    public static String buildOutPath(FileDTO temp, Table table, String code, Environment env) {
-        String defOutPath = FreemarkerUtils.getStringVal(env, CoreConstant.OUT_PATH);
-        if (StringUtils.isNotBlank(defOutPath)) {
-            return defOutPath;
-        }
-
-        String suffix = FileUtil.getSuffix(temp.getName());
-        RootDirProp rootDir = SpringUtils.getBean(RootDirProp.class);
-
-        String outPath = "";
-        if (StrUtil.equalsIgnoreCase(suffix, "java")) {
-            List<String> lines = new ArrayList<>();
-            IoUtil.readLines(new StringReader(code), lines);
-            List<String> packageLines = lines.stream().filter(e -> e.contains("package ")).collect(Collectors.toList());
-            List<String> classLines = lines.stream().filter(e -> e.contains("public ")).collect(Collectors.toList());
-            String packageLine = packageLines.get(0);
-            String classLine = classLines.get(0);
-            packageLine = packageLine.replace("package", "").replace(";", "").replace(" ", "").replace(".", "/");
-            classLine = StrUtil.split(classLine, " ").get(2);
-            outPath = StrUtil.format("/{}/{}/{}.java", rootDir.getJava(), packageLine, classLine);
-        } else if (StrUtil.equalsIgnoreCase(suffix, "js")) {
-            outPath = StrUtil.format("/{}/{}/{}.js", rootDir.getJs(), table.getModule(), table.getUpCamel());
-        } else if (StrUtil.equalsIgnoreCase(suffix, "xml") && StrUtil.contains(temp.getName(), "mapper")) {
-            outPath = StrUtil.format("/{}/{}Mapper.xml", rootDir.getMapper(), table.getCamel());
-        } else if (StrUtil.equalsIgnoreCase(suffix, "sql")) {
-            outPath = StrUtil.format("/{}/{}.sql", rootDir.getSql(), table.getCamel());
-        } else if (StrUtil.equalsIgnoreCase(suffix, "vue")) {
-            outPath = StrUtil.format("/{}/{}/{}/index.vue", rootDir.getVue(), table.getModule(), table.getUpCamel());
-        } else if (StrUtil.equalsIgnoreCase(suffix, "html")) {
-            outPath = StrUtil.format("/{}/{}/{}.html", rootDir.getHtml(), table.getModule(), table.getUpCamel());
-        } else {
-            outPath = StrUtil.format("/default/{}/{}.{}", table.getModule(), table.getUpCamel(), suffix);
-        }
-        return outPath;
     }
 
 }

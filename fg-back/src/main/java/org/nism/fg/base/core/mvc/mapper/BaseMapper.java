@@ -1,4 +1,4 @@
-package org.nism.fg.base.core;
+package org.nism.fg.base.core.mvc.mapper;
 
 import com.baomidou.mybatisplus.extension.toolkit.Db;
 

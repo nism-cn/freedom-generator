@@ -1,10 +1,10 @@
 package org.nism.fg.service;
 
-import org.nism.fg.base.core.IService;
+import org.nism.fg.base.core.mvc.service.IService;
 import org.nism.fg.domain.dto.DictDTO;
 import org.nism.fg.domain.dto.PreviewDTO;
-import org.nism.fg.domain.entity.Table;
 import org.nism.fg.domain.entity.Column;
+import org.nism.fg.domain.entity.Table;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -16,6 +16,8 @@ public interface TableService extends IService<Table> {
     Table getById(Serializable id);
 
     List<Table> selectBatchIdsUnion(Collection<?> ids);
+
+    Table selectByIdUnion(Serializable id);
 
     void modify(Table table, List<Column> columns);
 

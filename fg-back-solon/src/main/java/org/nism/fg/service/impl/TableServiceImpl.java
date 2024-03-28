@@ -56,9 +56,7 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, Table> implements
     @Override
     public Table getById(Serializable id) {
         Table table = baseMapper.selectById(id);
-        List<Column> columns = columnMapper.selectList(
-                Wrappers.lambdaQuery(Column.class).eq(Column::getTableId, id)
-        );
+        List<Column> columns = columnMapper.selectList(Wrappers.lambdaQuery(Column.class).eq(Column::getTableId, id));
         table.setColumns(columns);
 //        this.tableSetDictList(table);
         return table;

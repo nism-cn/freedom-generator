@@ -4,7 +4,7 @@ import cn.hutool.core.io.IoUtil;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.util.JdbcUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.nism.fg.base.core.CoreConstant;
+import org.nism.fg.base.core.BaseConstant;
 import org.nism.fg.domain.entity.DbInfo;
 
 import java.sql.Connection;
@@ -78,7 +78,7 @@ public class DataSourceUtils {
     }
 
     public static DruidDataSource getDb(String id) {
-        DruidDataSource ds = SpringUtils.getBean(CoreConstant.DB_BEAN_KEY + id, DruidDataSource.class);
+        DruidDataSource ds = SpringUtils.getBean(BaseConstant.DB_BEAN_KEY + id, DruidDataSource.class);
         reloadClassLoader(ds);
         DataSourceUtils.test(ds);
         return ds;
@@ -87,7 +87,7 @@ public class DataSourceUtils {
     private static void reloadClassLoader(DruidDataSource ds) {
         try {
             String driverClassName = JdbcUtils.getDriverClassName(ds.getUrl());
-            ClassLoader classLoader = CoreConstant.JDBC_CLASS_LOADER_MAP.get(driverClassName);
+            ClassLoader classLoader = BaseConstant.JDBC_CLASS_LOADER_MAP.get(driverClassName);
             if (classLoader != null && ds.getDriverClassLoader() == null) {
                 ds.setDriverClassLoader(classLoader);
             }

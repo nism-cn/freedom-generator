@@ -2,7 +2,7 @@ package org.nism.fg.base.config.handler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.MyBatisSystemException;
-import org.nism.fg.base.core.R;
+import org.nism.fg.base.core.mvc.domain.R;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;

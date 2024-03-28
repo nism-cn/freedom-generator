@@ -3,7 +3,7 @@ package org.nism.fg.domain.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nism.fg.base.core.BaseEntity;
+import org.nism.fg.base.core.mvc.domain.BaseEntity;
 import org.nism.fg.base.core.Tabs;
 import org.nism.fg.domain.enums.TabsType;
 

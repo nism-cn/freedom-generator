@@ -2,8 +2,9 @@ package org.nism.fg.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nism.fg.base.core.BaseEntity;
-import org.nism.fg.base.core.R;
+import org.nism.fg.base.core.mvc.controller.BaseController;
+import org.nism.fg.base.core.mvc.domain.BaseEntity;
+import org.nism.fg.base.core.mvc.domain.R;
 import org.nism.fg.domain.entity.Type;
 import org.nism.fg.domain.entity.TypeMap;
 import org.nism.fg.service.TypeMapService;
@@ -11,7 +12,6 @@ import org.nism.fg.service.TypeService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,15 +26,9 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("type-map")
-public class TypeMapController {
+public class TypeMapController extends BaseController<TypeMapService, TypeMap> {
 
     private final TypeService typeService;
-    private final TypeMapService baseService;
-
-    @GetMapping
-    public R<?> find() {
-        return R.ok(baseService.list());
-    }
 
     @GetMapping("list/{typeMold}/{mapMold}")
     public R<?> listMold(@PathVariable String typeMold, @PathVariable String mapMold) {
@@ -53,30 +47,9 @@ public class TypeMapController {
         return R.ok(typeMaps);
     }
 
-    @GetMapping("{id}")
-    public R<?> findOne(@PathVariable Serializable id) {
-        return R.ok(baseService.getById(id));
-    }
-
-    @PostMapping
-    public R<?> create(@RequestBody @Validated TypeMap e) {
-        return R.ok(baseService.save(e));
-    }
-
-    @PutMapping("{id}")
-    public R<?> update(@RequestBody @Validated TypeMap e, @PathVariable Long id) {
-        e.setId(id);
-        return R.ok(baseService.updateById(e));
-    }
-
     @PostMapping("saveOrUpdate")
     public R<?> saveOrUpdate(@RequestBody @Validated TypeMap e) {
         return R.ok(baseService.saveOrUpdate(e));
-    }
-
-    @DeleteMapping("{id}")
-    public R<?> delete(@PathVariable Serializable id) {
-        return R.ok(baseService.removeById(id));
     }
 
     @GetMapping("groups")

@@ -1,4 +1,4 @@
-package org.nism.fg.base.core;
+package org.nism.fg.base.core.mvc.domain;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;

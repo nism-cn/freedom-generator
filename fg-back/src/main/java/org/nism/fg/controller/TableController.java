@@ -3,13 +3,14 @@ package org.nism.fg.controller;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nism.fg.base.core.BaseEntity;
-import org.nism.fg.base.core.I2;
-import org.nism.fg.base.core.R;
+import org.nism.fg.base.core.mvc.controller.BaseController;
+import org.nism.fg.base.core.mvc.domain.BaseEntity;
+import org.nism.fg.base.core.mvc.domain.I2;
+import org.nism.fg.base.core.mvc.domain.R;
 import org.nism.fg.base.utils.PageUtils;
 import org.nism.fg.base.utils.ServletUtils;
-import org.nism.fg.domain.entity.Table;
 import org.nism.fg.domain.entity.Column;
+import org.nism.fg.domain.entity.Table;
 import org.nism.fg.service.TableService;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,35 +27,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("table")
-public class TableController {
-
-    private final TableService baseService;
-
-    @GetMapping
-    public R<?> find() {
-        return R.ok(baseService.list());
-    }
-
-    @GetMapping("{id}")
-    public R<?> findOne(@PathVariable Serializable id) {
-        return R.ok(baseService.getById(id));
-    }
-
-    @PostMapping
-    public R<?> create(@RequestBody Table e) {
-        return R.ok(baseService.save(e));
-    }
-
-    @PutMapping("{id}")
-    public R<?> update(@RequestBody Table e, @PathVariable Long id) {
-        e.setId(id);
-        return R.ok(baseService.updateById(e));
-    }
-
-    @DeleteMapping("{id}")
-    public R<?> delete(@PathVariable Serializable id) {
-        return R.ok(baseService.removeById(id));
-    }
+public class TableController extends BaseController<TableService, Table> {
 
     @DeleteMapping("batch/{ids}")
     public R<?> deleteBatch(@PathVariable List<Serializable> ids) {

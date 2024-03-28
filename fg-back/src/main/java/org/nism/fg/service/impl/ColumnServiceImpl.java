@@ -1,6 +1,6 @@
 package org.nism.fg.service.impl;
 
-import org.nism.fg.base.core.ServiceImpl;
+import org.nism.fg.base.core.mvc.service.ServiceImpl;
 import org.nism.fg.domain.entity.Column;
 import org.nism.fg.mapper.ColumnMapper;
 import org.nism.fg.service.ColumnService;

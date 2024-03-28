@@ -4,7 +4,7 @@ import cn.hutool.db.meta.MetaUtil;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.AllArgsConstructor;
-import org.nism.fg.base.core.ServiceImpl;
+import org.nism.fg.base.core.mvc.service.ServiceImpl;
 import org.nism.fg.base.utils.DataSourceUtils;
 import org.nism.fg.base.utils.FtlTools;
 import org.nism.fg.base.utils.GenUtils;

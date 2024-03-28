@@ -1,6 +1,6 @@
 package org.nism.fg.service.impl;
 
-import org.nism.fg.base.core.ServiceImpl;
+import org.nism.fg.base.core.mvc.service.ServiceImpl;
 import lombok.AllArgsConstructor;
 import org.nism.fg.domain.entity.TypeMap;
 import org.nism.fg.mapper.TypeMapMapper;

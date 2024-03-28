@@ -2,7 +2,7 @@ package org.nism.fg.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.AllArgsConstructor;
-import org.nism.fg.base.core.ServiceImpl;
+import org.nism.fg.base.core.mvc.service.ServiceImpl;
 import org.nism.fg.domain.entity.Type;
 import org.nism.fg.domain.entity.TypeMap;
 import org.nism.fg.mapper.TypeMapMapper;

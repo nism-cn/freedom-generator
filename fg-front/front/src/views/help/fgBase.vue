@@ -81,7 +81,7 @@ export default {
       },],
       outDef: {
         dir: '写法: <#assign _out_path_ = [输出路径]> (\'_out_path_\' 为关键字)',
-        eg: '例子: <#assign _out_path_ = "/src/main/" + table.sets.pkg?replace(".","/") + table.name + "Controller.java" >',
+        eg: '例子: <#assign _out_path_ = "/src/main/" + sets.pkg?replace(".","/") + table.upCamel + "Controller.java" >',
         result: '结果: 文件将输出至 "/src/main/org/nism/demo/HelloWroldController.java" 中'
       },
       outPathData: [

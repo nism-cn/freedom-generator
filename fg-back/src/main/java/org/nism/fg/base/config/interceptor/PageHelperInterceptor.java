@@ -3,7 +3,7 @@ package org.nism.fg.base.config.interceptor;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
-import org.nism.fg.base.core.R;
+import org.nism.fg.base.core.mvc.domain.R;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;

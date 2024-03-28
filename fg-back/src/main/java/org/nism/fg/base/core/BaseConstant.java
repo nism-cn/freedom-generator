@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author inism
  * @since 1.0.0
  */
-public interface CoreConstant {
+public interface BaseConstant {
 
     Map<String, ClassLoader> JDBC_CLASS_LOADER_MAP = new ConcurrentHashMap<>();
 

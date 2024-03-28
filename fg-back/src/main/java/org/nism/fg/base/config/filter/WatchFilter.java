@@ -1,7 +1,7 @@
 package org.nism.fg.base.config.filter;
 
 import lombok.extern.slf4j.Slf4j;
-import org.nism.fg.base.core.CoreConstant;
+import org.nism.fg.base.core.BaseConstant;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
@@ -20,7 +20,7 @@ import java.io.IOException;
  * @since 1.0.0
  */
 @Slf4j
-@Profile(CoreConstant.ENV_DEV)
+@Profile(BaseConstant.ENV_DEV)
 @Component
 public class WatchFilter extends OncePerRequestFilter {
 

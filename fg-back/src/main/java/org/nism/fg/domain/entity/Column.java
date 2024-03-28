@@ -3,11 +3,9 @@ package org.nism.fg.domain.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.nism.fg.base.core.BaseEntity;
-import org.nism.fg.base.core.JacksonSerializer;
+import org.nism.fg.base.core.mvc.domain.BaseEntity;
 
 import java.util.Map;
 
@@ -19,7 +17,7 @@ import java.util.Map;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName(value = "F_COLUMN" ,autoResultMap = true)
+@TableName(value = "F_COLUMN", autoResultMap = true)
 public class Column extends BaseEntity {
 
     /*** 项目主键 */

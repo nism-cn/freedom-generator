@@ -1,6 +1,6 @@
 package org.nism.fg.service.impl;
 
-import org.nism.fg.base.core.ServiceImpl;
+import org.nism.fg.base.core.mvc.service.ServiceImpl;
 import org.nism.fg.domain.entity.Sets;
 import org.nism.fg.mapper.SetsMapper;
 import org.nism.fg.service.SetsService;

@@ -1,4 +1,4 @@
-package org.nism.fg.base.core;
+package org.nism.fg.base.core.mvc.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

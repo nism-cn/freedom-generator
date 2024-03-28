@@ -2,9 +2,9 @@ package org.nism.fg.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nism.fg.base.core.I1;
-import org.nism.fg.base.core.R;
-import org.nism.fg.domain.dto.MapDTO;
+import org.nism.fg.base.core.mvc.controller.BaseController;
+import org.nism.fg.base.core.mvc.domain.I1;
+import org.nism.fg.base.core.mvc.domain.R;
 import org.nism.fg.domain.entity.Proj;
 import org.nism.fg.domain.entity.Sets;
 import org.nism.fg.service.ProjService;
@@ -13,9 +13,7 @@ import org.nism.fg.service.TypeService;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -28,38 +26,11 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("proj")
-public class ProjController {
+public class ProjController extends BaseController<ProjService, Proj> {
 
+    private final ProjService projService;
     private final TypeService typeService;
-    private final ProjService baseService;
     private final SetsService setsService;
-
-    @GetMapping
-    public R<?> find() {
-        return R.ok(baseService.list());
-    }
-
-    @GetMapping("{id}")
-    public R<?> findOne(@PathVariable Serializable id) {
-        return R.ok(baseService.getById(id));
-    }
-
-    @PostMapping
-    public R<?> create(@RequestBody Proj e) {
-        baseService.save(e);
-        return R.ok(e);
-    }
-
-    @PutMapping("{id}")
-    public R<?> update(@RequestBody Proj e, @PathVariable Long id) {
-        e.setId(id);
-        return R.ok(baseService.updateById(e));
-    }
-
-    @DeleteMapping("{id}")
-    public R<?> delete(@PathVariable String id) {
-        return R.ok(baseService.removeById(id));
-    }
 
     @GetMapping("setting/{id}")
     public R<?> findSetting(@PathVariable Serializable id) {
@@ -69,7 +40,7 @@ public class ProjController {
 
     @PostMapping("importTables/{projectId}")
     public R<?> importTables(@PathVariable Serializable projectId, @RequestBody I1<List<String>> tables) {
-        baseService.importTables(projectId, tables.getData());
+        projService.importTables(projectId, tables.getData());
         return R.ok();
     }
 

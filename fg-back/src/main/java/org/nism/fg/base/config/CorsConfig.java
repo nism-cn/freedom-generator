@@ -1,6 +1,6 @@
 package org.nism.fg.base.config;
 
-import org.nism.fg.base.core.CoreConstant;
+import org.nism.fg.base.core.BaseConstant;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @author inism
  * @since 1.0.0
  */
-@Profile(CoreConstant.ENV_DEV)
+@Profile(BaseConstant.ENV_DEV)
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
 
