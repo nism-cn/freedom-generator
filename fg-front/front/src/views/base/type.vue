@@ -1,28 +1,13 @@
 <template>
   <div>
     <template>
-      <fg-link content="新增数据类型(To be Dev)" placement="start" icon="plus" />
+      <fg-link content="Tips 新增右侧的数据才有数据" placement="start" icon="plus" @click="addType" />
     </template>
 
     <el-row>
       <el-col :span="4">
         <el-menu :default-active="actType" @select="menuSelect">
-          <el-menu-item index="db">
-            <i class="el-icon-coin"></i>
-            <span slot="title">数据库</span>
-          </el-menu-item>
-          <el-menu-item index="java">
-            <svg-icon icon-class="java" style="margin: 0 6px 0 0;" />
-            <span slot="title">java</span>
-          </el-menu-item>
-          <el-menu-item index="html">
-            <svg-icon icon-class="html" style="margin: 0 6px 0 0;" />
-            <span slot="title">html</span>
-          </el-menu-item>
-          <el-menu-item index="sql">
-            <svg-icon icon-class="sql" style="margin: 0 6px 0 0;" />
-            <span slot="title">sql</span>
-          </el-menu-item>
+          <el-menu-item v-for="i in groups" :key="i" :index="i">{{ i }}</el-menu-item>
         </el-menu>
       </el-col>
       <el-col :span="20">
@@ -51,7 +36,7 @@
                 @keyup.enter.native="saveOrUpdate(scope.row)" />
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="120">
             <template slot="header">
               <span>操作 </span>
             </template>
@@ -61,7 +46,7 @@
               <fg-link content="编辑" v-show="scope.row.id && !scope.row.search" placement="start" icon="edit"
                 @click="edit(scope.row)" />
               <fg-link type="warning" v-show="scope.row.id && !scope.row.dis" content="禁用/删除" placement="start"
-                icon="switch-button" @click="del(scope.row)" />
+                icon="delete" @click="del(scope.row)" />
               <fg-link type="success" v-show="scope.row.id && scope.row.dis" content="还原" placement="start"
                 icon="refresh-left" @click="reduction(scope.row)" />
             </template>
@@ -69,6 +54,16 @@
         </el-table>
       </el-col>
     </el-row>
+
+    <el-dialog class="fg-create-dialog" title="新增基础类型" :visible.sync="createVisible" width="20%" :show-close="false">
+      <el-form ref="typeForm" :rules="rules" :model="typeForm" @submit.prevent.native>
+        <el-form-item label="" prop="type">
+          <el-input onkeypress='return(!/[\\\\/:*?\"<>|]/.test(String.fromCharCode(event.keyCode)))' ref="type"
+            v-model="typeForm.type" autocomplete="off" @keyup.enter.native="doAddType"></el-input>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -76,17 +71,24 @@
 import typeApi from '@/apis/typeApi';
 
 export default {
-  name: "maps-main-type",
+  name: "base-main-type",
   data() {
     return {
+      type: "",
       types: [],
-      actType: 'DB',
+      groups: [],
+      actType: 'db',
+      createVisible: false,
       pagePm: {
         dis: false,
         total: 0,
         pageNum: 1,
         pageSize: 1000
       },
+      typeForm: {},
+      rules: {
+        type: { required: true, message: '请基础类型名不能为空', trigger: 'change' },
+      }
     }
   },
   mounted() {
@@ -108,10 +110,30 @@ export default {
     },
     init() {
       this.page();
+      typeApi.groups().then(r => this.groups = r.data);
     },
     page() {
       typeApi.listMold(this.actType, this.pagePm).then(r => {
         this.types = r.data;
+      });
+    },
+    addType() {
+      this.createVisible = true;
+    },
+    doAddType() {
+      this.$refs['typeForm'].validate((valid) => {
+        if (valid) {
+          this.createVisible = false;
+          this.actType = this.typeForm.type;
+          if (this.groups.find(i => i == this.actType)) {
+            this.page();
+          } else {
+            this.groups.push(this.actType);
+            this.types = [];
+            this.addLine();
+          }
+          this.typeForm.type = '';
+        }
       });
     },
     addLine() {

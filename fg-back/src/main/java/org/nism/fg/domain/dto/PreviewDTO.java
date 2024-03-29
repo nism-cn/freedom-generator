@@ -26,8 +26,8 @@ public class PreviewDTO implements Serializable {
         LANGUAGE_MAP.put("sql", "sql");
         LANGUAGE_MAP.put("html", "html");
         LANGUAGE_MAP.put("py", "python");
+        LANGUAGE_MAP.put("json", "json");
     }
-
 
     /*** 预览键 方便前端tabs处理 */
     private String id;

@@ -39,6 +39,7 @@ public class IoController {
 
     private static final String TEMP_PATH = SystemUtils.getTemplateDir();
     private static final String LOGS_PATH = SystemUtils.getLogsDir();
+    private static final String LIBS_PATH = SystemUtils.getLibsDir();
 
     /**
      * 获取项目结构
@@ -154,6 +155,21 @@ public class IoController {
     public R<?> loadJdbc() throws Exception {
         JarsUtils.loadJdbc();
         return R.ok();
+    }
+
+    @GetMapping("libs-tree")
+    public R<?> libsTree() throws Exception {
+        List<Path> walk = Files.walk(Paths.get(LIBS_PATH)).collect(Collectors.toList());
+        List<FileDTO> fileTree = new ArrayList<>();
+        for (Path path : walk) {
+            FileDTO dto = FileConvert.to(path.toFile());
+            if (StrUtil.equals(LIBS_PATH, dto.getAbsolutePath())) {
+                continue;
+            }
+            fileTree.add(dto);
+        }
+        Comparator<FileDTO> comparing = Comparator.comparing(FileDTO::getDirectory).thenComparing(FileDTO::getName);
+        return R.ok(fileTree.stream().sorted(comparing).collect(Collectors.toList()));
     }
 
 }

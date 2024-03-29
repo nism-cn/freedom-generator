@@ -21,18 +21,23 @@
       <el-table-column prop="desc" label="说明" />
     </el-table>
 
-    <h3>输出路径</h3>
-    <el-table size="small" :data="outPathData" style="width: 100%" row-key="id">
+    <h3>自定义输出路径 <small>不使用全局生成路径,可在模板文件中自定义</small></h3>
+    <!-- <el-table size="small" :data="outPathData" style="width: 100%" row-key="id">
       <el-table-column prop="suffix" label="文件后部分" width="160" />
       <el-table-column prop="outPath" label="生成路径" />
       <el-table-column prop="desc" label="说明" />
-    </el-table>
+    </el-table> -->
     <p>
-      <b>不使用默认生成路径,可在模板文件中自定义</b>
-      <b class="fg-text-primary">输出路径: </b> <br>
       <span class="fg-text-danger" v-html="outDef.dir"></span> <br>
       <span class="fg-text-warning" v-html="outDef.eg"></span> <br>
       <span class="fg-text-success" v-html="outDef.result"></span>
+    </p>
+
+    <h3>自定义预览排序 <small>预览文件按照指定循序显示</small></h3>
+    <p>
+      <span class="fg-text-danger" v-html="showDef.dir"></span> <br>
+      <span class="fg-text-warning" v-html="showDef.eg"></span> <br>
+      <span class="fg-text-success" v-html="showDef.result"></span>
     </p>
 
   </el-collapse-item>
@@ -81,8 +86,13 @@ export default {
       },],
       outDef: {
         dir: '写法: <#assign _out_path_ = [输出路径]> (\'_out_path_\' 为关键字)',
-        eg: '例子: <#assign _out_path_ = "/src/main/" + sets.pkg?replace(".","/") + table.upCamel + "Controller.java" >',
+        eg: '例子: <#assign _out_path_ = "/src/main/" + sets.pkg?replace(".","/") + table.upCamel + "Controller.java" >  注:和全局配置写法有差异!!!',
         result: '结果: 文件将输出至 "/src/main/org/nism/demo/HelloWroldController.java" 中'
+      },
+      showDef: {
+        dir: '写法: <#assign _show_index_ = [排序大小]> (\'_show_index_\' 为关键字)',
+        eg: '例子: <#assign _show_index_ = 1 >',
+        result: '结果: 预览代码中会按照模板文件中的指定顺序进行排序'
       },
       outPathData: [
         { id: 101, suffix: '*.sql', outPath: '/sql/${table.className}.sql', desc: '' },

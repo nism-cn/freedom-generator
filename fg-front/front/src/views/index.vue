@@ -38,7 +38,7 @@
           <el-tab-pane name="1"><span slot="label"><i class="el-icon-files icon-color-project"></i>项目</span></el-tab-pane>
           <el-tab-pane name="2"><span slot="label"><i
                 class="el-icon-notebook-1 icon-color-template"></i>模板</span></el-tab-pane>
-          <el-tab-pane name="3"><span slot="label"><i class="el-icon-s-unfold icon-color-maps"></i>映射</span></el-tab-pane>
+          <el-tab-pane name="3"><span slot="label"><i class="el-icon-s-unfold icon-color-maps"></i>设置</span></el-tab-pane>
         </el-tabs>
       </el-aside>
 
@@ -46,7 +46,7 @@
         <pane v-if="leftShow" size="20">
           <fg-proj v-show="leftTabVal == '1'" />
           <fg-temp v-show="leftTabVal == '2'" />
-          <fg-maps v-show="leftTabVal == '3'" />
+          <fg-base v-show="leftTabVal == '3'" />
         </pane>
 
         <pane size="70">
@@ -93,13 +93,13 @@ import FgDatabase from '@/views/database';
 import FgMain from '@/views/main';
 import FgProj from '@/views/proj';
 import FgTemp from '@/views/temp';
-import FgMaps from '@/views/maps';
+import FgBase from '@/views/base';
 import FgHelp from '@/views/help';
 import ioApi from '@/apis/ioApi';
 import Intro from '@/utils/intro';
 
 export default {
-  components: { Splitpanes, Pane, FgMain, FgProj, FgTemp, FgMaps, FgDatabase, FgHelp },
+  components: { Splitpanes, Pane, FgMain, FgProj, FgTemp, FgBase, FgDatabase, FgHelp },
   name: "app-index",
   data() {
     return {

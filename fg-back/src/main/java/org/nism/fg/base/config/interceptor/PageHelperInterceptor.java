@@ -30,7 +30,13 @@ public class PageHelperInterceptor implements ResponseBodyAdvice<Object> {
 
     @Nullable
     @Override
-    public Object beforeBodyWrite(@Nullable Object body, MethodParameter parameter, MediaType mediaType, Class<? extends HttpMessageConverter<?>> clazz, ServerHttpRequest request, ServerHttpResponse response) {
+    public Object beforeBodyWrite(
+            @Nullable Object body,
+            @Nullable MethodParameter parameter,
+            @Nullable MediaType mediaType,
+            @Nullable Class<? extends HttpMessageConverter<?>> clazz,
+            @Nullable ServerHttpRequest request,
+            @Nullable ServerHttpResponse response) {
         //此处的 Result 对象是我自定义的返回值类型,具体根据自己需求修改即可
         if (body instanceof R) {
             R<?> r = (R<?>) body;

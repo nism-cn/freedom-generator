@@ -1,23 +1,21 @@
 <template>
   <div>
     <template>
-      <fg-link content="项目设置" placement="start" icon="setting" />
-      <fg-link content="导入数据" placement="start" icon="upload" />
-      <fg-link content="刷新" placement="start" icon="refresh-right" @click="page" />
+      <fg-link content="Tips 新增右侧的数据才有数据" placement="start" icon="plus" @click="addMap" />
     </template>
 
     <el-row>
       <el-col :span="4">
         <el-menu :default-active="actType" @select="menuSelect">
           <el-menu-item v-for="g in groups" :index="`${g.typeMold}-${g.mapMold}`" :key="`${g.typeMold}-${g.mapMold}`">
-            <span slot="title">{{ g.typeMold }} - {{ g.mapMold }}</span>
+            <span slot="title">{{ g.typeMold }} -> {{ g.mapMold }}</span>
           </el-menu-item>
         </el-menu>
       </el-col>
       <el-col :span="20">
         <el-row>
           <el-col :span="24">
-            <el-input disabled v-model="pagePm.search" class="input-search" size="small">
+            <el-input v-model="pagePm.search" disabled class="input-search" size="small">
               <div slot="prepend">
                 <fg-link content="新增" icon="plus" @click="addLine" />
               </div>
@@ -31,9 +29,10 @@
         <el-table height="81vh" size="medium" :data="maps" @row-dblclick="edit">
           <el-table-column prop="val" :label="`类型-${actTypeMold}`">
             <template slot-scope="scope">
-              <span v-show="!scope.row.search">{{ scope.row.typeVal }}</span>
-              <el-select size="mini" v-show="scope.row.search" v-model="scope.row.typeId" filterable>
-                <el-option v-for="i in typeOptions" :label="i.val" :value="i.id" :key="i.id" />
+              <span v-show="scope.row.id">{{ scope.row.typeVal }}</span>
+              <el-select size="mini" v-show="!scope.row.id" v-model="scope.row.typeId" filterable
+                @visible-change="filterDbType">
+                <el-option v-for="i in filterTypeOptions" :label="i.val" :value="i.id" :key="i.id" />
               </el-select>
             </template>
           </el-table-column>
@@ -45,7 +44,7 @@
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="120">
             <template slot="header">
               <span>操作 </span>
             </template>
@@ -61,26 +60,42 @@
         </el-table>
       </el-col>
     </el-row>
+
+    <el-dialog class="fg-create-dialog" title="新增类型映射" :visible.sync="createVisible" width="20%" :show-close="false">
+      <el-form @submit.prevent.native>
+        <el-form-item label="">
+          <el-select v-model="map" placeholder="" @change="doAddMap" filterable @visible-change="filterGroups">
+            <el-option v-for="i in typeGroups" :key="i" :label="i" :value="i"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 import typeApi from '@/apis/typeApi';
 import typeMapApi from '@/apis/typeMapApi';
+import _ from 'lodash';
 
 export default {
-  name: "maps-main-maps",
+  name: "base-main-maps",
   data() {
     return {
       types: [],
       typeMap: {},
       maps: [],
       groups: [],
+      typeGroups: [],
       typeOptions: [],
+      filterTypeOptions: [],
       mapOptions: [],
-      actType: 'DB-JAVA',
-      actTypeMold: 'DB',
-      actMapMold: 'JAVA',
+      actType: 'db-java',
+      actTypeMold: 'db',
+      actMapMold: 'java',
+      createVisible: false,
+      map: '',
       pagePm: {
         dis: false,
         total: 0,
@@ -119,6 +134,7 @@ export default {
           return group;
         }, {});
       });
+      typeApi.groups().then(r => this.typeGroups = r.data);
       typeMapApi.groups().then(r => this.groups = r.data);
       this.page();
     },
@@ -126,6 +142,48 @@ export default {
       typeMapApi.listMold(this.actTypeMold, this.actMapMold, this.pagePm).then(r => {
         this.maps = r.data;
       });
+    },
+    addMap() {
+      this.init();
+      this.createVisible = true;
+    },
+    doAddMap() {
+      this.createVisible = false;
+      this.groups.push({ typeMold: 'db', mapMold: this.map });
+      this.actType = 'db-' + this.map;
+      this.actMapMold = this.map;
+      this.maps = [];
+      this.addLine();
+    },
+    // filters
+    filterGroups(flag) {
+      if (flag) {
+        let seleced = this.groups.map(i => i.mapMold);
+        seleced.push('db');
+        this.typeGroups = _.difference(this.typeGroups, seleced);
+      }
+    },
+    filterDbType(flag) {
+      console.info(flag)
+      this.filterTypeOptions = [];
+      if (flag) {
+        for (const type of this.typeOptions) {
+          console.info(type)
+          let exist = false;
+          for (const map of this.maps) {
+            if (map.typeVal == type.val) {
+              exist = true;
+              break;
+            }
+          }
+          if (!exist) {
+            this.filterTypeOptions.push(type);
+          }
+        }
+      }
+      console.info(this.maps, this.typeOptions)
+      console.info(this.typeOptions)
+      console.info(this.filterTypeOptions)
     },
     addLine() {
       this.maps.unshift({

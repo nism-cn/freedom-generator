@@ -62,4 +62,11 @@ export default {
       params: params
     })
   },
+  // 分页
+  groups: () => {
+    return request({
+      url: `${BASE}/groups`,
+      method: 'GET'
+    })
+  },
 }

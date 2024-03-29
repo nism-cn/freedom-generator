@@ -2,10 +2,9 @@
   <div>
     <el-row>
       <el-col :span="24">
-        <el-input class="input-search" size="small" placeholder="请输入内容" suffix-icon="el-icon-search">
+        <el-input disabled class="input-search" size="small" placeholder="" suffix-icon="el-icon-search">
           <div slot="append">
-            <fg-link content="新增" icon="plus" @click="openCreate(cmd.mkProj)" />
-            <fg-link content="隐藏" icon="minus" />
+            <!-- <fg-link content="新增" icon="plus" @click="openCreate(cmd.mkProj)" /> -->
           </div>
         </el-input>
       </el-col>
@@ -45,20 +44,28 @@ import { mapState } from 'vuex'
 import projApi from '@/apis/projApi';
 
 export default {
-  name: "maps-index",
+  name: "base-index",
   data() {
     return {
       count: 0,
       list: [{
+        "id": "生成路径",
+        "name": "生成路径",
+        "mainType": "maps",
+        "type": "outPath",
+        "icon": "el-icon-baseball"
+      }, {
         "id": "基础类型",
         "name": "基础类型",
         "mainType": "maps",
         "type": "type",
+        "icon": "el-icon-baseball"
       }, {
         "id": "类型映射",
         "name": "类型映射",
         "mainType": "maps",
         "type": "typeMap",
+        "icon": "el-icon-s-unfold",
       }],
       treeClickData: {},
       createVisible: false,

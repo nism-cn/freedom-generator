@@ -2,6 +2,8 @@ package org.nism.fg.base.core.mvc.domain;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -12,7 +14,9 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 @Data
-public class BaseEntity implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class BaseEntity extends Strapi implements Serializable {
 
     @TableId
     private Long id;

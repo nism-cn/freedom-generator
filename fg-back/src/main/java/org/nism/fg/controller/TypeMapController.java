@@ -9,8 +9,10 @@ import org.nism.fg.domain.entity.Type;
 import org.nism.fg.domain.entity.TypeMap;
 import org.nism.fg.service.TypeMapService;
 import org.nism.fg.service.TypeService;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
@@ -31,11 +33,11 @@ public class TypeMapController extends BaseController<TypeMapService, TypeMap> {
     private final TypeService typeService;
 
     @GetMapping("list/{typeMold}/{mapMold}")
-    public R<?> listMold(@PathVariable String typeMold, @PathVariable String mapMold) {
+    public R<?> listMold(@PathVariable String typeMold, @PathVariable String mapMold, String search) {
         List<TypeMap> typeMaps = baseService.lambdaQuery()
                 .eq(TypeMap::getTypeMold, typeMold)
                 .eq(TypeMap::getMapMold, mapMold)
-                .orderByDesc(BaseEntity::getId)
+                .orderByDesc(TypeMap::getId)
                 .list();
 
         Map<Long, String> maps = typeService.list().stream().collect(Collectors.toMap(BaseEntity::getId, Type::getVal));
@@ -47,17 +49,12 @@ public class TypeMapController extends BaseController<TypeMapService, TypeMap> {
         return R.ok(typeMaps);
     }
 
-    @PostMapping("saveOrUpdate")
-    public R<?> saveOrUpdate(@RequestBody @Validated TypeMap e) {
-        return R.ok(baseService.saveOrUpdate(e));
-    }
-
     @GetMapping("groups")
-    @SuppressWarnings({"unchecked"})
     public R<?> groups() {
-        return R.ok(baseService.lambdaQuery()
-                .select(TypeMap::getTypeMold, TypeMap::getMapMold)
-                .groupBy(TypeMap::getTypeMold, TypeMap::getMapMold)
+        return R.ok(baseService.query()
+                .select("TYPE_MOLD", "MAP_MOLD")
+                .groupBy("TYPE_MOLD", "MAP_MOLD")
+                .orderByAsc("MAX(ID)")
                 .list()
         );
     }

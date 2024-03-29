@@ -27,7 +27,7 @@
           <el-table-column type="selection" width="55" />
           <el-table-column prop="name" label="表名" />
           <el-table-column prop="comment" label="描述" />
-          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="120">
             <template slot="header">
               <span>操作 </span>
               <el-tooltip effect="dark" content="双击行可以进行编辑" placement="right"><i class="el-icon-info"></i></el-tooltip>

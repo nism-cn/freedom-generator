@@ -16,6 +16,7 @@
     "element-ui": "^2.4.5",
     "highlight.js": "10.7.3",
     "intro.js": "^7.0.1",
+    "lodash": "^4.17.21",
     "monaco-editor": "^0.39.0",
     "normalize.css": "^8.0.1",
     "screenfull": "^6.0.2",

@@ -17,10 +17,7 @@ import lombok.Data;
 import org.nism.fg.base.core.BaseConstant;
 import org.nism.fg.base.core.mvc.domain.BaseEntity;
 import org.nism.fg.base.core.mvc.service.ServiceImpl;
-import org.nism.fg.base.utils.DataSourceUtils;
-import org.nism.fg.base.utils.FreemarkerUtils;
-import org.nism.fg.base.utils.GenUtils;
-import org.nism.fg.base.utils.MetaUtil;
+import org.nism.fg.base.utils.*;
 import org.nism.fg.domain.convert.DictConvert;
 import org.nism.fg.domain.dto.DictDTO;
 import org.nism.fg.domain.dto.FileDTO;
@@ -272,6 +269,10 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, Table> implements
         String outPrefix = FileUtil.getPrefix(name);
         String defaultName = outPrefix + "_" + RandomUtil.randomStringUpper(6) + "." + outSuffix;
         // val 倒序
+        String defOutPath = FreemarkerUtils.getStringVal(env, BaseConstant.OUT_PATH);
+        if (StringUtils.isNotBlank(defOutPath)) {
+            return defOutPath;
+        }
         List<Config> pathList = configMapper.selectList(Wrappers.lambdaQuery(Config.class).eq(Config::getType, "OUT_PATH"))
                 .stream().sorted(Comparator.comparing(i -> -i.getVal().length())).collect(Collectors.toList());
         String reg = "";
